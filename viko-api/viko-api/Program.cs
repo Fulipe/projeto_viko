@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using viko_api.Models;
+using viko_api.Services;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ builder.Configuration
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
     .ConfigureFunctionsApplicationInsights();
+
+//Service registration
+builder.Services.AddScoped<IUserService, IUserService.UserService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                        ?? builder.Configuration["Values:DefaultConnection"];

@@ -11,7 +11,7 @@ namespace viko_api.Services
 {
     public interface IUserService
     {
-        Task<UserDto> Authenticate (string username, string password);
+        Task<UserDto> Authenticate(string username, string password);
 
         public class UserService : IUserService
         {
@@ -28,7 +28,7 @@ namespace viko_api.Services
                     .Where (u => u.Username == username && u.Password == password)
                     .Select(u => new
                     {
-                        User = new UserDto
+                        UserDto = new UserDto
                         {
                             Id = u.Id,
                             Username = u.Username,
@@ -38,7 +38,7 @@ namespace viko_api.Services
                 {
                     return (null);
                 }
-                return (user.User);
+                return (user.UserDto);
             }
         }
     }

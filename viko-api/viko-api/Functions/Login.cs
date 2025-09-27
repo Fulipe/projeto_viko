@@ -32,12 +32,10 @@ public class Login
 
     [Function("Login")]
 
-    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
     {
         var body = await req.ReadFromJsonAsync<LoginRequest>();
-        if (body == null) return req.CreateResponse(HttpStatusCode.BadRequest);
-        
-        
+
         var user = await _userService.Authenticate(body.Username, body.Password);
 
         if (user == null)
@@ -49,6 +47,7 @@ public class Login
         }
 
         _logger.LogInformation("SUCCESS!!!");
+        
         var token = GenerateJwtToken(user);
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(new { token });
@@ -78,7 +77,6 @@ public class Login
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
 
     public record LoginRequest(string Username, string Password);
 }
