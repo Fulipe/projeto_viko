@@ -77,6 +77,5 @@ public class Login
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
-    public record LoginRequest(string Username, string Password);
+    private record LoginRequest(string Username, string Password);
 }

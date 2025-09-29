@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace viko_api.Models.Entities;
 
@@ -7,12 +8,19 @@ public partial class User
 {
     public long Id { get; set; }
 
+    [Required]
     public string Username { get; set; } = null!;
 
+    [Required]
     public string Password { get; set; } = null!;
 
+    [Required, EmailAddress]
     public string Email { get; set; } = null!;
+    
+    [Required, Phone]
+    public string Phone { get; set; } = null!;
 
+    [Required, DataType(DataType.Date)]
     public DateOnly Birthdate { get; set; }
 
     public long EntityId { get; set; }

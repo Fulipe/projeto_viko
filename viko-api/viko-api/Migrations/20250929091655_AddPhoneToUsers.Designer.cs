@@ -12,8 +12,8 @@ using viko_api.Models;
 namespace viko_api.Migrations
 {
     [DbContext(typeof(VikoDbContext))]
-    [Migration("20250924213753_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250929091655_AddPhoneToUsers")]
+    partial class AddPhoneToUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace viko_api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("viko_api.Models.Administrator", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Administrator", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace viko_api.Migrations
                     b.ToTable("Administrators");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Entity", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Entity", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace viko_api.Migrations
                     b.ToTable("Entities");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Event", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Event", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,7 +143,7 @@ namespace viko_api.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("viko_api.Models.EventRegistration", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.EventRegistration", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,7 +172,7 @@ namespace viko_api.Migrations
                     b.ToTable("EventRegistrations");
                 });
 
-            modelBuilder.Entity("viko_api.Models.EventStatus", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.EventStatus", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -192,7 +192,7 @@ namespace viko_api.Migrations
                     b.ToTable("EventStatus", (string)null);
                 });
 
-            modelBuilder.Entity("viko_api.Models.Student", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Student", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -218,7 +218,7 @@ namespace viko_api.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Teacher", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Teacher", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -244,7 +244,7 @@ namespace viko_api.Migrations
                     b.ToTable("Teacher", (string)null);
                 });
 
-            modelBuilder.Entity("viko_api.Models.User", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -271,6 +271,10 @@ namespace viko_api.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -291,15 +295,15 @@ namespace viko_api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Administrator", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Administrator", b =>
                 {
-                    b.HasOne("viko_api.Models.Entity", "Entity")
+                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
                         .WithMany("Administrators")
                         .HasForeignKey("EntityId")
                         .IsRequired()
                         .HasConstraintName("FK_Admin_Entity");
 
-                    b.HasOne("viko_api.Models.User", "User")
+                    b.HasOne("viko_api.Models.Entities.User", "User")
                         .WithMany("Administrators")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -310,21 +314,21 @@ namespace viko_api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Event", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Event", b =>
                 {
-                    b.HasOne("viko_api.Models.Entity", "Entity")
+                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
                         .WithMany("Events")
                         .HasForeignKey("EntityId")
                         .IsRequired()
                         .HasConstraintName("FK_Event_Entity");
 
-                    b.HasOne("viko_api.Models.EventStatus", "EventStatus")
+                    b.HasOne("viko_api.Models.Entities.EventStatus", "EventStatus")
                         .WithMany("Events")
                         .HasForeignKey("EventStatusId")
                         .IsRequired()
                         .HasConstraintName("FK_Event_Status");
 
-                    b.HasOne("viko_api.Models.Teacher", "Teacher")
+                    b.HasOne("viko_api.Models.Entities.Teacher", "Teacher")
                         .WithMany("Events")
                         .HasForeignKey("TeacherId")
                         .IsRequired()
@@ -337,15 +341,15 @@ namespace viko_api.Migrations
                     b.Navigation("Teacher");
                 });
 
-            modelBuilder.Entity("viko_api.Models.EventRegistration", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.EventRegistration", b =>
                 {
-                    b.HasOne("viko_api.Models.Event", "Event")
+                    b.HasOne("viko_api.Models.Entities.Event", "Event")
                         .WithMany("EventRegistrations")
                         .HasForeignKey("EventId")
                         .IsRequired()
                         .HasConstraintName("FK_Registration_Event");
 
-                    b.HasOne("viko_api.Models.Student", "Student")
+                    b.HasOne("viko_api.Models.Entities.Student", "Student")
                         .WithMany("EventRegistrations")
                         .HasForeignKey("StudentId")
                         .IsRequired()
@@ -356,15 +360,15 @@ namespace viko_api.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Student", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Student", b =>
                 {
-                    b.HasOne("viko_api.Models.Entity", "Entity")
+                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
                         .WithMany("Students")
                         .HasForeignKey("EntityId")
                         .IsRequired()
                         .HasConstraintName("FK_Student_Entity");
 
-                    b.HasOne("viko_api.Models.User", "User")
+                    b.HasOne("viko_api.Models.Entities.User", "User")
                         .WithMany("Students")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -375,15 +379,15 @@ namespace viko_api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Teacher", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Teacher", b =>
                 {
-                    b.HasOne("viko_api.Models.Entity", "Entity")
+                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
                         .WithMany("Teachers")
                         .HasForeignKey("EntityId")
                         .IsRequired()
                         .HasConstraintName("FK_Teacher_Entity");
 
-                    b.HasOne("viko_api.Models.User", "User")
+                    b.HasOne("viko_api.Models.Entities.User", "User")
                         .WithMany("Teachers")
                         .HasForeignKey("UserId")
                         .IsRequired()
@@ -394,9 +398,9 @@ namespace viko_api.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("viko_api.Models.User", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.User", b =>
                 {
-                    b.HasOne("viko_api.Models.Entity", "Entity")
+                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
                         .WithMany("Users")
                         .HasForeignKey("EntityId")
                         .IsRequired()
@@ -405,7 +409,7 @@ namespace viko_api.Migrations
                     b.Navigation("Entity");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Entity", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Entity", b =>
                 {
                     b.Navigation("Administrators");
 
@@ -418,27 +422,27 @@ namespace viko_api.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Event", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Event", b =>
                 {
                     b.Navigation("EventRegistrations");
                 });
 
-            modelBuilder.Entity("viko_api.Models.EventStatus", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.EventStatus", b =>
                 {
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Student", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Student", b =>
                 {
                     b.Navigation("EventRegistrations");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Teacher", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Teacher", b =>
                 {
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("viko_api.Models.User", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.User", b =>
                 {
                     b.Navigation("Administrators");
 
