@@ -1,0 +1,18 @@
+nav {
+  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+a {
+  font-weight: 500;
+  color: #333;
+}
+
+a.active {
+  color: #2563eb; /* azul-600 */
+  font-weight: 600;
+}
+
+mat-icon {
+  color: #2563eb;
+}

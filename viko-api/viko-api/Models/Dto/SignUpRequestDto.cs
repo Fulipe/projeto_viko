@@ -25,8 +25,11 @@ namespace viko_api.Models.Dto
 
         [Required, Phone]
         public string Phone { get; set; }
-        [Required, MinLength(8, ErrorMessage = "Password must have at least 8 ")]
+
+        [Required, MinLength(8, ErrorMessage = "Password must consist of at least 8 characters.")]
         public string Password { get; set; }
+        [Required]
+        public string confirmPassword { get; set; }
 
         [Required, DataType(DataType.Date)]
         public DateOnly BirthDate { get; set; }

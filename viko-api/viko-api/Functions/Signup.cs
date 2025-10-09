@@ -28,6 +28,7 @@ public class Signup
     {
         var body = await req.ReadFromJsonAsync<SignUpRequestDto>();
 
+        //Checks if request is empty
         if (body == null)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
@@ -35,6 +36,18 @@ public class Signup
             return badResponse;
         }
 
+        //Password confirmation
+        if (body.Password != body.confirmPassword)
+        {
+            var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            await badResponse.WriteAsJsonAsync(new
+            {
+                Message = "Passwords in confirmations do not match."
+            });
+            return badResponse;
+        }
+
+        //Validates fields according to Data Annotations
         var validationContext = new ValidationContext(body);
         var validationResults = new List<ValidationResult>();
 
@@ -51,12 +64,12 @@ public class Signup
 
         var user = await _userService.RegisterUser(body);
 
-        if (user == false)
+        if (user.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await badResponse.WriteAsJsonAsync(new
-            {
-                message = "Username or email is unavailable"
+            await badResponse.WriteAsJsonAsync(new {
+                Status = user.status,
+                Message = user.msg
             });
             return badResponse;
         }
@@ -64,7 +77,11 @@ public class Signup
             _logger.LogInformation(user.ToString());
 
             var response = req.CreateResponse(HttpStatusCode.Created);
-            await response.WriteAsJsonAsync(user);
+            await response.WriteAsJsonAsync(new
+            {
+                Status = user.status,
+                Message = user.msg
+            });
             return response;
         }
     }

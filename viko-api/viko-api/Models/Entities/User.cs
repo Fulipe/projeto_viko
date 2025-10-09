@@ -14,7 +14,7 @@ public partial class User
     [Required]
     public string Password { get; set; } = null!;
 
-    [Required, EmailAddress]
+    [Required, EmailAddress(ErrorMessage = "This email is already in use")]
     public string Email { get; set; } = null!;
     
     [Required, Phone]
