@@ -12,7 +12,7 @@ public partial class User
     public string Username { get; set; } = null!;
 
     [Required]
-    public string Password { get; set; } = null!;
+    public string PasswordHash { get; set; } = null!;
 
     [Required, EmailAddress(ErrorMessage = "This email is already in use")]
     public string Email { get; set; } = null!;
@@ -23,13 +23,14 @@ public partial class User
     [Required, DataType(DataType.Date)]
     public DateOnly Birthdate { get; set; }
 
+    [Required]
+    public int RoleId { get; set; }
+    public Role Role { get; set; }  
+
     public long EntityId { get; set; }
 
-    public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
-
     public virtual Entity Entity { get; set; } = null!;
+    public virtual ICollection<Event> Events { get; set; } = new List<Event>();
+    public virtual ICollection<EventRegistration> EventRegistrations { get; set; } = new List<EventRegistration>();
 
-    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
-
-    public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 }

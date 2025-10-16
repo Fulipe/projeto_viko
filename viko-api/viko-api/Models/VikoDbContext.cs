@@ -12,56 +12,46 @@ public partial class VikoDbContext : DbContext
         : base(options)
     {
     }
-
-    public virtual DbSet<Administrator> Administrators { get; set; }
-
-    public virtual DbSet<Entity> Entities { get; set; }
-
-    public virtual DbSet<Event> Events { get; set; }
-
-    public virtual DbSet<EventRegistration> EventRegistrations { get; set; }
-
-    public virtual DbSet<EventStatus> EventStatuses { get; set; }
-
-    public virtual DbSet<Student> Students { get; set; }
-
-    public virtual DbSet<Teacher> Teachers { get; set; }
-
-    public virtual DbSet<User> Users { get; set; }
+    public DbSet<Entity> Entities { get; set; }
+    public DbSet<Event> Events { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<EventRegistration> EventRegistrations { get; set; }
+    public DbSet<EventStatus> EventStatuses { get; set; }
+    public DbSet<User> Users { get; set; }
 
     // Method that maps tables to create the classes 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         
-        modelBuilder.Entity<Administrator>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Administ__3214EC073EC03841"); //PK
+        //modelBuilder.Entity<Administrator>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PK__Administ__3214EC073EC03841"); //PK
 
-            // Collumn names as in the DB
-            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-            entity.Property(e => e.UserId).HasColumnName("User_Id");
+        //    // Collumn names as in the DB
+        //    entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+        //    entity.Property(e => e.UserId).HasColumnName("User_Id");
 
-            //Relation with entities (FK_Admin_Entity)
-            entity.HasOne(d => d.Entity).WithMany(p => p.Administrators)
-                .HasForeignKey(d => d.EntityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Admin_Entity");
+        //    //Relation with entities (FK_Admin_Entity)
+        //    entity.HasOne(d => d.Entity).WithMany(p => p.Administrators)
+        //        .HasForeignKey(d => d.EntityId)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_Admin_Entity");
 
-            //Relation with Users (FK_Admin_User)
-            entity.HasOne(d => d.User).WithMany(p => p.Administrators)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Admin_User");
-        });
+        //    //Relation with Users (FK_Admin_User)
+        //    entity.HasOne(d => d.User).WithMany(p => p.Administrators)
+        //        .HasForeignKey(d => d.UserId)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_Admin_User");
+        //});
 
 
         modelBuilder.Entity<Entity>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Entities__3214EC070ADBE488");
+            entity.HasKey(e => e.Id).HasName("PK_Entities");
 
             //Collumn definition
             entity.Property(e => e.Image)
-                .HasMaxLength(500)
+                .HasColumnType("VARCHAR(MAX)")
                 .IsUnicode(false);
             entity.Property(e => e.Languages)
                 .HasMaxLength(255)
@@ -71,9 +61,23 @@ public partial class VikoDbContext : DbContext
                 .IsUnicode(false);
         });
 
+        // === Roles ===
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(r => r.Id).HasName("PK_Roles");
+            entity.Property(r => r.Name).HasMaxLength(50).IsUnicode(false).IsRequired();
+
+            // Seed inicial (para login e permissões)
+            entity.HasData(
+                new Role { Id = 1, Name = "Student" },
+                new Role { Id = 2, Name = "Teacher" },
+                new Role { Id = 3, Name = "Administrator" }
+            );
+        });
+
         modelBuilder.Entity<Event>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Events__3214EC0796865580");
+            entity.HasKey(e => e.Id).HasName("PK_Events");
 
             entity.Property(e => e.Category)
                 .HasMaxLength(100)
@@ -81,14 +85,16 @@ public partial class VikoDbContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(1000)
                 .IsUnicode(false);
-            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-            entity.Property(e => e.EventStatusId).HasColumnName("Event_Status_Id");
-            entity.Property(e => e.FinishDate)
-                .HasColumnType("datetime")
-                .HasColumnName("Finish_Date");
             entity.Property(e => e.Location)
                 .HasMaxLength(255)
                 .IsUnicode(false);
+
+            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+            entity.Property(e => e.EventStatusId).HasColumnName("Event_Status_Id");
+            
+            entity.Property(e => e.FinishDate)
+                .HasColumnType("datetime")
+                .HasColumnName("Finish_Date");
             entity.Property(e => e.RegistrationDeadline)
                 .HasColumnType("datetime")
                 .HasColumnName("Registration_Deadline");
@@ -97,17 +103,20 @@ public partial class VikoDbContext : DbContext
                 .HasColumnName("Start_Date");
             entity.Property(e => e.TeacherId).HasColumnName("Teacher_Id");
 
-            entity.HasOne(d => d.Entity).WithMany(p => p.Events)
+            entity.HasOne(d => d.Entity)
+                .WithMany(p => p.Events)
                 .HasForeignKey(d => d.EntityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Event_Entity");
 
-            entity.HasOne(d => d.EventStatus).WithMany(p => p.Events)
+            entity.HasOne(d => d.EventStatus)
+                .WithMany(p => p.Events)
                 .HasForeignKey(d => d.EventStatusId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Event_Status");
 
-            entity.HasOne(d => d.Teacher).WithMany(p => p.Events)
+            entity.HasOne(d => d.Teacher)
+                .WithMany(p => p.Events)
                 .HasForeignKey(d => d.TeacherId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Event_Teacher");
@@ -115,18 +124,19 @@ public partial class VikoDbContext : DbContext
 
         modelBuilder.Entity<EventRegistration>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EventReg__3214EC07A46E7A77");
+            entity.HasKey(e => e.Id).HasName("PK_EventRegistrations");
 
-            entity.Property(e => e.EventId).HasColumnName("Event_Id");
+            //entity.Property(e => e.EventId).HasColumnName("Event_Id");
             entity.Property(e => e.RegistrationDate).HasColumnType("datetime");
-            entity.Property(e => e.StudentId).HasColumnName("Student_Id");
 
-            entity.HasOne(d => d.Event).WithMany(p => p.EventRegistrations)
+            entity.HasOne(d => d.Event)
+                .WithMany(p => p.EventRegistrations)
                 .HasForeignKey(d => d.EventId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Registration_Event");
 
-            entity.HasOne(d => d.Student).WithMany(p => p.EventRegistrations)
+            entity.HasOne(d => d.Student)
+                .WithMany(p => p.EventRegistrations)
                 .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Registration_Student");
@@ -134,73 +144,86 @@ public partial class VikoDbContext : DbContext
 
         modelBuilder.Entity<EventStatus>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__EventSta__3214EC07E115BBAA");
+            entity.HasKey(e => e.Id).HasName("PK_EventStatus");
 
             entity.ToTable("EventStatus");
 
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .IsUnicode(false);
+
+            // Seed inicial (para login e permissões)
+            entity.HasData(
+                new EventStatus { Id = 1, Status = "Open" },
+                new EventStatus { Id = 2, Status = "Closed" },
+                new EventStatus { Id = 3, Status = "Finished" }
+            );
         });
 
-        modelBuilder.Entity<Student>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Students__3214EC07E1286ECC");
+        //modelBuilder.Entity<Student>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PK__Students__3214EC07E1286ECC");
 
-            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-            entity.Property(e => e.UserId).HasColumnName("User_Id");
+        //    entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+        //    entity.Property(e => e.UserId).HasColumnName("User_Id");
 
-            entity.HasOne(d => d.Entity).WithMany(p => p.Students)
-                .HasForeignKey(d => d.EntityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Student_Entity");
+        //    entity.HasOne(d => d.Entity).WithMany(p => p.Students)
+        //        .HasForeignKey(d => d.EntityId)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_Student_Entity");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Students)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Student_User");
-        });
+        //    entity.HasOne(d => d.User).WithMany(p => p.Students)
+        //        .HasForeignKey(d => d.UserId)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_Student_User");
+        //});
 
-        modelBuilder.Entity<Teacher>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Teacher__3214EC0794A11128");
+        //modelBuilder.Entity<Teacher>(entity =>
+        //{
+        //    entity.HasKey(e => e.Id).HasName("PK__Teacher__3214EC0794A11128");
 
-            entity.ToTable("Teacher");
+        //    entity.ToTable("Teacher");
 
-            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-            entity.Property(e => e.UserId).HasColumnName("User_Id");
+        //    entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+        //    entity.Property(e => e.UserId).HasColumnName("User_Id");
 
-            entity.HasOne(d => d.Entity).WithMany(p => p.Teachers)
-                .HasForeignKey(d => d.EntityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Teacher_Entity");
+        //    entity.HasOne(d => d.Entity).WithMany(p => p.Teachers)
+        //        .HasForeignKey(d => d.EntityId)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_Teacher_Entity");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Teachers)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Teacher_User");
-        });
+        //    entity.HasOne(d => d.User).WithMany(p => p.Teachers)
+        //        .HasForeignKey(d => d.UserId)
+        //        .OnDelete(DeleteBehavior.ClientSetNull)
+        //        .HasConstraintName("FK_Teacher_User");
+        //});
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC0772F42D82");
+            entity.HasKey(e => e.Id).HasName("PK_Users");
 
-            entity.HasIndex(e => e.Username, "UQ__Users__536C85E4D82E5D9E").IsUnique();
-
-            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053450251125").IsUnique();
+            entity.HasIndex(e => e.Username).IsUnique();
+            entity.HasIndex(e => e.Email).IsUnique();
 
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
-                .IsUnicode(false);
-            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-            entity.Property(e => e.Password)
+                .IsUnicode(false)
+                .IsRequired();
+
+            entity.Property(e => e.PasswordHash)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .IsRequired();
+
             entity.Property(e => e.Username)
                 .HasMaxLength(100)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .IsRequired();
 
-            entity.HasOne(d => d.Entity).WithMany(p => p.Users)
+            entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
+
+            entity.HasOne(d => d.Entity)
+                .WithMany(p => p.Users)
                 .HasForeignKey(d => d.EntityId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Users_Entities");

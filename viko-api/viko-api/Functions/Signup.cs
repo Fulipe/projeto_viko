@@ -37,12 +37,22 @@ public class Signup
         }
 
         //Password confirmation
-        if (body.Password != body.confirmPassword)
+        if (body.Password != body.ConfirmPassword)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await badResponse.WriteAsJsonAsync(new
             {
-                Message = "Passwords in confirmations do not match."
+                Message = "Passwords confirmations do not match."
+            });
+            return badResponse;
+        }
+
+        if (body.BirthDate == null)
+        {
+            var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+            await badResponse.WriteAsJsonAsync(new
+            {
+                Message = "Please insert your birth date."
             });
             return badResponse;
         }

@@ -16,13 +16,7 @@ public partial class Entity
     [Required]
     public string Languages { get; set; } = null!;
 
-    public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
-
     public virtual ICollection<Event> Events { get; set; } = new List<Event>();
-
-    public virtual ICollection<Student> Students { get; set; } = new List<Student>();
-
-    public virtual ICollection<Teacher> Teachers { get; set; } = new List<Teacher>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

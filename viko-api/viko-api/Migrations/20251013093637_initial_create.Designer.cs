@@ -12,8 +12,8 @@ using viko_api.Models;
 namespace viko_api.Migrations
 {
     [DbContext(typeof(VikoDbContext))]
-    [Migration("20250929091655_AddPhoneToUsers")]
-    partial class AddPhoneToUsers
+    [Migration("20251013093637_initial_create")]
+    partial class initial_create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,32 +24,6 @@ namespace viko_api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("viko_api.Models.Entities.Administrator", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("EntityId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Entity_Id");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("User_Id");
-
-                    b.HasKey("Id")
-                        .HasName("PK__Administ__3214EC073EC03841");
-
-                    b.HasIndex("EntityId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Administrators");
-                });
 
             modelBuilder.Entity("viko_api.Models.Entities.Entity", b =>
                 {
@@ -77,7 +51,7 @@ namespace viko_api.Migrations
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Entities__3214EC070ADBE488");
+                        .HasName("PK_Entities");
 
                     b.ToTable("Entities");
                 });
@@ -132,7 +106,7 @@ namespace viko_api.Migrations
                         .HasColumnName("Teacher_Id");
 
                     b.HasKey("Id")
-                        .HasName("PK__Events__3214EC0796865580");
+                        .HasName("PK_Events");
 
                     b.HasIndex("EntityId");
 
@@ -152,18 +126,16 @@ namespace viko_api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("EventId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Event_Id");
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("RegistrationDate")
                         .HasColumnType("datetime");
 
                     b.Property<long>("StudentId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Student_Id");
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id")
-                        .HasName("PK__EventReg__3214EC07A46E7A77");
+                        .HasName("PK_EventRegistrations");
 
                     b.HasIndex("EventId");
 
@@ -187,61 +159,63 @@ namespace viko_api.Migrations
                         .HasColumnType("varchar(50)");
 
                     b.HasKey("Id")
-                        .HasName("PK__EventSta__3214EC07E115BBAA");
+                        .HasName("PK_EventStatus");
 
                     b.ToTable("EventStatus", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Status = "Open"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Status = "Closed"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Status = "Finished"
+                        });
                 });
 
-            modelBuilder.Entity("viko_api.Models.Entities.Student", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Role", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("EntityId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Entity_Id");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("User_Id");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(50)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Students__3214EC07E1286ECC");
+                        .HasName("PK_Roles");
 
-                    b.HasIndex("EntityId");
+                    b.ToTable("Roles");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Students");
-                });
-
-            modelBuilder.Entity("viko_api.Models.Entities.Teacher", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("EntityId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Entity_Id");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("User_Id");
-
-                    b.HasKey("Id")
-                        .HasName("PK__Teacher__3214EC0794A11128");
-
-                    b.HasIndex("EntityId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Teacher", (string)null);
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Student"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Teacher"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Administrator"
+                        });
                 });
 
             modelBuilder.Entity("viko_api.Models.Entities.User", b =>
@@ -265,7 +239,7 @@ namespace viko_api.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Entity_Id");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasMaxLength(255)
                         .IsUnicode(false)
@@ -275,6 +249,9 @@ namespace viko_api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -282,36 +259,19 @@ namespace viko_api.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.HasKey("Id")
-                        .HasName("PK__Users__3214EC0772F42D82");
+                        .HasName("PK_Users");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("EntityId");
 
-                    b.HasIndex(new[] { "Username" }, "UQ__Users__536C85E4D82E5D9E")
-                        .IsUnique();
+                    b.HasIndex("RoleId");
 
-                    b.HasIndex(new[] { "Email" }, "UQ__Users__A9D1053450251125")
+                    b.HasIndex("Username")
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("viko_api.Models.Entities.Administrator", b =>
-                {
-                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
-                        .WithMany("Administrators")
-                        .HasForeignKey("EntityId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Admin_Entity");
-
-                    b.HasOne("viko_api.Models.Entities.User", "User")
-                        .WithMany("Administrators")
-                        .HasForeignKey("UserId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Admin_User");
-
-                    b.Navigation("Entity");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("viko_api.Models.Entities.Event", b =>
@@ -328,7 +288,7 @@ namespace viko_api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Event_Status");
 
-                    b.HasOne("viko_api.Models.Entities.Teacher", "Teacher")
+                    b.HasOne("viko_api.Models.Entities.User", "Teacher")
                         .WithMany("Events")
                         .HasForeignKey("TeacherId")
                         .IsRequired()
@@ -349,7 +309,7 @@ namespace viko_api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Registration_Event");
 
-                    b.HasOne("viko_api.Models.Entities.Student", "Student")
+                    b.HasOne("viko_api.Models.Entities.User", "Student")
                         .WithMany("EventRegistrations")
                         .HasForeignKey("StudentId")
                         .IsRequired()
@@ -360,44 +320,6 @@ namespace viko_api.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Entities.Student", b =>
-                {
-                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
-                        .WithMany("Students")
-                        .HasForeignKey("EntityId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Student_Entity");
-
-                    b.HasOne("viko_api.Models.Entities.User", "User")
-                        .WithMany("Students")
-                        .HasForeignKey("UserId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Student_User");
-
-                    b.Navigation("Entity");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("viko_api.Models.Entities.Teacher", b =>
-                {
-                    b.HasOne("viko_api.Models.Entities.Entity", "Entity")
-                        .WithMany("Teachers")
-                        .HasForeignKey("EntityId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Teacher_Entity");
-
-                    b.HasOne("viko_api.Models.Entities.User", "User")
-                        .WithMany("Teachers")
-                        .HasForeignKey("UserId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Teacher_User");
-
-                    b.Navigation("Entity");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("viko_api.Models.Entities.User", b =>
                 {
                     b.HasOne("viko_api.Models.Entities.Entity", "Entity")
@@ -406,18 +328,20 @@ namespace viko_api.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Users_Entities");
 
+                    b.HasOne("viko_api.Models.Entities.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Entity");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("viko_api.Models.Entities.Entity", b =>
                 {
-                    b.Navigation("Administrators");
-
                     b.Navigation("Events");
-
-                    b.Navigation("Students");
-
-                    b.Navigation("Teachers");
 
                     b.Navigation("Users");
                 });
@@ -432,23 +356,16 @@ namespace viko_api.Migrations
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("viko_api.Models.Entities.Student", b =>
+            modelBuilder.Entity("viko_api.Models.Entities.Role", b =>
                 {
-                    b.Navigation("EventRegistrations");
-                });
-
-            modelBuilder.Entity("viko_api.Models.Entities.Teacher", b =>
-                {
-                    b.Navigation("Events");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("viko_api.Models.Entities.User", b =>
                 {
-                    b.Navigation("Administrators");
+                    b.Navigation("EventRegistrations");
 
-                    b.Navigation("Students");
-
-                    b.Navigation("Teachers");
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

@@ -29,7 +29,8 @@ builder.Services
 
 builder.UseWhen<JWTValidationMiddleware>(context =>
 {
-    return context.FunctionDefinition.Name != "Login";
+    return context.FunctionDefinition.Name != "Login"
+        && context.FunctionDefinition.Name != "Signup";
 });
 
 //Service registration

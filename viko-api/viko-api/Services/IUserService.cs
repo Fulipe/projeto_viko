@@ -8,13 +8,15 @@ using Microsoft.Extensions.Logging;
 using viko_api.Models;
 using viko_api.Models.Dto;
 using viko_api.Models.Entities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace viko_api.Services
 {
     public interface IUserService
     {
         Task<UserDto> Authenticate(string username, string password);
-        Task<SignUpResponseDto> RegisterUser(SignUpRequestDto request);
-        Task<UserInfoDto> GetUserById(int id);
+        Task<ResponseDto> RegisterUser(SignUpRequestDto request);
+        Task<(ResponseDto, UserInfoDto)> GetUserById(int id);
+        Task<ResponseDto> UpdateUser (int id, UserInfoDto userinfo);
 
         public class UserService : IUserService
         {
@@ -27,7 +29,7 @@ namespace viko_api.Services
             public async Task<UserDto> Authenticate(string username, string password)
             {
                 var user = await _dbContext.Users
-                    .Where (u => u.Username == username && u.Password == password)
+                    .Where (u => u.Username == username && u.PasswordHash == password)
                     .Select(u => new
                     {
                         UserDto = new UserDto
@@ -42,12 +44,12 @@ namespace viko_api.Services
                 }
                 return (user.UserDto);
             }
-            public async Task<SignUpResponseDto> RegisterUser(SignUpRequestDto request)
+            public async Task<ResponseDto> RegisterUser(SignUpRequestDto request)
             {
                 //Username Validation
                 if (await _dbContext.Users.AsNoTracking().AnyAsync(u => u.Username == request.Username))
                 {
-                    var res = new SignUpResponseDto
+                    var res = new ResponseDto
                     {
                         status = false,
                         msg = "Username alrerady in use. Please choose a different username"
@@ -58,7 +60,7 @@ namespace viko_api.Services
                 //Email Validation
                 if (await _dbContext.Users.AsNoTracking().AnyAsync(u => u.Email == request.Email))
                 {
-                    var res = new SignUpResponseDto
+                    var res = new ResponseDto
                     {
                         status = false,
                         msg = "Email alrerady in use. Please choose a different email"
@@ -72,7 +74,7 @@ namespace viko_api.Services
                 {
                     var newEntity = new Entity
                     {
-                        Name = request.firstName + ' ' + request.lastName,
+                        Name = request.FirstName + ' ' + request.LastName,
                         Languages = request.Languages,
                     };
 
@@ -85,8 +87,9 @@ namespace viko_api.Services
                         Username = request.Username,
                         Email = request.Email,
                         Birthdate = request.BirthDate,
-                        Password = request.Password,
+                        PasswordHash = request.Password,
                         Phone = request.Phone,
+                        RoleId = 1,
                     };
 
                     _dbContext.Users.Add(newUser);
@@ -94,7 +97,7 @@ namespace viko_api.Services
 
                     await transaction.CommitAsync();
 
-                    var res = new SignUpResponseDto
+                    var res = new ResponseDto
                     {
                         status = true,
                         msg = "User was successfully created."
@@ -106,7 +109,7 @@ namespace viko_api.Services
                     throw;
                 }
             }
-            public async Task<UserInfoDto> GetUserById(int id)
+            public async Task<(ResponseDto, UserInfoDto?)> GetUserById(int id)
             {
                 var user = await _dbContext.Users
                     .Where(user => user.Id == id)
@@ -123,17 +126,94 @@ namespace viko_api.Services
                             Username = join.u.Username,
                             Email = join.u.Email,
                             Birthdate = join.u.Birthdate,
-                            Phone = join.u.Phone
+                            Phone = join.u.Phone,
+                            Photo = join.e.Image
 
                         },
                     }).FirstOrDefaultAsync();
 
                 if (user == null)
                 {
-                    return null;
+                    return (new ResponseDto
+                    {
+                        status = false,
+                        msg = "User was not found"
+
+                    }, null);
                 }
 
-                return user.UserInfoDto;
+                return (new ResponseDto 
+                {
+                    status = true,
+                    msg = "User was found and sent" 
+                }, user.UserInfoDto);
+            }
+            public async Task<ResponseDto> UpdateUser(int id, UserInfoDto userinfo)
+            {
+                var user = await _dbContext.Users
+                    .Where(user => user.Id == id)
+                    .Join(_dbContext.Entities,
+                        u => u.EntityId,
+                        e => e.Id,
+                        (u, e) => new { u, e })
+                    .FirstOrDefaultAsync();
+
+                if(user == null)
+                {
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "User not found.",
+                    };
+                }
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    if (!string.IsNullOrEmpty(userinfo.Username))
+                        user.u.Username = userinfo.Username;
+
+                    if (!string.IsNullOrEmpty(userinfo.Email))
+                        user.u.Email = userinfo.Email;
+
+                    if (!string.IsNullOrEmpty(userinfo.Phone))
+                        user.u.Phone = userinfo.Phone;
+                    
+                    if (userinfo.Birthdate != default)
+                        user.u.Birthdate = userinfo.Birthdate;
+
+                    if (!string.IsNullOrEmpty(userinfo.Name))
+                        user.e.Name = userinfo.Name;
+                    
+                    if (!string.IsNullOrEmpty(userinfo.Language))
+                        user.e.Languages = userinfo.Language;
+                    
+                    if (!string.IsNullOrEmpty(userinfo.Photo))
+                        user.e.Image = userinfo.Photo; // base64 string
+
+                    _dbContext.Users.Update(user.u);
+                    _dbContext.Entities.Update(user.e);
+                    await _dbContext.SaveChangesAsync();
+    
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "User updated!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "User not update - " + ex.Message 
+                    };
+                    throw;
+                }
+
             }
         }
     }

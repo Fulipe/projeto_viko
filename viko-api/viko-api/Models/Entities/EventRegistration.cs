@@ -8,12 +8,10 @@ public partial class EventRegistration
     public long Id { get; set; }
 
     public long StudentId { get; set; }
+    public User Student { get; set; } = null!;
 
     public long EventId { get; set; }
+    public Event Event { get; set; } = null!;
 
     public DateTime? RegistrationDate { get; set; }
-
-    public virtual Event Event { get; set; } = null!;
-
-    public virtual Student Student { get; set; } = null!;
 }
