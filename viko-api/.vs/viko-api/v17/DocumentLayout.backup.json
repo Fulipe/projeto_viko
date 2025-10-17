@@ -63,8 +63,7 @@
               "ViewState": "AgIAABkAAAAAAAAAAAAqwJQAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-25T10:03:26.698Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -76,8 +75,7 @@
               "RelativeToolTip": "viko-api\\Functions\\UpdateUser.cs",
               "ViewState": "AgIAAB8AAAAAAAAAAAA0wCYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T20:09:13.174Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T20:09:13.174Z"
             },
             {
               "$type": "Document",
@@ -89,8 +87,7 @@
               "RelativeToolTip": "viko-api\\Models\\Entities\\EventRegistration.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T08:42:41.216Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-13T08:42:41.216Z"
             },
             {
               "$type": "Document",
@@ -102,8 +99,7 @@
               "RelativeToolTip": "viko-api\\Services\\JWTService.cs",
               "ViewState": "AgIAAHcAAAAAAAAAAAAkwJkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-03T10:25:44.326Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-03T10:25:44.326Z"
             },
             {
               "$type": "Document",
@@ -127,8 +123,7 @@
               "RelativeToolTip": "viko-api\\Models\\Dto\\UserInfoDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAgAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T07:35:50.714Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-08T07:35:50.714Z"
             },
             {
               "$type": "Document",

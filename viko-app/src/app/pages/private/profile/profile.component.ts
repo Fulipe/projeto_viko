@@ -1,6 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from '../../../services/user.service';
 import { UserInfo } from '../../../interfaces/interfaces';
+import { COUNTRY_CODES } from '../../../interfaces/country-codes';
+import { splitDialAndNumber } from '../../../services/dialcodes-helper.service';
+
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 
@@ -17,18 +20,28 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveForms
 })
 export class ProfileComponent implements OnInit {
   private userService = inject(UserService)
-  
+
   loading = true
 
   user: UserInfo = {} as UserInfo;
   selectedFile?: File;
   previewUrl: string | ArrayBuffer | null = null;
-  
+
+  countryCodes = COUNTRY_CODES;
+  selectedCode = '+370';
+  phoneNumber = '';
+  fullPhone = '';
+
   ngOnInit() {
     this.userService.userInfo().subscribe({
       next: (user) => {
         this.user = user
-        this.previewUrl = user.photo ? user.phone : null 
+        this.previewUrl = user.photo ? user.phone : null
+        
+        const {countryCode, number} = splitDialAndNumber(this.user.phone)
+        this.selectedCode = countryCode;
+        this.phoneNumber = number;
+        
         console.log(this.user);
         this.loading = false;
       },
@@ -55,9 +68,30 @@ export class ProfileComponent implements OnInit {
     };
     reader.readAsDataURL(this.selectedFile);
   }
-  
+
+  onCodeChange() {
+    this.combinePhone();
+    console.log(this.selectedCode)
+    console.log(this.phoneNumber)
+
+  }
+
+  combinePhone() {
+    // Remove apenas o indicativo exato se o número começar por ele
+    let cleanNumber = this.phoneNumber.trim();
+
+    if (cleanNumber.startsWith(this.selectedCode)) {
+      cleanNumber = cleanNumber.slice(this.selectedCode.length);
+    }
+
+    this.fullPhone = `${this.selectedCode}${cleanNumber}`;
+  }
+
   onSave(form: NgForm){
     if (!form.dirty) return; // Evita chamadas desnecessárias
+
+    this.combinePhone()
+    this.user.phone = this.fullPhone
 
     console.log('Perfil atualizado:', this.user);
     this.userService.userUpdate(this.user).subscribe({
