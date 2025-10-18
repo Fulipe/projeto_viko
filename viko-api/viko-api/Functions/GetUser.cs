@@ -47,8 +47,10 @@ public class GetUser
                 return res;
             }
 
+            var userLogged = user.Item2;
+
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(user.Item2);
+            await response.WriteAsJsonAsync(new { userLogged });
             return response;
 
         } else {

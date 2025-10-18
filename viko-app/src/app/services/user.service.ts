@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 import { UserInfo } from '../interfaces/interfaces';
 import { environment } from '../../environments/environment';
 import { AuthService } from './auth.service';
@@ -15,8 +15,17 @@ export class UserService {
   private http= inject(HttpClient);
   private authService = inject(AuthService);
   
-  userInfo():Observable<UserInfo>{
-    return this.http.get<UserInfo>(`${environment.apiUrl}/GetUser`)
+  userInfo():Observable<UserInfo | false>{
+    return this.http.get<any>(`${environment.apiUrl}/GetUser`).pipe(
+      map((response) => {
+        if(response?.userLogged){
+          return response.userLogged;
+        }
+        
+        return of<false>(false);
+
+      })
+    )
   }
 
   userUpdate(user: UserInfo):Observable<UserInfo>{

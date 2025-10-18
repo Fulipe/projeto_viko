@@ -19,7 +19,7 @@ namespace viko_api.Services
     public class JWTService
     {
         private readonly ILogger<JWTService> _logger;
-        private static IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public JWTService(IConfiguration configuration, ILogger<JWTService> logger)
         {
@@ -51,7 +51,7 @@ namespace viko_api.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-        public static bool ValidateToken(string token)
+        public bool ValidateToken(string token)
         {
             if (string.IsNullOrEmpty(token))
             {

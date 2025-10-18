@@ -8,11 +8,11 @@ export interface LoginResponse {
 }
 
 export interface UserInfo {
-    photo: string;
     name: string;
-    username: string;
     email: string;
+    username: string;
     language: string;
     birthdate: string;
     phone: string;
+    photo: string;
 }

@@ -13,6 +13,11 @@ namespace viko_api.Middleware
 {
     public class JWTValidationMiddleware : IFunctionsWorkerMiddleware
     {
+        private readonly JWTService _jwtService;
+        public JWTValidationMiddleware(JWTService jwtservice)
+        {
+            _jwtService = jwtservice;
+        }
         public async Task Invoke(FunctionContext context, FunctionExecutionDelegate next)
         {
             var httpRequest = await context.GetHttpRequestDataAsync(); //gets inbound request
@@ -38,7 +43,7 @@ namespace viko_api.Middleware
             }
 
             // Validates token with JWTService
-            var tokenValid = JWTService.ValidateToken(token);
+            var tokenValid = _jwtService.ValidateToken(token);
 
             if (!tokenValid)
             {

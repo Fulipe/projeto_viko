@@ -13,7 +13,7 @@
             <div class="flex flex-col items-center mb-6">
                 <div class="relative">
                     @if (previewUrl) {
-                    <img [src]="user.photo || previewUrl"
+                    <img [src]="previewUrl"
                         class="w-24 h-24 rounded-full object-cover border border-gray-300" />
                     } @else {
                     <div
@@ -30,28 +30,34 @@
                                 d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
                         </svg>
 
-                        <input type="file" accept="image/*" (change)="onFileSelected($event, profileForm)"
+                        <input type="file" accept="image/*" (change)="onFileSelected($event)"
                             class="hidden" />
                     </label>
                 </div>
             </div>
 
-            <form #profileForm="ngForm" (ngSubmit)="onSave(profileForm)" class="space-y-5">
+            <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="space-y-5">
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Name</label>
-                    <input type="text" [(ngModel)]="user.name" name="name"
+                    <input type="text" formControlName="name" name="name"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Username</label>
-                    <input type="text" [(ngModel)]="user.username" name="username"
+                    <input type="text" formControlName="username" name="username"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Email</label>
-                    <input type="email" [(ngModel)]="user.email" name="email"
+                    <input type="email" formControlName="email" name="email"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Birthdate</label>
+                    <input type="date" formControlName="birthdate" name="birthdate"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
@@ -59,7 +65,7 @@
                     <label class="block text-sm font-medium text-gray-600">Phone</label>
                     <div class="flex space-x-2 mt-1">
                         <select 
-                            [(ngModel)]="selectedCode" 
+                            formControlName="selectedCode"
                             name="countryCodes"
                             (change)="onCodeChange()"
                             class="border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring focus:ring-blue-200 w-24">
@@ -69,9 +75,12 @@
                                 </option>
                             }
                         </select>
-                        <input type="text" 
-                            [(ngModel)]="phoneNumber" 
+                        <input type="tel" 
+                            formControlName="phoneNumber" 
+                            pattern="[0-9]*"
                             name="phone"
+                            inputmode="numeric"
+                            (input)="phoneValidator($event)"
                             (blur)="combinePhone()"
                             class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                         
@@ -80,15 +89,10 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Languages</label>
-                    <input type="text" [(ngModel)]="user.language" name="languages"
+                    <input type="text" formControlName="language" name="languages"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-600">Birthdate</label>
-                    <input type="date" [(ngModel)]="user.birthdate" name="birthdate"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
-                </div>
 
                 <div class="text-center pt-4">
                     <button type="submit" [disabled]="!profileForm.dirty" class="bg-green-500 hover:bg-green-600 

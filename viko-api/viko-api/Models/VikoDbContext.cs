@@ -160,44 +160,6 @@ public partial class VikoDbContext : DbContext
             );
         });
 
-        //modelBuilder.Entity<Student>(entity =>
-        //{
-        //    entity.HasKey(e => e.Id).HasName("PK__Students__3214EC07E1286ECC");
-
-        //    entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-        //    entity.Property(e => e.UserId).HasColumnName("User_Id");
-
-        //    entity.HasOne(d => d.Entity).WithMany(p => p.Students)
-        //        .HasForeignKey(d => d.EntityId)
-        //        .OnDelete(DeleteBehavior.ClientSetNull)
-        //        .HasConstraintName("FK_Student_Entity");
-
-        //    entity.HasOne(d => d.User).WithMany(p => p.Students)
-        //        .HasForeignKey(d => d.UserId)
-        //        .OnDelete(DeleteBehavior.ClientSetNull)
-        //        .HasConstraintName("FK_Student_User");
-        //});
-
-        //modelBuilder.Entity<Teacher>(entity =>
-        //{
-        //    entity.HasKey(e => e.Id).HasName("PK__Teacher__3214EC0794A11128");
-
-        //    entity.ToTable("Teacher");
-
-        //    entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-        //    entity.Property(e => e.UserId).HasColumnName("User_Id");
-
-        //    entity.HasOne(d => d.Entity).WithMany(p => p.Teachers)
-        //        .HasForeignKey(d => d.EntityId)
-        //        .OnDelete(DeleteBehavior.ClientSetNull)
-        //        .HasConstraintName("FK_Teacher_Entity");
-
-        //    entity.HasOne(d => d.User).WithMany(p => p.Teachers)
-        //        .HasForeignKey(d => d.UserId)
-        //        .OnDelete(DeleteBehavior.ClientSetNull)
-        //        .HasConstraintName("FK_Teacher_User");
-        //});
-
         modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Users");
