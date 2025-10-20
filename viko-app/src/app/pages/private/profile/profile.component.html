@@ -13,8 +13,7 @@
             <div class="flex flex-col items-center mb-6">
                 <div class="relative">
                     @if (previewUrl) {
-                    <img [src]="previewUrl"
-                        class="w-24 h-24 rounded-full object-cover border border-gray-300" />
+                    <img [src]="previewUrl" class="w-24 h-24 rounded-full object-cover border border-gray-300" />
                     } @else {
                     <div
                         class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm">
@@ -30,8 +29,7 @@
                                 d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
                         </svg>
 
-                        <input type="file" accept="image/*" (change)="onFileSelected($event)"
-                            class="hidden" />
+                        <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
                     </label>
                 </div>
             </div>
@@ -52,7 +50,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Email</label>
                     <input type="email" formControlName="email" name="email"
-                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
@@ -64,34 +62,59 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Phone</label>
                     <div class="flex space-x-2 mt-1">
-                        <select 
-                            formControlName="selectedCode"
-                            name="countryCodes"
-                            (change)="onCodeChange()"
+                        <select formControlName="selectedCode" name="countryCodes" (change)="onCodeChange()"
                             class="border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring focus:ring-blue-200 w-24">
                             @for (code of countryCodes; track code.code + $index) {
-                                <option [value]="code.code">
-                                    {{code.flag}} ({{code.code}}) {{code.name}} 
-                                </option>
+                            <option [value]="code.code">
+                                {{code.flag}} ({{code.code}}) {{code.name}}
+                            </option>
                             }
                         </select>
-                        <input type="tel" 
-                            formControlName="phoneNumber" 
-                            pattern="[0-9]*"
-                            name="phone"
-                            inputmode="numeric"
-                            (input)="phoneValidator($event)"
-                            (blur)="combinePhone()"
+                        <input type="tel" formControlName="phoneNumber" pattern="[0-9]*" name="phone"
+                            inputmode="numeric" (input)="phoneValidator($event)" (blur)="combinePhone()"
                             class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
-                        
+
                     </div>
                 </div>
 
-                <div>
+                <div
+                    class="relative w-full border border-gray-300 rounded-md px-2 py-2 flex flex-wrap items-center gap-2 focus-within:ring focus-within:ring-blue-200">
                     <label class="block text-sm font-medium text-gray-600">Languages</label>
-                    <input type="text" formControlName="language" name="languages"
+
+                    <!-- Tags (línguas selecionadas) -->
+                    @for (lang of selectedLanguages; track $index) {
+                    <span class="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm">
+                        {{ lang }}
+                        <button 
+                            type="button" 
+                            class="ml-1 text-blue-500 hover:text-red-500 focus:outline-none"
+                            (click)="removeLanguage(lang)">
+                            ✕
+                        </button>
+                    </span>
+                    }
+
+                    <input type="text" formControlName="language" name="languages" 
+                        #inputEl
+                        (input)="onSearch()" 
+                        (focus)="onSearch()"
+                        (blur)="onInputBlur()"
+                        placeholder="Select your languages"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+
+                    @if (searching) {
+                    <ul
+                        class="relativez-10 bg-white border border-gray-300 w-full rounded-md shadow-lg max-h-48 overflow-y-auto">
+                        @for (lang of languages; track lang.index){
+                        <li (click)="selectLanguage(lang)"
+                            class="px-3 py-2 hover:bg-blue-100 cursor-pointer items-center gap-2">
+                            <span>{{ lang.name }}</span>
+                        </li>
+                        }
+                    </ul>
+                    }
                 </div>
+
 
 
                 <div class="text-center pt-4">
@@ -104,7 +127,7 @@
                 </div>
             </form>
             } @else {
-                <div class="text-center py-6 text-gray-500">Loading profile...</div>
+            <div class="text-center py-6 text-gray-500">Loading profile...</div>
             }
         </section>
 

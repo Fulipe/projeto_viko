@@ -1,12 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../services/user.service';
-import { UserInfo } from '../../../interfaces/interfaces';
+import { LanguagesObjectFormat, UserInfo } from '../../../interfaces/interfaces';
 import { COUNTRY_CODES } from '../../../interfaces/country-codes';
 import { splitDialAndNumber } from '../../../services/dialcodes-helper.service';
-import { AbstractControl, Form, ValidationErrors, ValidatorFn } from '@angular/forms';
-
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LANGUAGES } from '../../../interfaces/languages';
 
 const PHONE_PATTERN = /^[0-9+()\-\s]{6,20}$/;
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
@@ -23,6 +22,9 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
+
+  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
+
   private userService = inject(UserService)
 
   profileForm!: FormGroup; //Form of profile
@@ -34,10 +36,16 @@ export class ProfileComponent implements OnInit {
   selectedFile?: File;
   previewUrl: string | ArrayBuffer | null = null;
 
+  //Phone
   countryCodes = COUNTRY_CODES;
   selectedCode = '+370';
   phoneNumber = '';
   fullPhone = '';
+
+  //Language
+  languages = [...LANGUAGES];
+  selectedLanguages: any[] = [];
+  searching = false
 
   constructor(private fb: FormBuilder) {
     //Forms startup
@@ -50,7 +58,8 @@ export class ProfileComponent implements OnInit {
       birthdate: [{ value: '' }, [Validators.required]],
       selectedCode: ['+370', Validators.required],
       phoneNumber: ['', [Validators.required, Validators.pattern(PHONE_PATTERN), Validators.maxLength(20)]],
-      language: ['', [Validators.required]]
+      language: ['']
+
     });
 
     this.passwordForm = this.fb.group({
@@ -63,6 +72,7 @@ export class ProfileComponent implements OnInit {
     this.loadUser()
   }
 
+
   private loadUser() {
     this.userService.userInfo().subscribe({
       next: (res: UserInfo | false) => {
@@ -71,7 +81,7 @@ export class ProfileComponent implements OnInit {
           this.fillFormEmpty()
           return;
         }
-        
+
         const u: any = res;
         const map: UserInfo = {
           name: u.Name ?? u.name ?? '',
@@ -92,25 +102,17 @@ export class ProfileComponent implements OnInit {
           birthdate: map.birthdate,
           selectedCode: countryCode,
           phoneNumber: number,
-          language: map.language
+          // language: map.language
         })
 
         if (map.photo) this.previewUrl = map.photo
         if (map.phone) this.fullPhone = map.phone
-
+        if (map.language) map.language.split(',').forEach(langs => this.selectedLanguages.push(langs))
 
         this.profileForm.markAsPristine();
 
         this.loading = false
 
-        // this.user = user
-        // this.previewUrl = user.photo ? user.photo : null
-
-        // this.selectedCode = countryCode;
-        // this.phoneNumber = number;
-
-        // console.log(this.user);
-        // this.loading = false;
       },
       error: (_) => {
         console.error('Erro ao carregar perfil:', _)
@@ -120,6 +122,43 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  onSearch() {
+    this.searching = true
+
+    const query = this.profileForm.get('language')?.value || '';
+
+    if (query.trim() === '') {
+      this.languages = LANGUAGES.filter(
+        l => !this.selectedLanguages.includes(l.name)
+      );
+    } else {
+      this.languages = LANGUAGES.filter(
+        l => l.name.toLowerCase().startsWith(query) &&
+          !this.selectedLanguages.includes(l.name));
+      console.log(this.languages)
+    }
+  }
+
+  selectLanguage(lang: LanguagesObjectFormat) {
+    this.searching = false
+
+    this.selectedLanguages.push(lang.name)
+
+    this.inputEl.nativeElement.value = ''
+    this.profileForm.markAsDirty();
+
+  }
+
+  removeLanguage(lang: LanguagesObjectFormat): void {
+    this.selectedLanguages = this.selectedLanguages.filter(l => l !== lang.name);
+    this.profileForm.markAsDirty();
+
+  }
+
+  onInputBlur(){
+    setTimeout(() => (this.searching = false), 250);
+  }
+
   private fillFormEmpty() {
     this.profileForm.patchValue({
       username: '',
@@ -127,9 +166,11 @@ export class ProfileComponent implements OnInit {
       email: '',
       birthdate: '',
       selectedCode: '+370',
+      language: '',
       phoneNumber: '',
 
     });
+    this.selectedLanguages = []
     this.profileForm.markAsPristine();
   };
 
@@ -168,13 +209,15 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  private updateUser(){
+  private updateUser() {
     this.user.name = this.profileForm.get('name')?.value,
-    this.user.username = this.profileForm.get('username')?.value,
-    this.user.email = this.profileForm.get('email')?.value,
-    this.user.phone = this.combinePhone(),
-    this.user.birthdate = this.profileForm.value.birthdate,
-    this.user.language = this.profileForm.value.language
+      this.user.username = this.profileForm.get('username')?.value,
+      this.user.email = this.profileForm.get('email')?.value,
+      this.user.phone = this.combinePhone(),
+      this.user.birthdate = this.profileForm.value.birthdate,
+      this.user.language = this.selectedLanguages.join(",")
+
+    this.fillFormEmpty()
   }
 
   onSave() {
@@ -190,7 +233,6 @@ export class ProfileComponent implements OnInit {
     this.userService.userUpdate(this.user).subscribe({
       next: () => {
         console.log('Perfil guardado com sucesso!');
-        // form.form.markAsPristine(); // limpa o estado dirty
         this.loadUser()
       },
       error: (err) => {
