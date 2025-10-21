@@ -1,0 +1,164 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-2xl bg-white shadow-md rounded-xl p-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6 text-center pb-3">Create an Account</h1>
+
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="space-y-5">
+            <!-- Profile Picture -->
+            <div class="flex flex-col items-center mb-5">
+                <div class="relative">
+                    @if (previewUrl) {
+                    <img [src]="previewUrl" class="w-24 h-24 rounded-full object-cover border border-gray-300" />
+                    } @else {
+                    <div
+                        class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm">
+                        Photo
+                    </div>
+                    }
+
+                    <label
+                        class="absolute bottom-0 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                        </svg>
+                        <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
+                    </label>
+                </div>
+            </div>
+
+            <!-- First Name -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">First Name</label>
+                    <input type="text" formControlName="FirstName" placeholder="Enter your first name"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                </div>
+
+                <!-- Last Name -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Last Name</label>
+                    <input type="text" formControlName="LastName" placeholder="Enter your last name"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                </div>
+            </div>
+
+            <!-- Username -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Username</label>
+                <input type="text" formControlName="Username" placeholder="Choose a username"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200">
+            </div>
+
+            <!-- Email -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Email</label>
+                <input type="email" formControlName="Email" placeholder="you@example.com"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    [ngClass]="{'border-red-500': signupForm.get('Email')?.invalid && signupForm.get('Email')?.touched}">
+
+                @if (signupForm.get('Email')?.hasError('required') && signupForm.get('Email')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Email is required.</p>
+                }
+                @if (signupForm.get('Email')?.hasError('email') && signupForm.get('Email')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Please enter a valid email address.</p>
+                }
+            </div>
+
+            <!-- Password -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Password</label>
+                <input type="password" formControlName="Password" placeholder="Enter password"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    [ngClass]="{ 'border-red-500': signupForm.get('Password')?.invalid && signupForm.get('Password')?.touched}">
+
+                @if (signupForm.get('Password')?.hasError('required') && signupForm.get('Password')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Password is required.</p>
+                }
+                @if (signupForm.get('Password')?.hasError('minlength') && signupForm.get('Password')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Password must be at least 8 characters.</p>
+                }
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Confirm Password</label>
+                <input type="password" formControlName="ConfirmPassword" placeholder="Repeat password"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                    [ngClass]="{'border-red-500': signupForm.hasError('passwordMismatch') && signupForm.get('ConfirmPassword')?.touched}">
+
+                @if (signupForm.hasError('passwordMismatch') && signupForm.get('ConfirmPassword')?.touched) {
+                <p class="text-red-500 text-sm mt-1">Passwords do not match.</p>
+                }
+            </div>
+
+            <!-- Birthdate -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Birthdate</label>
+                <input type="date" formControlName="BirthDate"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200">
+            </div>
+
+            <!-- Phone -->
+            <div>
+                <label class="block text-sm font-medium text-gray-600">Phone</label>
+                <div class="flex space-x-2 mt-1">
+                    <select formControlName="selectedCode" (change)="onCodeChange()"
+                        class="border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 w-24">
+                        @for (code of countryCodes; track code.code + $index) {
+                        <option [value]="code.code">
+                            {{code.flag}} ({{code.code}}) {{code.name}}
+                        </option>
+                        }
+                    </select>
+                    <input type="tel" formControlName="phoneNumber" inputmode="numeric" (input)="phoneValidator($event)"
+                        (blur)="combinePhone()"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200">
+                </div>
+            </div>
+
+            <!-- Languages -->
+            <div
+                class="relative w-full border border-gray-300 rounded-md px-2 py-2 flex flex-wrap items-center gap-2 focus-within:ring-2 focus-within:ring-blue-200">
+                <label class="block text-sm font-medium text-gray-600">Languages</label>
+
+                @for (lang of selectedLanguages; track $index) {
+                <span class="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm">
+                    {{ lang }}
+                    <button type="button" class="ml-1 text-blue-500 hover:text-red-500 focus:outline-none"
+                        (click)="removeLanguage(lang)">✕</button>
+                </span>
+                }
+
+                <input type="text" formControlName="language" #inputEl (input)="onSearch()" (focus)="onSearch()"
+                    (blur)="onInputBlur()" placeholder="Select your languages"
+                    class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200">
+
+                @if (searching) {
+                <ul
+                    class="relative z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg max-h-48 overflow-y-auto mt-1">
+                    @for (lang of languages; track lang.index) {
+                    <li (click)="selectLanguage(lang)" class="px-3 py-2 hover:bg-blue-100 cursor-pointer">{{ lang.name
+                        }}</li>
+                    }
+                </ul>
+                }
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center pt-4">
+                <button type="submit" [disabled]="!signupForm.dirty || signupForm.invalid" class="w-full bg-blue-500 hover:bg-blue-600 
+            text-white font-medium px-6 py-2 rounded-md 
+            shadow-sm transition 
+            disabled:bg-gray-400 disabled:cursor-not-allowed">
+                    Sign Up
+                </button>
+            </div>
+        </form>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+            Already have an account?
+            <a href="/login" class="text-blue-500 font-medium hover:underline">Login here.</a>
+        </p>
+    </div>
+</div>

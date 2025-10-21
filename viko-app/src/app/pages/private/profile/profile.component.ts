@@ -22,9 +22,6 @@ const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
-
-  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
-
   private userService = inject(UserService)
 
   profileForm!: FormGroup; //Form of profile
@@ -33,18 +30,20 @@ export class ProfileComponent implements OnInit {
   loading = true
 
   user: UserInfo = {} as UserInfo;
+
+  //Photo
   selectedFile?: File;
   previewUrl: string | ArrayBuffer | null = null;
 
   //Phone
   countryCodes = COUNTRY_CODES;
   selectedCode = '+370';
-  phoneNumber = '';
   fullPhone = '';
 
   //Language
   languages = [...LANGUAGES];
   selectedLanguages: any[] = [];
+  @ViewChild('inputEl') inputEl!: ElementRef<HTMLInputElement>;
   searching = false
 
   constructor(private fb: FormBuilder) {
@@ -149,13 +148,12 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  removeLanguage(lang: LanguagesObjectFormat): void {
-    this.selectedLanguages = this.selectedLanguages.filter(l => l !== lang.name);
+  removeLanguage(lang: any): void {
+    this.selectedLanguages = this.selectedLanguages.filter(l => l !== lang);
     this.profileForm.markAsDirty();
-
   }
 
-  onInputBlur(){
+  onInputBlur() {
     setTimeout(() => (this.searching = false), 250);
   }
 

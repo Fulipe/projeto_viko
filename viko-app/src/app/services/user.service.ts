@@ -14,6 +14,10 @@ export class UserService {
 
   private http= inject(HttpClient);
   private authService = inject(AuthService);
+
+  createUser(dto: any):Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/Signup`, dto)
+  }
   
   userInfo():Observable<UserInfo | false>{
     return this.http.get<any>(`${environment.apiUrl}/GetUser`).pipe(
@@ -29,9 +33,6 @@ export class UserService {
   }
 
   userUpdate(user: UserInfo):Observable<UserInfo>{
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.authService.getToken()}`
-    }) 
     return this.http.post<any>(`${environment.apiUrl}/UpdateUser`, user)
   }
 }

@@ -4,6 +4,7 @@ import { authGuard } from './guards/auth.guard';
 import { LayoutComponent } from './pages/private/layout/layout.component';
 import { DashboardComponent } from './pages/private/dashboard/dashboard.component';
 import { ProfileComponent } from './pages/private/profile/profile.component';
+import { SignupComponent } from './pages/signup/signup.component';
 
 export const routes: Routes = [
     {
@@ -22,5 +23,7 @@ export const routes: Routes = [
         ]
     },
     { path: 'login', component: LoginComponent },
+    { path: 'signup', component: SignupComponent },
+
     { path: '**', redirectTo: 'private/dashboard', pathMatch: 'full'},
 ];

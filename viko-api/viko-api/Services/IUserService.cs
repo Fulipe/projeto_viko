@@ -75,6 +75,7 @@ namespace viko_api.Services
                     var newEntity = new Entity
                     {
                         Name = request.FirstName + ' ' + request.LastName,
+                        Image = request.Photo,
                         Languages = request.Languages,
                     };
 

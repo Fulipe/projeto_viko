@@ -22,6 +22,9 @@ namespace viko_api.Models.Dto
         [Required]
         [JsonPropertyName("Username")]
         public string Username { get; set; }
+
+        [JsonPropertyName("Photo")]
+        public string? Photo { get; set; }
         
         [Required]
         [DataType(DataType.EmailAddress)]
