@@ -13,7 +13,7 @@ namespace viko_api.Services
 {
     public interface IUserService
     {
-        Task<UserDto> Authenticate(string username, string password);
+        Task<(UserDto?, ResponseDto)> Authenticate(string username, string password);
         Task<ResponseDto> RegisterUser(SignUpRequestDto request);
         Task<(ResponseDto, UserInfoDto)> GetUserById(int id);
         Task<ResponseDto> UpdateUser (int id, UserInfoDto userinfo);
@@ -26,7 +26,7 @@ namespace viko_api.Services
             {
                 _dbContext = dbContext;
             }
-            public async Task<UserDto> Authenticate(string username, string password)
+            public async Task<(UserDto?, ResponseDto)> Authenticate(string username, string password)
             {
                 var user = await _dbContext.Users
                     .Where (u => u.Username == username && u.PasswordHash == password)
@@ -38,11 +38,23 @@ namespace viko_api.Services
                             Username = u.Username,
                         },
                     }).FirstOrDefaultAsync();
+
                 if (user == null)
                 {
-                    return (null);
+                    return (null, 
+                        new ResponseDto {
+                            status = false,
+                            msg = "Authentication failed. Please check you credentials."
+                        }
+                    );
                 }
-                return (user.UserDto);
+
+                return (user.UserDto, 
+                    new ResponseDto {
+                        status = true,
+                        msg = "Authentication successful!"
+                    }
+                );
             }
             public async Task<ResponseDto> RegisterUser(SignUpRequestDto request)
             {

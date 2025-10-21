@@ -21,6 +21,9 @@ export class LoginComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  msg = '';
+  loginAlert = false;
+
   form = this.fb.group({
     username: this.fb.nonNullable.control('', Validators.required),
     password: this.fb.nonNullable.control('', Validators.required)
@@ -30,10 +33,18 @@ export class LoginComponent {
     if (this.form.invalid) return;
 
     const credentials: LoginRequest = this.form.getRawValue();
-    
+
     this.auth.login(credentials).subscribe({
-        next: () => this.router.navigate(['/private/dashboard']),
-        error: (err) => console.error('Login failed', err)
-      });
+      next: (res) => {
+        if (res.token) {
+          this.router.navigate(['/private/dashboard'])
+        }
+      },
+      error: (err) => {
+        this.loginAlert = true;
+        this.msg = "Authentication failed. Please check you credentials."
+        console.error('Login failed', err)
+      }
+    });
   }
 }

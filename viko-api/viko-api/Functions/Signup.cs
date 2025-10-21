@@ -84,8 +84,6 @@ public class Signup
             return badResponse;
         }
         else { 
-            _logger.LogInformation(user.ToString());
-
             var response = req.CreateResponse(HttpStatusCode.Created);
             await response.WriteAsJsonAsync(new
             {

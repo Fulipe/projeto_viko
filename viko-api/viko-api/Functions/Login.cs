@@ -37,24 +37,22 @@ public class Login
     {
         var body = await req.ReadFromJsonAsync<LoginRequest>();
 
-        var user = await _userService.Authenticate(body.Username, body.Password);
+        var auth = await _userService.Authenticate(body.Username, body.Password);
+
+        var user = auth.Item1;
+        var authResponse = auth.Item2;
 
         if (user == null)
         {
-            _logger.LogInformation("USER NULL!");
-
-            var nullResponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            return nullResponse;
+            var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
+            await badresponse.WriteAsJsonAsync(authResponse);
+            return badresponse;
         }
-
-        _logger.LogInformation("SUCCESS!!!");
 
         var token = _jwtService.GenerateJwtToken(user);
 
-        _logger.LogInformation(token);
-
         var response = req.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(new { token });
+        await response.WriteAsJsonAsync(new {token, authResponse});
         return response;
 
     }
