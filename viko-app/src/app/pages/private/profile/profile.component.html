@@ -11,52 +11,57 @@
             <h2 class="text-lg font-semibold text-gray-700 mb-4">User Information</h2>
 
             <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="space-y-5">
-            <div class="flex flex-col items-center mb-6">
-                <div class="relative">
-                    @if (previewUrl) {
-                    <img [src]="previewUrl" class="w-24 h-24 rounded-full object-cover border border-gray-300" />
-                    } @else {
-                    <div
-                        class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm">
-                        Photo
+                <div class="flex flex-col items-center mb-6">
+                    <div class="relative">
+                        @if (previewUrl) {
+                        <img [src]="previewUrl" class="w-24 h-24 rounded-full object-cover border border-gray-300" />
+                        } @else {
+                        <div
+                            class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm">
+                            Photo
+                        </div>
+                        }
+
+                        <label
+                            class="absolute bottom-0 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                            </svg>
+
+                            <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
+                        </label>
                     </div>
-                    }
-
-                    <label
-                        class="absolute bottom-0 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-full cursor-pointer">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
-                        </svg>
-
-                        <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
-                    </label>
                 </div>
-            </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Name</label>
                     <input type="text" formControlName="name" name="name"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                        class="w-full border border-gray-300 rounded-md text-gray-600 px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Username</label>
                     <input type="text" formControlName="username" name="username"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                        class="w-full border border-gray-300 rounded-md text-gray-600 px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Email</label>
                     <input type="email" formControlName="email" name="email"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                        class="w-full border border-gray-300 rounded-md text-gray-600 px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Role</label>
+                    <input type="text" formControlName="role" name="role"
+                        class="w-full border border-gray-300 rounded-md text-gray-600 px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Birthdate</label>
                     <input type="date" formControlName="birthdate" name="birthdate"
-                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+                        class="w-full border border-gray-300 rounded-md text-gray-600 px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
                 </div>
 
                 <div>
@@ -85,21 +90,15 @@
                     @for (lang of selectedLanguages; track $index) {
                     <span class="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm">
                         {{ lang }}
-                        <button 
-                            type="button" 
-                            class="ml-1 text-blue-500 hover:text-red-500 focus:outline-none"
+                        <button type="button" class="ml-1 text-blue-500 hover:text-red-500 focus:outline-none"
                             (click)="removeLanguage(lang)">
                             ✕
                         </button>
                     </span>
                     }
 
-                    <input type="text" formControlName="language" name="languages" 
-                        #inputEl
-                        (input)="onSearch()" 
-                        (focus)="onSearch()"
-                        (blur)="onInputBlur()"
-                        placeholder="Select your languages"
+                    <input type="text" formControlName="language" name="languages" #inputEl (input)="onSearch()"
+                        (focus)="onSearch()" (blur)="onInputBlur()" placeholder="Select your languages"
                         class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
 
                     @if (searching) {

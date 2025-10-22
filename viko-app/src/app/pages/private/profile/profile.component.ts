@@ -54,11 +54,11 @@ export class ProfileComponent implements OnInit {
       username: [{ value: '', disabled: true }, [Validators.required]],
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
       photo: [null],
-      birthdate: [{ value: '' }, [Validators.required]],
+      birthdate: [{ value: '', disabled: true }, [Validators.required]],
       selectedCode: ['+370', Validators.required],
       phoneNumber: ['', [Validators.required, Validators.pattern(PHONE_PATTERN), Validators.maxLength(20)]],
-      language: ['']
-
+      language: [''],
+      role: [{value: '', disabled: true}]
     });
 
     this.passwordForm = this.fb.group({
@@ -89,7 +89,8 @@ export class ProfileComponent implements OnInit {
           language: u.Language ?? u.language ?? '',
           birthdate: u.Birthdate ?? u.birthdate ?? '',
           phone: u.Phone ?? u.phone ?? '',
-          photo: u.Photo ?? u.photo ?? null
+          photo: u.Photo ?? u.photo ?? null,
+          role: u.Role ?? u.role ?? ''
         }
 
         const { countryCode, number } = splitDialAndNumber(map.phone)
@@ -101,6 +102,7 @@ export class ProfileComponent implements OnInit {
           birthdate: map.birthdate,
           selectedCode: countryCode,
           phoneNumber: number,
+          role: map.role,
           // language: map.language
         })
 
@@ -166,6 +168,7 @@ export class ProfileComponent implements OnInit {
       selectedCode: '+370',
       language: '',
       phoneNumber: '',
+      role: ''
 
     });
     this.selectedLanguages = []
@@ -213,7 +216,8 @@ export class ProfileComponent implements OnInit {
       this.user.email = this.profileForm.get('email')?.value,
       this.user.phone = this.combinePhone(),
       this.user.birthdate = this.profileForm.value.birthdate,
-      this.user.language = this.selectedLanguages.join(",")
+      this.user.language = this.selectedLanguages.join(","),
+      this.user.role = this.profileForm.get('role')?.value
 
     this.fillFormEmpty()
   }

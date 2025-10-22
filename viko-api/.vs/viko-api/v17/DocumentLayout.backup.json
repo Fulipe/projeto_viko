@@ -67,8 +67,7 @@
               "ViewState": "AgIAABUAAAAAAAAAAAAowJQAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-25T10:03:26.698Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
@@ -80,8 +79,7 @@
               "RelativeToolTip": "viko-api\\Models\\Entities\\User.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAuwBQAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T16:03:39.702Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-18T16:03:39.702Z"
             },
             {
               "$type": "Document",
@@ -93,8 +91,7 @@
               "RelativeToolTip": "viko-api\\Functions\\UpdateUser.cs",
               "ViewState": "AgIAABgAAAAAAAAAAADwvyYAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T20:09:13.174Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T20:09:13.174Z"
             },
             {
               "$type": "Document",
@@ -118,8 +115,7 @@
               "RelativeToolTip": "viko-api\\Services\\JWTService.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAqwBUAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-03T10:25:44.326Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-03T10:25:44.326Z"
             },
             {
               "$type": "Document",
@@ -131,8 +127,7 @@
               "RelativeToolTip": "viko-api\\Models\\VikoDbContext.cs",
               "ViewState": "AgIAAI0AAAAAAAAAAAAwwKAAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T09:04:50.377Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-08T09:04:50.377Z"
             },
             {
               "$type": "Document",
@@ -144,8 +139,7 @@
               "RelativeToolTip": "viko-api\\Models\\Dto\\UserInfoDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAgAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T07:35:50.714Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-08T07:35:50.714Z"
             },
             {
               "$type": "Document",
@@ -157,8 +151,7 @@
               "RelativeToolTip": "viko-api\\Functions\\GetUser.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAmwDQAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-07T08:38:57.625Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-07T08:38:57.625Z"
             },
             {
               "$type": "Document",

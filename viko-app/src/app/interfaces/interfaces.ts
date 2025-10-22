@@ -22,4 +22,5 @@ export interface UserInfo {
     birthdate: string;
     phone: string;
     photo: string;
+    role: string;
 }

@@ -130,17 +130,22 @@ namespace viko_api.Services
                         u => u.EntityId,
                         e => e.Id,
                         (u, e) => new { u, e })
+                    .Join(_dbContext.Roles,
+                        u => u.u.RoleId,
+                        r => r.Id,
+                        (u, r) => new { u, r })
                     .Select(join => new
                     {
                         UserInfoDto = new UserInfoDto
                         {
-                            Name = join.e.Name,
-                            Language = join.e.Languages,
-                            Username = join.u.Username,
-                            Email = join.u.Email,
-                            Birthdate = join.u.Birthdate,
-                            Phone = join.u.Phone,
-                            Photo = join.e.Image
+                            Name = join.u.e.Name,
+                            Language = join.u.e.Languages,
+                            Username = join.u.u.Username,
+                            Email = join.u.u.Email,
+                            Birthdate = join.u.u.Birthdate,
+                            Phone = join.u.u.Phone,
+                            Photo = join.u.e.Image,
+                            Role = join.r.Name
 
                         },
                     }).FirstOrDefaultAsync();
