@@ -9,6 +9,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using viko_api.Helpers;
 using viko_api.Models.Dto;
 using viko_api.Services;
 
@@ -30,13 +31,20 @@ public class GetUser
     }
 
     [Function("GetUser")]
-    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext context)
     {
-        var detachid = _jwtService.DetachId(req);   
+        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher", "Student");
+        if (roleCheck != null)
+            return roleCheck; // retorna Forbidden/Unauthorized automaticamente
+
+        var detachid = _jwtService.DetachInfo(req);
+
+        var userRole = context.Items["UserRole"];
 
         if(detachid.status == true)
         {
-            var userid = detachid.value;
+            var userid = detachid.valueInt;
+
             //Sends user ID to User Service
             var user = await _userService.GetUserById(userid);
 
@@ -50,7 +58,7 @@ public class GetUser
             var userLogged = user.Item2;
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new { userLogged });
+            await response.WriteAsJsonAsync(new { userLogged, Role = userRole });
             return response;
 
         } else {

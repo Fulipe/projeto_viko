@@ -53,6 +53,22 @@ namespace viko_api.Middleware
                 return;
             }
 
+            // Detach user data (id e role)
+            var responseDto = _jwtService.DetachInfo(httpRequest);
+            if (!responseDto.status)
+            {
+                var response = httpRequest.CreateResponse(HttpStatusCode.Unauthorized);
+                await response.WriteStringAsync(responseDto.msg);
+                context.GetInvocationResult().Value = response;
+                return;
+            }
+
+            var userId = responseDto.valueInt;
+            var userRole = responseDto.valueString;
+
+            context.Items["UserId"] = userId;
+            context.Items["UserRole"] = userRole!;
+
             await next(context);
         }
     }

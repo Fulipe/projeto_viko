@@ -1,19 +1,19 @@
-<nav class="bg-white/90 backdrop-blur-md shadow-md fixed w-full z-50">
+<nav class="bg-white/90 backdrop-blur-md shadow-md w-full z-50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between h-16">
-      <!-- Logo -->
-      <div class="flex items-center">
-        <span class="text-2xl font-bold text-blue-600">MyApp</span>
+    <div class="flex justify-between items-center h-16">
+      <!-- Lado esquerdo: botão hambúrguer + logo -->
+      <div class="flex items-center space-x-3">
+        <!-- Botão hamburguer -->
+        <button mat-icon-button class="md:hidden" (click)="toggleMobileMenu()">
+          <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
+        </button>
+
+        <!-- Logo -->
+        <a routerLink="/">
+          <span class="text-2xl font-bold text-blue-600">VikoEvents</span>
+        </a>
       </div>
 
-      <!-- Links (desktop) -->
-      <div class="hidden md:flex items-center space-x-6">
-        <a routerLink="/home" class="hover:text-blue-600 transition">Home</a>
-        <a routerLink="/private/dashboard" class="hover:text-blue-600 transition">Dashboard</a>
-        <a routerLink="/about" class="hover:text-blue-600 transition">Sobre</a>
-      </div>
-
-      <!-- Ações -->
       <div class="flex items-center space-x-2">
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>account_circle</mat-icon>
@@ -22,11 +22,6 @@
           <button mat-menu-item routerLink="/private/profile">Perfil</button>
           <button mat-menu-item (click)="logout()">Sair</button>
         </mat-menu>
-
-        <!-- Botão mobile -->
-        <button mat-icon-button class="md:hidden" (click)="toggleMobileMenu()">
-          <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
-        </button>
       </div>
     </div>
   </div>

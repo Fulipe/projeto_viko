@@ -30,12 +30,17 @@ namespace viko_api.Services
             {
                 var user = await _dbContext.Users
                     .Where (u => u.Username == username && u.PasswordHash == password)
-                    .Select(u => new
+                    .Join(_dbContext.Roles,
+                        u => u.RoleId,
+                        r => r.Id,
+                        (u, r) =>  new { u, r })
+                    .Select(join => new
                     {
                         UserDto = new UserDto
                         {
-                            Id = u.Id,
-                            Username = u.Username,
+                            Id = join.u.Id,
+                            Username = join.u.Username,
+                            Role = join.r.Name,
                         },
                     }).FirstOrDefaultAsync();
 

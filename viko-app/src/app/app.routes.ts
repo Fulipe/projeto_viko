@@ -11,7 +11,7 @@ export const routes: Routes = [
         path: 'private',
         canActivate: [authGuard],
         component: LayoutComponent,
-        children:[
+        children: [
             {
                 path: 'dashboard',
                 component: DashboardComponent,
@@ -19,11 +19,28 @@ export const routes: Routes = [
             {
                 path: 'profile',
                 component: ProfileComponent,
-            }
+            },
+
+            //Admin
+            /**
+             * path: 'dashboardAdmin'
+             * component: DashboardAdminComponent
+             * canActivate: [RoleGuard]
+             * data: Roles.Admin
+             * children: [
+             *      {
+             *          path: children1
+             *          component: childComponent
+             *          canActivate: [RoleGuard]
+             *          data: Roles.Admin
+             *      }
+             * ]
+             */
         ]
     },
+
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
 
-    { path: '**', redirectTo: 'private/dashboard', pathMatch: 'full'},
+    { path: '**', redirectTo: 'private/dashboard', pathMatch: 'full' },
 ];

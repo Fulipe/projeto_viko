@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
@@ -37,6 +38,7 @@ namespace viko_api.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim("userId", user.Id.ToString()),
+                new Claim("userRole", user.Role),
                 //new Claim("username", user.Username.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -80,7 +82,7 @@ namespace viko_api.Services
             }
         }
 
-        public ResponseDto DetachId(HttpRequestData req)
+        public ResponseDto DetachInfo(HttpRequestData req)
         {
             //Get token from Headers
             if (!req.Headers.TryGetValues("Authorization", out var authHeaders))
@@ -122,6 +124,7 @@ namespace viko_api.Services
 
                 //Gets User ID from claims
                 var userIdClaim = principal.FindFirst("userId")?.Value;
+                var userRoleClaim = principal.FindFirst("userRole")?.Value;
                 if (userIdClaim == null)
                 {
                     return new ResponseDto
@@ -130,13 +133,23 @@ namespace viko_api.Services
                         msg = "Missing userId in token"
                     };
                 }
-
                 int userId = int.Parse(userIdClaim);
+
+                if (userRoleClaim == null)
+                {
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Missing userRole in token"
+                    };
+                }
+
                 return new ResponseDto
                 {
                     status = true,
                     msg = "User Id successfully detached",
-                    value = userId
+                    valueInt = userId,
+                    valueString = userRoleClaim,
                 };
 
             }

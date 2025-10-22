@@ -32,11 +32,11 @@ public class UpdateUser
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequestData req)
     {
 
-        var detachid = _jwtService.DetachId(req);
+        var detachid = _jwtService.DetachInfo(req);
 
         if (detachid.status == true)
         {
-            var userid = detachid.value;
+            var userid = detachid.valueInt;
             var body = await req.ReadFromJsonAsync<UserInfoDto>();
 
             if (body == null)
