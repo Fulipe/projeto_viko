@@ -33,7 +33,7 @@ public class GetUser
     [Function("GetUser")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext context)
     {
-        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher");
+        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher", "Student");
         if (roleCheck != null)
             return roleCheck; 
 

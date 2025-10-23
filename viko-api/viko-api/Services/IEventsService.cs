@@ -11,7 +11,7 @@ namespace viko_api.Services
 {
     public interface IEventsService
     {
-        Task<(ResponseDto, EventsDto?)> GetUserEvents(long userid);
+        Task<(ResponseDto, List<EventsDto>)> GetUserEvents(long userid);
 
         public class EventService : IEventsService
         {
@@ -21,7 +21,7 @@ namespace viko_api.Services
                 _dbContext = dbContext;
             }
 
-            public async Task<(ResponseDto, EventsDto?)> GetUserEvents(long userid)
+            public async Task<(ResponseDto, List<EventsDto>)> GetUserEvents(long userid)
             {
                 var eventfetched = await _dbContext.EventRegistrations
                         .Where(u => u.StudentId == userid)
@@ -35,8 +35,7 @@ namespace viko_api.Services
                             eId => eId.Id,
                             (events, eId) => new { events, eId })
 
-                        .Select(join => new {
-                            Event = new EventsDto 
+                        .Select(join => new EventsDto 
                             {
                                 Title = join.eId.Name,
                                 Image = join.eId.Image,
@@ -46,16 +45,24 @@ namespace viko_api.Services
                                 StartDate = join.events.ev.StartDate,
                                 EndDate = join.events.ev.FinishDate,
                                 RegistrationDeadline = join.events.ev.RegistrationDeadline,
-                                EventStatus = join.events.ev.EventStatusId
+                                EventStatus = join.events.ev.EventStatusId   
                             }
-                        })
-                        .FirstOrDefaultAsync();
+                        ).ToListAsync();
+                
+                if (eventfetched == null || !eventfetched.Any())
+                {
+                    return (new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event not found!"
+                    }, new List<EventsDto>());
+                }
 
                 return (new ResponseDto
                 {
                     status = true,
-                    msg = "Event fetched!"
-                }, eventfetched.Event);
+                    msg = "Event fetched successfully"
+                }, eventfetched);
             }
         }
     }

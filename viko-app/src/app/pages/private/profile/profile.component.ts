@@ -75,7 +75,7 @@ export class ProfileComponent implements OnInit {
   private loadUser() {
     this.userService.userInfo().subscribe({
       next: (res: UserInfo | false) => {
-        console.log(res)
+        // console.log(res)
         if (res == false) {
           this.fillFormEmpty()
           return;
@@ -116,7 +116,7 @@ export class ProfileComponent implements OnInit {
 
       },
       error: (_) => {
-        console.error('Erro ao carregar perfil:', _)
+        console.error('Error while trying to load user profile:', _)
         this.loading = false;
         this.fillFormEmpty()
       }

@@ -35,6 +35,7 @@ builder.UseWhen<JWTValidationMiddleware>(context =>
 
 //Service registration
 builder.Services.AddScoped<IUserService, IUserService.UserService>();
+builder.Services.AddScoped<IEventsService, IEventsService.EventService>();
 builder.Services.AddSingleton<JWTService>();
 builder.Services.AddScoped<JWTValidationMiddleware>();
 

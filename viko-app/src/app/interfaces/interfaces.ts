@@ -24,3 +24,19 @@ export interface UserInfo {
     photo: string;
     role: string;
 }
+
+export interface EventItem {
+  title: string;
+}
+
+export interface EventFetched {
+    title: string;
+    description: string;
+    category: string;
+    image: string;
+    eventStatus: number;
+    location: string;
+    startDate: string;
+    endDate: string;
+    registrationDeadline: string;
+}
