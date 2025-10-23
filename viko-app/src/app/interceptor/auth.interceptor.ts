@@ -7,13 +7,15 @@ import { Router } from '@angular/router';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const router = inject(Router)
     const authService = inject(AuthService)
-    
-    const decode = authService.decodeToken(authService.getToken());
-    if(decode && decode.userRole){
-        localStorage.setItem('role', decode.userRole);
-    }
 
     if (authService.isLoggedIn()) {
+
+        const decode = authService.decodeToken(authService.getToken());
+        if (decode && decode.userRole) {
+            console.log(decode.userRole)
+            localStorage.setItem('role', decode.userRole);
+        }
+        
         const cloned = req.clone({
             setHeaders: { Authorization: `Bearer ${authService.getToken()}`, Role: decode.userRole },
         });

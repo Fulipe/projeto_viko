@@ -43,7 +43,7 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('auth_token');
+    localStorage.clear()
     console.log("dados apagados!")
     this.router.navigate(['/login'])
   }
