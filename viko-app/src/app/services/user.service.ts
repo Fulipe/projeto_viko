@@ -13,10 +13,12 @@ export class UserService {
 
   private http= inject(HttpClient);
 
+  //Signup
   createUser(dto: any):Observable<any> {
     return this.http.post<any>(`${environment.apiUrl}/Signup`, dto)
   }
   
+  //Profile
   userInfo():Observable<UserInfo | false>{
     return this.http.get<any>(`${environment.apiUrl}/GetUser`).pipe(
       map((response) => {

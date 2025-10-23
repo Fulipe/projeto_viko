@@ -18,7 +18,7 @@ public partial class Event
     public string Location { get; set; } = null!;
     public string? Description { get; set; }
 
-    public long EventStatusId { get; set; }
+    public int EventStatusId { get; set; }
     public EventStatus EventStatus { get; set; } = null!;
 
     public long EntityId { get; set; }

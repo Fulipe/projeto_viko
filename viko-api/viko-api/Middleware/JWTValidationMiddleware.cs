@@ -63,7 +63,7 @@ namespace viko_api.Middleware
                 return;
             }
 
-            var userId = responseDto.valueInt;
+            var userId = responseDto.valueLong;
             var userRole = responseDto.valueString;
 
             context.Items["UserId"] = userId;

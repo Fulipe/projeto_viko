@@ -12,8 +12,8 @@ using viko_api.Models;
 namespace viko_api.Migrations
 {
     [DbContext(typeof(VikoDbContext))]
-    [Migration("20251013093637_initial_create")]
-    partial class initial_create
+    [Migration("20251023113717_Initial_Create")]
+    partial class Initial_Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,9 +34,8 @@ namespace viko_api.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Image")
-                        .HasMaxLength(500)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("VARCHAR(MAX)");
 
                     b.Property<string>("Languages")
                         .IsRequired()
@@ -79,8 +78,8 @@ namespace viko_api.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Entity_Id");
 
-                    b.Property<long>("EventStatusId")
-                        .HasColumnType("bigint")
+                    b.Property<int>("EventStatusId")
+                        .HasColumnType("int")
                         .HasColumnName("Event_Status_Id");
 
                     b.Property<DateTime>("FinishDate")
@@ -146,11 +145,11 @@ namespace viko_api.Migrations
 
             modelBuilder.Entity("viko_api.Models.Entities.EventStatus", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -166,17 +165,17 @@ namespace viko_api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1L,
+                            Id = 1,
                             Status = "Open"
                         },
                         new
                         {
-                            Id = 2L,
+                            Id = 2,
                             Status = "Closed"
                         },
                         new
                         {
-                            Id = 3L,
+                            Id = 3,
                             Status = "Finished"
                         });
                 });

@@ -36,7 +36,7 @@ public class UpdateUser
 
         if (detachid.status == true)
         {
-            var userid = detachid.valueInt;
+            var userid = detachid.valueLong;
             var body = await req.ReadFromJsonAsync<UserInfoDto>();
 
             if (body == null)

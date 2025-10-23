@@ -15,8 +15,8 @@ namespace viko_api.Services
     {
         Task<(UserDto?, ResponseDto)> Authenticate(string username, string password);
         Task<ResponseDto> RegisterUser(SignUpRequestDto request);
-        Task<(ResponseDto, UserInfoDto)> GetUserById(int id);
-        Task<ResponseDto> UpdateUser (int id, UserInfoDto userinfo);
+        Task<(ResponseDto, UserInfoDto?)> GetUserById(long id);
+        Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
 
         public class UserService : IUserService
         {
@@ -127,7 +127,7 @@ namespace viko_api.Services
                     throw;
                 }
             }
-            public async Task<(ResponseDto, UserInfoDto?)> GetUserById(int id)
+            public async Task<(ResponseDto, UserInfoDto?)> GetUserById(long id)
             {
                 var user = await _dbContext.Users
                     .Where(user => user.Id == id)
@@ -171,7 +171,7 @@ namespace viko_api.Services
                     msg = "User was found and sent" 
                 }, user.UserInfoDto);
             }
-            public async Task<ResponseDto> UpdateUser(int id, UserInfoDto userinfo)
+            public async Task<ResponseDto> UpdateUser(long id, UserInfoDto userinfo)
             {
                 var user = await _dbContext.Users
                     .Where(user => user.Id == id)

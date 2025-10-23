@@ -10,7 +10,7 @@ namespace viko_api.Models.Dto
     {
         public bool status {  get; set; }
         public string msg{ get; set; }
-        public int valueInt { get; set; }
+        public long valueLong { get; set; }
         public string? valueString { get; set; }
     }
 }

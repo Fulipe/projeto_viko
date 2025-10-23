@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace viko_api.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_create : Migration
+    public partial class Initial_Create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace viko_api.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
-                    Image = table.Column<string>(type: "varchar(500)", unicode: false, maxLength: 500, nullable: true),
+                    Image = table.Column<string>(type: "VARCHAR(MAX)", unicode: false, nullable: true),
                     Languages = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false)
                 },
                 constraints: table =>
@@ -32,7 +32,7 @@ namespace viko_api.Migrations
                 name: "EventStatus",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Status = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false)
                 },
@@ -97,7 +97,7 @@ namespace viko_api.Migrations
                     Category = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
                     Location = table.Column<string>(type: "varchar(255)", unicode: false, maxLength: 255, nullable: false),
                     Description = table.Column<string>(type: "varchar(1000)", unicode: false, maxLength: 1000, nullable: true),
-                    Event_Status_Id = table.Column<long>(type: "bigint", nullable: false),
+                    Event_Status_Id = table.Column<int>(type: "int", nullable: false),
                     Entity_Id = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -150,9 +150,9 @@ namespace viko_api.Migrations
                 columns: new[] { "Id", "Status" },
                 values: new object[,]
                 {
-                    { 1L, "Open" },
-                    { 2L, "Closed" },
-                    { 3L, "Finished" }
+                    { 1, "Open" },
+                    { 2, "Closed" },
+                    { 3, "Finished" }
                 });
 
             migrationBuilder.InsertData(

@@ -148,7 +148,7 @@ namespace viko_api.Services
                 {
                     status = true,
                     msg = "User Id successfully detached",
-                    valueInt = userId,
+                    valueLong = userId,
                     valueString = userRoleClaim,
                 };
 

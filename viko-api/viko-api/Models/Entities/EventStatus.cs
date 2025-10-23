@@ -5,7 +5,7 @@ namespace viko_api.Models.Entities;
 
 public partial class EventStatus
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     public string Status { get; set; } = null!;
 

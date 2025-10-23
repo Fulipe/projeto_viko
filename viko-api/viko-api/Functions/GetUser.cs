@@ -33,9 +33,9 @@ public class GetUser
     [Function("GetUser")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext context)
     {
-        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher", "Student");
+        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher");
         if (roleCheck != null)
-            return roleCheck; // retorna Forbidden/Unauthorized automaticamente
+            return roleCheck; 
 
         var detachid = _jwtService.DetachInfo(req);
 
@@ -43,7 +43,7 @@ public class GetUser
 
         if(detachid.status == true)
         {
-            var userid = detachid.valueInt;
+            var userid = detachid.valueLong;
 
             //Sends user ID to User Service
             var user = await _userService.GetUserById(userid);
