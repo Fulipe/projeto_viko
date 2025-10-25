@@ -11,6 +11,7 @@ namespace viko_api.Services
 {
     public interface IEventsService
     {
+        Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents();
         Task<(ResponseDto, List<EventsDto>)> GetUserEvents(long userid);
 
         public class EventService : IEventsService
@@ -21,6 +22,47 @@ namespace viko_api.Services
                 _dbContext = dbContext;
             }
 
+            public async Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents()
+            {
+                var eventfetched = await _dbContext.Events
+                    .Join( _dbContext.Entities,
+                        ev => ev.EntityId,
+                        e => e.Id,
+
+                        (ev, e) => new {ev, e}
+                    )
+                    .Select( 
+                        join => new EventsDto
+                        {
+                            Title = join.e.Name,
+                            Image = join.e.Image,
+                            Language = join.e.Languages,
+                            Description = join.ev.Description,
+                            Category = join.ev.Category,
+                            Location = join.ev.Location,
+                            StartDate = join.ev.StartDate,
+                            EndDate = join.ev.FinishDate,
+                            RegistrationDeadline = join.ev.RegistrationDeadline,
+                            EventStatus = join.ev.EventStatusId
+                        }
+                    )
+                    .ToListAsync();
+
+                if (eventfetched == null || eventfetched.Count < 1) 
+                {
+                    return (new ResponseDto
+                    {
+                        status = false,
+                        msg = "No events were found"
+                    }, new List<EventsDto>());
+                }
+
+                return (new ResponseDto
+                {
+                    status = true,
+                    msg = "Events were found"
+                }, eventfetched);
+            }
             public async Task<(ResponseDto, List<EventsDto>)> GetUserEvents(long userid)
             {
                 var eventfetched = await _dbContext.EventRegistrations
@@ -39,6 +81,7 @@ namespace viko_api.Services
                             {
                                 Title = join.eId.Name,
                                 Image = join.eId.Image,
+                                Language = join.eId.Languages,
                                 Description = join.events.ev.Description,
                                 Category = join.events.ev.Category,
                                 Location = join.events.ev.Location,
@@ -54,7 +97,7 @@ namespace viko_api.Services
                     return (new ResponseDto
                     {
                         status = false,
-                        msg = "Event not found!"
+                        msg = "No events were found!"
                     }, new List<EventsDto>());
                 }
 

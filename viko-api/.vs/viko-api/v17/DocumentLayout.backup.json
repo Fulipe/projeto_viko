@@ -7,60 +7,44 @@
       "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\functions\\getuserevents.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\dto\\eventsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\dto\\eventsdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\services\\ieventsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\services\\ieventsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\functions\\getuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\functions\\getuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\services\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\services\\jwtservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\middleware\\jwtvalidationmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\middleware\\jwtvalidationmiddleware.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\dto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\dto\\userdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\functions\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\functions\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\entities\\eventregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\entities\\eventregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\functions\\signup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\functions\\signup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\entities\\event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\entities\\event.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\dto\\responsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\dto\\responsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\dto\\userinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\dto\\userinfodto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\functions\\updateuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\functions\\updateuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\services\\iuserservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\entities\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\entities\\eventregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\entities\\eventregistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\vikodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\vikodbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\models\\entities\\eventstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\models\\entities\\eventstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\local.settings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\local.settings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|c:\\users\\filip\\desktop\\stuff\\universidade\\lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\functions\\updateuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC260B6D-9A29-4061-88E7-16F552E8475E}|viko-api\\viko-api.csproj|solutionrelative:viko-api\\functions\\updateuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -70,8 +54,100 @@
       "DocumentGroups": [
         {
           "DockedWidth": 220,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 7,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IUserService.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\IUserService.cs",
+              "RelativeDocumentMoniker": "viko-api\\Services\\IUserService.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\IUserService.cs",
+              "RelativeToolTip": "viko-api\\Services\\IUserService.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowKMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-25T10:03:26.698Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Program.cs",
+              "RelativeDocumentMoniker": "viko-api\\Program.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Program.cs",
+              "RelativeToolTip": "viko-api\\Program.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAAACMAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T15:29:35.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "EventStatus.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\EventStatus.cs",
+              "RelativeDocumentMoniker": "viko-api\\Models\\Entities\\EventStatus.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\EventStatus.cs",
+              "RelativeToolTip": "viko-api\\Models\\Entities\\EventStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T11:10:27.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Event.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\Event.cs",
+              "RelativeDocumentMoniker": "viko-api\\Models\\Entities\\Event.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\Event.cs",
+              "RelativeToolTip": "viko-api\\Models\\Entities\\Event.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T11:10:10.27Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IEventsService.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\IEventsService.cs",
+              "RelativeDocumentMoniker": "viko-api\\Services\\IEventsService.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\IEventsService.cs",
+              "RelativeToolTip": "viko-api\\Services\\IEventsService.cs",
+              "ViewState": "AgIAACYAAAAAAAAAAAAUwD8AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T09:45:00.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ResponseDto.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\ResponseDto.cs",
+              "RelativeDocumentMoniker": "viko-api\\Models\\Dto\\ResponseDto.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\ResponseDto.cs",
+              "RelativeToolTip": "viko-api\\Models\\Dto\\ResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T09:57:07.561Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EventsDto.cs",
+              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\EventsDto.cs",
+              "RelativeDocumentMoniker": "viko-api\\Models\\Dto\\EventsDto.cs",
+              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\EventsDto.cs",
+              "RelativeToolTip": "viko-api\\Models\\Dto\\EventsDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAoAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T09:46:19.448Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -80,71 +156,10 @@
               "RelativeDocumentMoniker": "viko-api\\Functions\\GetUserEvents.cs",
               "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\GetUserEvents.cs",
               "RelativeToolTip": "viko-api\\Functions\\GetUserEvents.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAAADYAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-23T09:38:08.121Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "IUserService.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\IUserService.cs",
-              "RelativeDocumentMoniker": "viko-api\\Services\\IUserService.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\IUserService.cs",
-              "RelativeToolTip": "viko-api\\Services\\IUserService.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAowCoAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-25T10:03:26.698Z",
-              "IsPinned": true
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "ResponseDto.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\ResponseDto.cs",
-              "RelativeDocumentMoniker": "viko-api\\Models\\Dto\\ResponseDto.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\ResponseDto.cs",
-              "RelativeToolTip": "viko-api\\Models\\Dto\\ResponseDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T10:02:30.957Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UserDto.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\UserDto.cs",
-              "RelativeDocumentMoniker": "viko-api\\Models\\Dto\\UserDto.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\UserDto.cs",
-              "RelativeToolTip": "viko-api\\Models\\Dto\\UserDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-22T09:45:34.241Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Signup.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\Signup.cs",
-              "RelativeDocumentMoniker": "viko-api\\Functions\\Signup.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\Signup.cs",
-              "RelativeToolTip": "viko-api\\Functions\\Signup.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAAFUAAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T10:56:48.126Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\User.cs",
-              "RelativeDocumentMoniker": "viko-api\\Models\\Entities\\User.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\User.cs",
-              "RelativeToolTip": "viko-api\\Models\\Entities\\User.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAA+wBQAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-18T16:03:39.702Z"
             },
             {
               "$type": "Document",
@@ -154,13 +169,14 @@
               "RelativeDocumentMoniker": "viko-api\\Functions\\UpdateUser.cs",
               "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\UpdateUser.cs",
               "RelativeToolTip": "viko-api\\Functions\\UpdateUser.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAADwvyYAAAAqAAAAAAAAAA==",
+              "ViewState": "AgIAABUAAAAAAAAAAAAcwC8AAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-15T20:09:13.174Z"
+              "WhenOpened": "2025-10-15T20:09:13.174Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "EventRegistration.cs",
               "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Entities\\EventRegistration.cs",
               "RelativeDocumentMoniker": "viko-api\\Models\\Entities\\EventRegistration.cs",
@@ -168,93 +184,21 @@
               "RelativeToolTip": "viko-api\\Models\\Entities\\EventRegistration.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-13T08:42:41.216Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "JWTService.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\JWTService.cs",
-              "RelativeDocumentMoniker": "viko-api\\Services\\JWTService.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Services\\JWTService.cs",
-              "RelativeToolTip": "viko-api\\Services\\JWTService.cs",
-              "ViewState": "AgIAAFQAAAAAAAAAAAAEwFQAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-03T10:25:44.326Z",
+              "WhenOpened": "2025-10-13T08:42:41.216Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "VikoDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\VikoDbContext.cs",
-              "RelativeDocumentMoniker": "viko-api\\Models\\VikoDbContext.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\VikoDbContext.cs",
-              "RelativeToolTip": "viko-api\\Models\\VikoDbContext.cs",
-              "ViewState": "AgIAAI0AAAAAAAAAAAAwwKAAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T09:04:50.377Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "UserInfoDto.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\UserInfoDto.cs",
-              "RelativeDocumentMoniker": "viko-api\\Models\\Dto\\UserInfoDto.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Models\\Dto\\UserInfoDto.cs",
-              "RelativeToolTip": "viko-api\\Models\\Dto\\UserInfoDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-08T07:35:50.714Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "GetUser.cs",
               "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\GetUser.cs",
               "RelativeDocumentMoniker": "viko-api\\Functions\\GetUser.cs",
               "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\GetUser.cs",
               "RelativeToolTip": "viko-api\\Functions\\GetUser.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAowCkAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAACMAAAAAAAAAAAAmwBcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-07T08:38:57.625Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Login.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\Login.cs",
-              "RelativeDocumentMoniker": "viko-api\\Functions\\Login.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Functions\\Login.cs",
-              "RelativeToolTip": "viko-api\\Functions\\Login.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAADgvzQAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-27T09:19:55.998Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "JWTValidationMiddleware.cs",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Middleware\\JWTValidationMiddleware.cs",
-              "RelativeDocumentMoniker": "viko-api\\Middleware\\JWTValidationMiddleware.cs",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\Middleware\\JWTValidationMiddleware.cs",
-              "RelativeToolTip": "viko-api\\Middleware\\JWTValidationMiddleware.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEUAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-03T10:23:30.569Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "local.settings.json",
-              "DocumentMoniker": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\local.settings.json",
-              "RelativeDocumentMoniker": "viko-api\\local.settings.json",
-              "ToolTip": "C:\\Users\\filip\\Desktop\\stuff\\Universidade\\Lituania\\projeto_viko\\projeto_viko\\viko-api\\viko-api\\local.settings.json",
-              "RelativeToolTip": "viko-api\\local.settings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-02T11:19:56.046Z"
             }
           ]
         }

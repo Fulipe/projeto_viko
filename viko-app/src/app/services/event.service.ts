@@ -17,8 +17,21 @@ export class EventService {
     return this.http.get<any>(`${environment.apiUrl}/GetUserEvents`).pipe(
       map((res) => {
         // console.log(res)
-        if (res?.eventFetched) {
-          return res.eventFetched;
+        if (res?.eventsFetched) {
+          return res.eventsFetched;
+        }
+
+        return false;
+      })
+    )
+  }
+
+  getAllEvents(): Observable<EventFetched | false> {
+    return this.http.get<any>(`${environment.apiUrl}/GetAllEvents`).pipe(
+      map((res) => {
+        // console.log(res)
+        if (res?.eventsFetched) {
+          return res.eventsFetched;
         }
 
         return false;

@@ -35,12 +35,12 @@ public class GetUserEvents
         {
             var userid = detachid.valueLong;
 
-            //Sends user ID to event Service
-            var userEvent = await _eventService.GetUserEvents(userid);
-            var eventFetched = userEvent.Item2;
+            ////Sends user ID to event Service
+            var userEvent = await _eventService.GetUserEvents(userid); //deactivate to API Test
+            var eventsFetched = userEvent.Item2;
 
             //API Test
-            //var eventFetched = new List<EventsDto>
+            //var eventsFetched = new List<EventsDto>
             //{
             //    new EventsDto
             //    {
@@ -49,10 +49,11 @@ public class GetUserEvents
             //        Description = "Um evento de tecnologia e inovação.",
             //        Category = "Technology",
             //        Location = "Lisboa",
+            //        Language = "Portuguese, English",
             //        StartDate = DateTime.UtcNow.AddDays(5),
             //        EndDate = DateTime.UtcNow.AddDays(6),
             //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
-            //        EventStatus = 1
+            //        EventStatus = 3
             //    },
             //    new EventsDto
             //    {
@@ -61,13 +62,39 @@ public class GetUserEvents
             //        Description = "Um evento de tecnologia e inovação.",
             //        Category = "Technology",
             //        Location = "Lisboa",
+            //        Language = "Portuguese, English",
+            //        StartDate = DateTime.UtcNow.AddDays(5),
+            //        EndDate = DateTime.UtcNow.AddDays(6),
+            //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
+            //        EventStatus = 1
+            //    },
+            //    new EventsDto
+            //    {
+            //        Title = "Wine Summit 2025",
+            //        Image = "https://example.com/image.jpg",
+            //        Description = "Um evento de tecnologia e inovação.",
+            //        Category = "Technology",
+            //        Location = "Lisboa",
+            //        Language = "Portuguese, English",
+            //        StartDate = DateTime.UtcNow.AddDays(5),
+            //        EndDate = DateTime.UtcNow.AddDays(6),
+            //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
+            //        EventStatus = 2
+            //    },
+            //    new EventsDto
+            //    {
+            //        Title = "Juice Summit 2025",
+            //        Image = "https://example.com/image.jpg",
+            //        Description = "Um evento de tecnologia e inovação.",
+            //        Category = "Technology",
+            //        Location = "Lisboa",
+            //        Language = "Portuguese, English",
             //        StartDate = DateTime.UtcNow.AddDays(5),
             //        EndDate = DateTime.UtcNow.AddDays(6),
             //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
             //        EventStatus = 1
             //    }
             //};
-
 
             if (userEvent.Item1.status == false)
             {
@@ -77,7 +104,7 @@ public class GetUserEvents
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new { eventFetched, userEvent.Item1.msg});
+            await response.WriteAsJsonAsync(new { eventsFetched, userEvent.Item1.msg});
             return response;
 
         }
