@@ -13,6 +13,8 @@ namespace viko_api.Services
     {
         Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents();
         Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
+        Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
+        Task<(ResponseDto, EventsDto)> CreateEvent(long userid);
 
         public class EventService : IEventsService
         {
@@ -31,19 +33,30 @@ namespace viko_api.Services
 
                         (ev, e) => new {ev, e}
                     )
+                    .Join(_dbContext.Users, //Gets the User registration for the responsible teacher 
+                        t => t.ev.TeacherId,
+                        teacher => teacher.Id,
+                        (t, teacher) => new { t, teacher })
+
+                    .Join(_dbContext.Entities, //Gets Entiity from teachers user registration, to get name
+                        tn => tn.teacher.EntityId,
+                        teacherName => teacherName.Id,
+                        (tn, teacherName) => new { tn, teacherName })
                     .Select( 
                         join => new EventsDto
                         {
-                            Title = join.e.Name,
-                            Image = join.e.Image,
-                            Language = join.e.Languages,
-                            Description = join.ev.Description,
-                            Category = join.ev.Category,
-                            Location = join.ev.Location,
-                            StartDate = join.ev.StartDate,
-                            EndDate = join.ev.FinishDate,
-                            RegistrationDeadline = join.ev.RegistrationDeadline,
-                            EventStatus = join.ev.EventStatusId
+                            Title = join.tn.t.e.Name,
+                            Image = join.tn.t.e.Image,
+                            Language = join.tn.t.e.Languages,
+                            Teacher = join.teacherName.Name,
+                            Description = join.tn.t.ev.Description,
+                            Category = join.tn.t.ev.Category,
+                            Location = join.tn.t.ev.Location,
+                            StartDate = join.tn.t.ev.StartDate,
+                            EndDate = join.tn.t.ev.FinishDate,
+                            RegistrationDeadline = join.tn.t.ev.RegistrationDeadline,
+                            EventStatus = join.tn.t.ev.EventStatusId,
+                            guid = join.tn.t.ev.EventGuid,
                         }
                     )
                     .ToListAsync();
@@ -72,8 +85,18 @@ namespace viko_api.Services
                             ev => ev.Id,
                             (regId , ev) => new {regId, ev})
 
+                        .Join(_dbContext.Users, //Gets the User registration for the responsible teacher 
+                            t => t.ev.TeacherId,
+                            teacher => teacher.Id,
+                            (t, teacher) => new {t, teacher})
+
+                        .Join(_dbContext.Entities, //Gets Entiity from teachers user registration, to get name
+                            tn => tn.teacher.EntityId,
+                            teacherName => teacherName.Id,
+                            (tn, teacherName) => new { tn, teacherName })
+
                         .Join(_dbContext.Entities,
-                            events => events.ev.EntityId,
+                            events => events.tn.t.ev.EntityId,
                             eId => eId.Id,
                             (events, eId) => new { events, eId })
 
@@ -82,13 +105,15 @@ namespace viko_api.Services
                                 Title = join.eId.Name,
                                 Image = join.eId.Image,
                                 Language = join.eId.Languages,
-                                Description = join.events.ev.Description,
-                                Category = join.events.ev.Category,
-                                Location = join.events.ev.Location,
-                                StartDate = join.events.ev.StartDate,
-                                EndDate = join.events.ev.FinishDate,
-                                RegistrationDeadline = join.events.ev.RegistrationDeadline,
-                                EventStatus = join.events.ev.EventStatusId   
+                                Teacher = join.events.teacherName.Name,
+                                Description = join.events.tn.t.ev.Description,
+                                Category = join.events.tn.t.ev.Category,
+                                Location = join.events.tn.t.ev.Location,
+                                StartDate = join.events.tn.t.ev.StartDate,
+                                EndDate = join.events.tn.t.ev.FinishDate,
+                                RegistrationDeadline = join.events.tn.t.ev.RegistrationDeadline,
+                                EventStatus = join.events.tn.t.ev.EventStatusId,
+                                guid = join.events.tn.t.ev.EventGuid
                             }
                         ).ToListAsync();
                 
@@ -107,6 +132,62 @@ namespace viko_api.Services
                     msg = "Event fetched successfully"
                 }, eventfetched);
             }
+            public async Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid)
+            {
+                var eventsFetched = await _dbContext.Events
+                    .Where(t => t.TeacherId == userid)
+                    .Join( _dbContext.Entities,
+                        events => events.EntityId,
+                        e => e.Id,
+                        (events, e) => new {events, e})
+
+                    .Join(_dbContext.Users, //Gets the User registration for the responsible teacher 
+                        t => userid, //userid is from the user id of the teacher
+                        teacher => teacher.Id,
+                        (t, teacher) => new { t, teacher })
+
+                    .Join(_dbContext.Entities, //Gets Entiity from teachers user registration, to get name
+                        tn => tn.teacher.EntityId,
+                        teacherName => teacherName.Id,
+                        (tn, teacherName) => new { tn, teacherName })
+                    .Select(
+                        teacherEvents => new EventsDto
+                        {
+                            Title = teacherEvents.tn.t.e.Name,
+                            Image = teacherEvents.tn.t.e.Image,
+                            Language = teacherEvents.tn.t.e.Languages,
+                            Teacher = teacherEvents.teacherName.Name,
+                            Description = teacherEvents.tn.t.events.Description,
+                            Category = teacherEvents.tn.t.events.Category,
+                            Location = teacherEvents.tn.t.events.Location,
+                            StartDate = teacherEvents.tn.t.events.StartDate,
+                            EndDate = teacherEvents.tn.t.events.FinishDate,
+                            RegistrationDeadline = teacherEvents.tn.t.events.RegistrationDeadline,
+                            EventStatus = teacherEvents.tn.t.events.EventStatusId,
+                            guid = teacherEvents.tn.t.events.EventGuid
+                        }).ToListAsync();
+
+                if (eventsFetched == null || !eventsFetched.Any())
+                {
+                    return (new ResponseDto
+                    {
+                        status = false,
+                        msg = "No events were found!"
+                    }, new List<EventsDto>());
+                }
+
+                return (new ResponseDto
+                {
+                    status = true,
+                    msg = "Events fetched successfully"
+                }, eventsFetched);
+            }
+            
+            public async Task<(ResponseDto, EventsDto)> CreateEvent(long userid)
+            {
+                var e
+            }
+
         }
     }
 }

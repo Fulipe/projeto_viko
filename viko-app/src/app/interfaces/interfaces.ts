@@ -33,10 +33,12 @@ export interface EventFetched {
     title: string;
     description: string;
     category: string;
+    teacher: string;
     image: string;
     eventStatus: number;
     location: string;
     startDate: string;
     endDate: string;
     registrationDeadline: string;
+    guid: string; 
 }

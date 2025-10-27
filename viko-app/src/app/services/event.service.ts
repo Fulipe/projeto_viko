@@ -26,6 +26,19 @@ export class EventService {
     )
   }
 
+  getTeacherEvents():Observable<EventFetched | false>{
+    return this.http.get<any>(`${environment.apiUrl}/GetTeacherEvents`).pipe(
+      map((res) => {
+        // console.log(res)
+        if (res?.eventsFetched) {
+          return res.eventsFetched;
+        }
+
+        return false;
+      })
+    )
+  }
+
   getAllEvents(): Observable<EventFetched | false> {
     return this.http.get<any>(`${environment.apiUrl}/GetAllEvents`).pipe(
       map((res) => {

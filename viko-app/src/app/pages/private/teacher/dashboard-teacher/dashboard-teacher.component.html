@@ -1,1 +1,87 @@
-<p>dashboard-teacher works!</p>
+<div class="p-8">
+  <h1 class="text-3xl font-bold mb-8 text-gray-800">Dashboard</h1>
+
+  <!-- Grid com 3 colunas -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Upcoming Events -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-600">Upcoming Events</h2>
+      @if (!loading && upcomingEvents.length > 0) {
+      <table class="w-full text-left border-t border-gray-200">
+        <thead>
+          <tr class="text-gray-500 text-sm">
+            <th class="py-2">Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (event of upcomingEvents; track $index) {
+          <tr class="border-t hover:bg-gray-50">
+            <td class="py-2">{{ event.title }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+      @else if (!loading && upcomingEvents ) {
+      <div class="text-center py-6 text-gray-500">No upcoming events were found</div>
+      }
+      @else {
+      <div class="text-center py-6 text-gray-500">Loading profile...</div>
+      }
+    </div>
+
+    <!-- Registered Events -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-600">Your Events</h2>
+      @if (!loading && registeredEvents.length > 0) {
+      <table class="w-full text-left border-t border-gray-200">
+        <thead>
+          <tr class="text-gray-500 text-sm">
+            <th class="py-2">Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (event of registeredEvents; track $index) {
+          <tr class="border-t hover:bg-gray-50">
+            <td class="py-2">{{ event.title }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+      @else if (!loading && registeredEvents ) {
+      <div class="text-center py-6 text-gray-500">No registered events were found</div>
+      }
+      @else {
+      <div class="text-center py-6 text-gray-500">Loading profile...</div>
+      }
+    </div>
+
+    <!-- Finished Events -->
+    <div class="bg-white rounded-2xl shadow p-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-600">Finished Events</h2>
+      @if (!loading && finishedEvents.length > 0) {
+      <table class="w-full text-left border-t border-gray-200">
+        <thead>
+          <tr class="text-gray-500 text-sm">
+            <th class="py-2">Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (event of finishedEvents; track $index) {
+          <tr class="border-t hover:bg-gray-50">
+            <td class="py-2">{{ event.title }}</td>
+          </tr>
+          }
+        </tbody>
+      </table>
+      }
+      @else if (!loading && finishedEvents ) {
+      <div class="text-center py-6 text-gray-500">No upcoming events were found</div>
+      }
+      @else {
+      <div class="text-center py-6 text-gray-500">Loading profile...</div>
+      }
+    </div>
+  </div>
+</div>
