@@ -10,23 +10,23 @@ using viko_api.Services;
 
 namespace viko_api.Functions;
 
-public class GetUserEvents
+public class GetStudentEvents
 {
-    private readonly ILogger<GetUserEvents> _logger;
+    private readonly ILogger<GetStudentEvents> _logger;
     private readonly JWTService _jwtService;
     private readonly IEventsService _eventService;
 
-    public GetUserEvents(ILogger<GetUserEvents> logger, JWTService jwtService, IEventsService eventsService)
+    public GetStudentEvents(ILogger<GetStudentEvents> logger, JWTService jwtService, IEventsService eventsService)
     {
         _logger = logger;
         _jwtService = jwtService;
         _eventService = eventsService;
     }
 
-    [Function("GetUserEvents")]
+    [Function("GetStudentEvents")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext context)
     {
-        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher", "Student");
+        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Student");
         if (roleCheck != null)
             return roleCheck;
 
@@ -36,7 +36,7 @@ public class GetUserEvents
             var userid = detachid.valueLong;
 
             ////Sends user ID to event Service
-            var userEvent = await _eventService.GetUserEvents(userid); //deactivate to API Test
+            var userEvent = await _eventService.GetStudentEvents(userid); //deactivate to API Test
             var eventsFetched = userEvent.Item2;
 
             //API Test

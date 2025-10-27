@@ -3,17 +3,22 @@
     <div class="flex justify-between items-center h-16">
       <!-- Lado esquerdo: botão hambúrguer + logo -->
       <div class="flex items-center space-x-3">
-        <!-- Botão hamburguer -->
+        <!-- Botão hamburguer
         <button mat-icon-button class="md:hidden" (click)="toggleMobileMenu()">
           <mat-icon>{{ isMobileMenuOpen ? 'close' : 'menu' }}</mat-icon>
-        </button>
+        </button> -->
 
         <!-- Logo -->
         <a routerLink="/">
           <span class="text-2xl font-bold text-blue-600">VikoEvents</span>
         </a>
       </div>
+        <div class="hidden md:flex items-center space-x-6">
+          <a routerLink="#" class="hover:text-blue-600 transition">My Events</a>
+          <a routerLink="/private/dashboard" class="hover:text-blue-600 transition">Dashboard</a>
+          <a routerLink="#" class="hover:text-blue-600 transition">Search Events</a>
 
+        </div>
       <div class="flex items-center space-x-2">
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>account_circle</mat-icon>

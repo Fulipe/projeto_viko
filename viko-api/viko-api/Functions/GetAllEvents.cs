@@ -12,11 +12,11 @@ namespace viko_api.Functions;
 
 public class GetAllEvents
 {
-    private readonly ILogger<GetUserEvents> _logger;
+    private readonly ILogger<GetAllEvents> _logger;
     private readonly JWTService _jwtService;
     private readonly IEventsService _eventService;
 
-    public GetAllEvents(ILogger<GetUserEvents> logger, JWTService jwtService, IEventsService eventsService)
+    public GetAllEvents(ILogger<GetAllEvents> logger, JWTService jwtService, IEventsService eventsService)
     {
         _logger = logger;
         _jwtService = jwtService;

@@ -8,8 +8,14 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
 import { DashboardTeacherComponent } from './pages/private/teacher/dashboard-teacher/dashboard-teacher.component';
 import { roleGuard } from './guards/role.guard';
+import { HomeComponent } from './pages/private/home/home.component';
+import { DashboardStudentComponent } from './pages/private/student/dashboard-student/dashboard-student.component';
+import { roleRedirectGuard } from './guards/role-redirect.guard';
 
 export const routes: Routes = [
+    { path: 'login', component: LoginComponent },
+    { path: 'signup', component: SignupComponent },
+    { path: 'unauthorized', component: UnauthorizedComponent },
     {
         path: 'private',
         canActivate: [authGuard],
@@ -17,24 +23,36 @@ export const routes: Routes = [
         children: [
             //General use pages
             {
+                path: 'home',
+                component: HomeComponent
+            },
+
+            {
                 path: 'profile',
                 component: ProfileComponent,
             },
-            { 
-                //Public events
-                path: 'dashboard',
-                component: DashboardComponent,
-            },
 
+            {
+                path: 'dashboard',
+                component: DashboardComponent, 
+                canActivate: [roleRedirectGuard],
+            },
             //Student
+            {
+                path: 'dashboard/student',
+                component: DashboardStudentComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Student'] }
+            },
 
             //Teacher
             {
-                path: 'teacher-dashboard',
+                path: 'dashboard/teacher',
                 component: DashboardTeacherComponent,
                 canActivate: [roleGuard],
-                data: {roles: ['Teacher']}
+                data: { roles: ['Teacher'] }
             }
+
 
             //Admin
             /**
@@ -53,9 +71,5 @@ export const routes: Routes = [
              */
         ]
     },
-    { path: 'login', component: LoginComponent },
-    { path: 'signup', component: SignupComponent },
-    { path: 'unauthorized', component: UnauthorizedComponent},
-
-    { path: '**', redirectTo: 'private/dashboard', pathMatch: 'full' },
+    { path: '**', redirectTo: 'private/home', pathMatch: 'full' },
 ];

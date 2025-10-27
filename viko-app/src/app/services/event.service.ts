@@ -13,8 +13,8 @@ export class EventService {
 
   private http = inject(HttpClient);
 
-  getUserEvents(): Observable<EventFetched | false> {
-    return this.http.get<any>(`${environment.apiUrl}/GetUserEvents`).pipe(
+  getStudentEvents(): Observable<EventFetched | false> {
+    return this.http.get<any>(`${environment.apiUrl}/GetStudentEvents`).pipe(
       map((res) => {
         // console.log(res)
         if (res?.eventsFetched) {

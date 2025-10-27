@@ -12,7 +12,7 @@ namespace viko_api.Services
     public interface IEventsService
     {
         Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents();
-        Task<(ResponseDto, List<EventsDto>)> GetUserEvents(long userid);
+        Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
 
         public class EventService : IEventsService
         {
@@ -63,7 +63,7 @@ namespace viko_api.Services
                     msg = "Events were found"
                 }, eventfetched);
             }
-            public async Task<(ResponseDto, List<EventsDto>)> GetUserEvents(long userid)
+            public async Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid)
             {
                 var eventfetched = await _dbContext.EventRegistrations
                         .Where(u => u.StudentId == userid)

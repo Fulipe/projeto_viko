@@ -6,10 +6,9 @@ namespace viko_api.Models.Entities;
 public partial class Event
 {
     public long Id { get; set; }
-
+    public Guid EventGuid { get; set; } = Guid.NewGuid();
     public long TeacherId { get; set; }
     public User Teacher { get; set; }
-
     public DateTime StartDate { get; set; }
     public DateTime FinishDate { get; set; }
     public DateTime RegistrationDeadline { get; set; }

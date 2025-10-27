@@ -28,9 +28,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 } else if (error.status === 403) {
                     // Forbidden
                     // e.g. navigate to a "no access" page or just log
-                    console.error('Access denied – 403');
-                    router.navigate(['/login'])
-                    // router.navigate(['/forbidden']);
+                    
+                    authService.logout();
                 }
                 // Propagate the error so the component or other interceptors can handle it
                 return throwError(() => error);

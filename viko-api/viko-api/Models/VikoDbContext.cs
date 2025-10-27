@@ -78,6 +78,9 @@ public partial class VikoDbContext : DbContext
         modelBuilder.Entity<Event>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Events");
+            
+            entity.HasIndex(e => e.EventGuid)
+                .IsUnique();
 
             entity.Property(e => e.Category)
                 .HasMaxLength(100)
