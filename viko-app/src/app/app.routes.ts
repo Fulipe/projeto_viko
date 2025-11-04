@@ -11,6 +11,9 @@ import { roleGuard } from './guards/role.guard';
 import { HomeComponent } from './pages/private/home/home.component';
 import { DashboardStudentComponent } from './pages/private/student/dashboard-student/dashboard-student.component';
 import { roleRedirectGuard } from './guards/role-redirect.guard';
+import { MyeventsComponent } from './pages/private/myevents/myevents.component';
+import { MyEventsStudentComponent } from './pages/private/student/my-events-student/my-events-student.component';
+import { MyEventsTeacherComponent } from './pages/private/teacher/my-events-teacher/my-events-teacher.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -33,26 +36,60 @@ export const routes: Routes = [
             },
 
             {
-                path: 'dashboard',
-                component: DashboardComponent, 
+                path: 'myevents',
+                component: MyeventsComponent,
                 canActivate: [roleRedirectGuard],
+                data: {
+                    redirectMap: {
+                        Student: '/private/student/myevents',
+                        Teacher: '/private/teacher/myevents',
+                        // Admin: '/private/admin/dashboard'
+                    }
+                }
             },
+
+            {
+                path: 'dashboard',
+                component: DashboardComponent,
+                canActivate: [roleRedirectGuard],
+                data: {
+                    redirectMap: {
+                        Student: '/private/student/dashboard',
+                        Teacher: '/private/teacher/dashboard',
+                        // Admin: '/private/admin/dashboard'
+                    }
+                }
+            },
+
             //Student
             {
-                path: 'dashboard/student',
+                path: 'student/dashboard',
                 component: DashboardStudentComponent,
                 canActivate: [roleGuard],
                 data: { roles: ['Student'] }
             },
 
+            {
+                path: 'student/myevents',
+                component: MyEventsStudentComponent,
+                canActivate: [roleGuard],
+                data: {roles: ['Student']}
+            },
+
             //Teacher
             {
-                path: 'dashboard/teacher',
+                path: 'teacher/dashboard',
                 component: DashboardTeacherComponent,
                 canActivate: [roleGuard],
                 data: { roles: ['Teacher'] }
-            }
+            },
 
+            {
+                path: 'teacher/myevents',
+                component: MyEventsTeacherComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Teacher'] }
+            },
 
             //Admin
             /**

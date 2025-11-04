@@ -13,6 +13,7 @@ public partial class Event
     public DateTime FinishDate { get; set; }
     public DateTime RegistrationDeadline { get; set; }
     public string Category { get; set; } = null!;
+    public string City { get; set; }
     public string Location { get; set; } = null!;
     public string? Description { get; set; }
 

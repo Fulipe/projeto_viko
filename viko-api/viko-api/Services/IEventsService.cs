@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using viko_api.Models;
 using viko_api.Models.Dto;
+using viko_api.Models.Entities;
 
 namespace viko_api.Services
 {
@@ -14,7 +16,7 @@ namespace viko_api.Services
         Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents();
         Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
         Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
-        Task<(ResponseDto, EventsDto)> CreateEvent(long userid);
+        Task<ResponseDto> CreateEvent(long userid, EventCreationDto eventCreated);
 
         public class EventService : IEventsService
         {
@@ -182,12 +184,55 @@ namespace viko_api.Services
                     msg = "Events fetched successfully"
                 }, eventsFetched);
             }
-            
-            public async Task<(ResponseDto, EventsDto)> CreateEvent(long userid)
-            {
-                var e
-            }
 
+            public async Task<ResponseDto> CreateEvent(long userid, EventCreationDto eventCreated)
+            {
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                try
+                {
+                    var newEntity = new Entity
+                    {
+                        Name = eventCreated.Title,
+                        Image = eventCreated.Image,
+                        Languages = eventCreated.Language,
+                    };
+
+                    _dbContext.Entities.Add(newEntity);
+                    await _dbContext.SaveChangesAsync();
+  
+                    var newEvent = new Event
+                    {
+                        EntityId = newEntity.Id,
+                        TeacherId = eventCreated.Teacher,
+                        Description = eventCreated.Description,
+                        Category = eventCreated.Category,
+                        Location = eventCreated.Location,
+                        City = eventCreated.City,
+                        StartDate = eventCreated.StartDate,
+                        FinishDate = eventCreated.EndDate,
+                        RegistrationDeadline = eventCreated.RegistrationDeadline,
+                        EventStatusId = 1,
+                        EventGuid = Guid.NewGuid()
+                    };
+
+                    _dbContext.Add(newEvent);
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    var res = new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event was successfully created."
+                    };
+                    return res;
+                }
+                catch (Exception ex) {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
     }
 }

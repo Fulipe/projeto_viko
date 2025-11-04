@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using viko_api.Models;
 
@@ -11,9 +12,11 @@ using viko_api.Models;
 namespace viko_api.Migrations
 {
     [DbContext(typeof(VikoDbContext))]
-    partial class VikoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251104203207_AddCityField")]
+    partial class AddCityField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

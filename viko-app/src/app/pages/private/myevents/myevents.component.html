@@ -1,0 +1,61 @@
+<div class="p-8">
+    <h1 class="text-3xl font-bold mb-6">My events</h1>
+
+    <!-- Upcoming Events -->
+    <section class="mb-12">
+        <h2 class="text-xl font-semibold mb-3">Upcoming</h2>
+
+        <table class="min-w-full border-collapse border-t border-b border-gray-300">
+            <thead>
+                <tr class="text-left font-semibold text-gray-700">
+                    <th class="py-2">Name</th>
+                    <th class="py-2">Languages</th>
+                    <th class="py-2">Category</th>
+                    <th class="py-2">Location</th>
+                    <th class="py-2">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (event of upcomingEvents; track $index) {
+
+                    <tr class="border-t border-gray-200">
+                        <td class="py-2">{{ event.title }}</td>
+                        <td class="py-2">{{ event.language }}</td>
+                        <td class="py-2">{{ event.category }}</td>
+                        <td class="py-2">{{ event.location }}</td>
+                        <td class="py-2">{{ event.startDate }}</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Finished Events -->
+    <section>
+        <h2 class="text-xl font-semibold mb-3">Finished Events</h2>
+
+        <table class="min-w-full border-collapse border-t border-b border-gray-300">
+            <thead>
+                <tr class="text-left font-semibold text-gray-700">
+                    <th class="py-2">Name</th>
+                    <th class="py-2">Languages</th>
+                    <th class="py-2">Category</th>
+                    <th class="py-2">Location</th>
+                    <th class="py-2">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (event of finishedEvents; track $index) {
+
+                <tr class="border-t border-gray-200">
+                        <td class="py-2">{{ event.title }}</td>
+                        <td class="py-2">{{ event.language }}</td>
+                        <td class="py-2">{{ event.category }}</td>
+                        <td class="py-2">{{ event.location }}</td>
+                        <td class="py-2">{{ event.startDate }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>

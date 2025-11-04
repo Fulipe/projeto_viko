@@ -16,10 +16,14 @@ namespace viko_api.Models.Dto
 
         [JsonPropertyName("Image")]
         public string Image { get; set; }
-        
+
         [Required]
         [JsonPropertyName("Language")]
         public string Language { get; set; }
+
+        [Required]
+        [JsonPropertyName("Teacher")]
+        public long Teacher{ get; set; }
 
         [JsonPropertyName("Description")]
         public string Description { get; set; }
@@ -31,6 +35,10 @@ namespace viko_api.Models.Dto
         [Required]
         [JsonPropertyName("Location")]
         public string Location { get; set; }
+
+        [Required]
+        [JsonPropertyName("City")]
+        public string City { get; set; }
 
         [Required]
         [JsonPropertyName("StartDate")]

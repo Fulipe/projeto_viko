@@ -8,7 +8,7 @@ export interface LoginResponse {
     msg: string,
 }
 
-export interface LanguagesObjectFormat{
+export interface LanguagesObjectFormat {
     index: number,
     name: string,
     flag?: string
@@ -26,7 +26,21 @@ export interface UserInfo {
 }
 
 export interface EventItem {
-  title: string;
+    title: string;
+}
+
+export interface CreateEventDto {
+    title: string;
+    description: string;
+    category: string;
+    language: string;
+    city: string;
+    image: string;
+    location: string;
+    startDate: string;
+    registrationDeadline: string;
+    endDate: string;
+
 }
 
 export interface EventFetched {
@@ -34,11 +48,13 @@ export interface EventFetched {
     description: string;
     category: string;
     teacher: string;
+    language: string;
+    //city: string;
     image: string;
     eventStatus: number;
     location: string;
     startDate: string;
     endDate: string;
     registrationDeadline: string;
-    guid: string; 
+    guid: string;
 }
