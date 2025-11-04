@@ -37,7 +37,7 @@ export class LoginComponent {
     this.auth.login(credentials).subscribe({
       next: (res) => {
         if (res.token) {
-          this.router.navigate(['/private/dashboard'])
+          this.router.navigate(['/private/home'])
         }
       },
       error: (err) => {
