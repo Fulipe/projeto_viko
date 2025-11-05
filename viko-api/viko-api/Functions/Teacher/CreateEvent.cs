@@ -48,12 +48,12 @@ public class CreateEvent
         {
         //Detach ID logged in from token 
 
-            var userid = detachid.valueLong;
+            var teacherid = detachid.valueLong;
 
         //Send EventCreationDto and ID to CreateEvent() function in IEventService
 
             //Sends user ID to User Service
-            var eventCreated = await _eventsService.CreateEvent(userid, request);
+            var eventCreated = await _eventsService.CreateEvent(teacherid, request);
 
             //if (user.Item1.status == false)
             //{

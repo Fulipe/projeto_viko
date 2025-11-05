@@ -1,6 +1,13 @@
-<p>my-events-teacher works!</p>
+<div class="p-8">
+    <h1 class="text-3xl font-bold mb-6">My events</h1>
 
-<app-myevents    
-    [upcomingEvents]="upcomingEvents"
+    <div class="flex justify-between items-center mb-6">
+        <a routerLink= "/private/event/newevent" type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+            + Create Event
+        </a>
+    </div>
+
+<app-myevents 
+    [upcomingEvents]="upcomingEvents" 
     [finishedEvents]="finishedEvents">
 </app-myevents>

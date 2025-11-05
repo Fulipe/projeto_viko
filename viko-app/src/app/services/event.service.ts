@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, map, of, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { EventFetched } from '../interfaces/interfaces';
+import { CreateEventDto, EventFetched } from '../interfaces/interfaces';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
@@ -50,5 +50,9 @@ export class EventService {
         return false;
       })
     )
+  }
+
+  createEvent(dto: CreateEventDto): Observable<CreateEventDto>{
+    return this.http.post<CreateEventDto>(`${environment.apiUrl}/CreateEvent`, dto);
   }
 }

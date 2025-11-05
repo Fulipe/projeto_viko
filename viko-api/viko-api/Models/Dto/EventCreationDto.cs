@@ -21,9 +21,9 @@ namespace viko_api.Models.Dto
         [JsonPropertyName("Language")]
         public string Language { get; set; }
 
-        [Required]
-        [JsonPropertyName("Teacher")]
-        public long Teacher{ get; set; }
+        //[Required]
+        //[JsonPropertyName("Teacher")]
+        //public long Teacher{ get; set; }
 
         [JsonPropertyName("Description")]
         public string Description { get; set; }
@@ -48,9 +48,9 @@ namespace viko_api.Models.Dto
         [JsonPropertyName("EndDate")]
         public DateTime EndDate { get; set; }
 
-        [Required]
-        [JsonPropertyName("RegistrationDeadline")]
-        public DateTime RegistrationDeadline { get; set; }
+        //[Required]
+        //[JsonPropertyName("RegistrationDeadline")]
+        //public DateTime RegistrationDeadline { get; set; }
 
     }
 }

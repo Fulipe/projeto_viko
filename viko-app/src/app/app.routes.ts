@@ -14,6 +14,7 @@ import { roleRedirectGuard } from './guards/role-redirect.guard';
 import { MyeventsComponent } from './pages/private/myevents/myevents.component';
 import { MyEventsStudentComponent } from './pages/private/student/my-events-student/my-events-student.component';
 import { MyEventsTeacherComponent } from './pages/private/teacher/my-events-teacher/my-events-teacher.component';
+import { NewEventComponent } from './pages/private/teacher/new-event/new-event.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -47,7 +48,7 @@ export const routes: Routes = [
                     }
                 }
             },
-
+            
             {
                 path: 'dashboard',
                 component: DashboardComponent,
@@ -59,6 +60,13 @@ export const routes: Routes = [
                         // Admin: '/private/admin/dashboard'
                     }
                 }
+            },
+            
+            {
+                path: 'event/newevent',
+                component: NewEventComponent,
+                canActivate: [roleGuard],
+                data: {roles: ['Admin', 'Teacher']}
             },
 
             //Student
@@ -90,6 +98,7 @@ export const routes: Routes = [
                 canActivate: [roleGuard],
                 data: { roles: ['Teacher'] }
             },
+
 
             //Admin
             /**

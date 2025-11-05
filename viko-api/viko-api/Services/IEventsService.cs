@@ -16,7 +16,7 @@ namespace viko_api.Services
         Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents();
         Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
         Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
-        Task<ResponseDto> CreateEvent(long userid, EventCreationDto eventCreated);
+        Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated);
 
         public class EventService : IEventsService
         {
@@ -54,6 +54,7 @@ namespace viko_api.Services
                             Description = join.tn.t.ev.Description,
                             Category = join.tn.t.ev.Category,
                             Location = join.tn.t.ev.Location,
+                            City = join.tn.t.ev.City,
                             StartDate = join.tn.t.ev.StartDate,
                             EndDate = join.tn.t.ev.FinishDate,
                             RegistrationDeadline = join.tn.t.ev.RegistrationDeadline,
@@ -111,6 +112,7 @@ namespace viko_api.Services
                                 Description = join.events.tn.t.ev.Description,
                                 Category = join.events.tn.t.ev.Category,
                                 Location = join.events.tn.t.ev.Location,
+                                City = join.events.tn.t.ev.City,
                                 StartDate = join.events.tn.t.ev.StartDate,
                                 EndDate = join.events.tn.t.ev.FinishDate,
                                 RegistrationDeadline = join.events.tn.t.ev.RegistrationDeadline,
@@ -162,6 +164,7 @@ namespace viko_api.Services
                             Description = teacherEvents.tn.t.events.Description,
                             Category = teacherEvents.tn.t.events.Category,
                             Location = teacherEvents.tn.t.events.Location,
+                            City = teacherEvents.tn.t.events.City,
                             StartDate = teacherEvents.tn.t.events.StartDate,
                             EndDate = teacherEvents.tn.t.events.FinishDate,
                             RegistrationDeadline = teacherEvents.tn.t.events.RegistrationDeadline,
@@ -185,7 +188,7 @@ namespace viko_api.Services
                 }, eventsFetched);
             }
 
-            public async Task<ResponseDto> CreateEvent(long userid, EventCreationDto eventCreated)
+            public async Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated)
             {
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -204,14 +207,14 @@ namespace viko_api.Services
                     var newEvent = new Event
                     {
                         EntityId = newEntity.Id,
-                        TeacherId = eventCreated.Teacher,
+                        TeacherId = teacherid,
                         Description = eventCreated.Description,
                         Category = eventCreated.Category,
                         Location = eventCreated.Location,
                         City = eventCreated.City,
                         StartDate = eventCreated.StartDate,
                         FinishDate = eventCreated.EndDate,
-                        RegistrationDeadline = eventCreated.RegistrationDeadline,
+                        RegistrationDeadline = eventCreated.StartDate.AddDays(-1),
                         EventStatusId = 1,
                         EventGuid = Guid.NewGuid()
                     };

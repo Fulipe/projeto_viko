@@ -30,16 +30,16 @@ export interface EventItem {
 }
 
 export interface CreateEventDto {
-    title: string;
-    description: string;
-    category: string;
-    language: string;
-    city: string;
-    image: string;
-    location: string;
-    startDate: string;
-    registrationDeadline: string;
-    endDate: string;
+    Title: string;
+    Description: string;
+    Category: string;
+    Language: string;
+    City: string;
+    Image: string | undefined;
+    Location: string;
+    StartDate: string;
+    // registrationDeadline: string;
+    EndDate: string;
 
 }
 
@@ -49,7 +49,7 @@ export interface EventFetched {
     category: string;
     teacher: string;
     language: string;
-    //city: string;
+    city: string;
     image: string;
     eventStatus: number;
     location: string;

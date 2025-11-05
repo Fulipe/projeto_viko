@@ -1,0 +1,131 @@
+<div class="max-w-3xl mx-auto p-8">
+    <h1 class="text-3xl font-bold mb-6">Create New Event</h1>
+
+    <!-- Mensagens -->
+    @if (successMessage) {
+
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        {{ successMessage }}
+    </div>
+    }
+    @if (errorMessage) {
+
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        {{ errorMessage }}
+    </div>
+    }
+
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()" class="space-y-5">
+
+        <!-- Banner + Info -->
+        <div class="flex flex-col md:flex-row gap-6 mb-6 items-start">
+            <!-- Banner -->
+            <div class="flex flex-col items-center">
+                <div
+                    class="relative w-40 h-64 rounded-lg overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
+                    @if (previewUrl) {
+                    <img [src]="previewUrl" class="w-full h-full object-cover" />
+                    } @else {
+                    <span class="text-gray-400 text-sm">Poster</span>
+                    }
+
+                    <label
+                        class="absolute bottom-2 right-2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md cursor-pointer hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-4 h-4 inline-block mr-1">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                        </svg>
+                        Upload
+                        <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
+                    </label>
+                </div>
+            </div>
+
+            <!-- Right side info -->
+            <div class="flex-1 grid grid-cols-2 gap-4 w-full">
+                <div class="col-span-2">
+                    <label class="block font-medium mb-1">Title</label>
+                    <input type="text" formControlName="title"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+                    @if (eventForm.get('title')?.touched && eventForm.get('title')?.invalid) {
+                    <div class="text-sm text-red-500 mt-1">
+                        Event name is required (min 3 chars)
+                    </div>
+                    }
+                </div>
+
+                <div class="col-span-2">
+                    <label class="block font-medium mb-1">Category</label>
+                    <input type="text" formControlName="category"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div>
+                    <label class="block font-medium mb-1">Location</label>
+                    <input type="text" formControlName="location"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+                </div>
+
+                <div>
+                    <label class="block font-medium mb-1">City</label>
+                    <input type="text" formControlName="city"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="relative w-full border border-gray-300 rounded-md px-2 py-2 flex flex-wrap items-center gap-2 focus-within:ring-2 focus-within:ring-blue-200">
+            <label class="block text-sm font-medium text-gray-600">Languages</label>
+
+            @for (lang of selectedLanguages; track $index) {
+            <span class="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm">
+                {{ lang }}
+                <button type="button" class="ml-1 text-blue-500 hover:text-red-500 focus:outline-none"
+                    (click)="removeLanguage(lang)">✕</button>
+            </span>
+            }
+
+            <input type="text" formControlName="languages" #inputEl (input)="onSearch()" (focus)="onSearch()"
+                (blur)="onInputBlur()" placeholder="Select your languages"
+                class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-blue-200">
+
+            @if (searching) {
+            <ul
+                class="relative z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg max-h-48 overflow-y-auto mt-1">
+                @for (lang of languages; track lang.index) {
+                <li (click)="selectLanguage(lang)" class="px-3 py-2 hover:bg-blue-100 cursor-pointer">{{ lang.name
+                    }}</li>
+                }
+            </ul>
+            }
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">Start Date</label>
+            <input type="datetime-local" formControlName="startDate"
+                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">End Date</label>
+            <input type="datetime-local" formControlName="endDate"
+                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+        </div>
+
+        <div>
+            <label class="block font-medium mb-1">Description (optional)</label>
+            <textarea formControlName="description" rows="4"
+                class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400"></textarea>
+        </div>
+
+        <div class="pt-4 flex justify-end">
+            <button type="submit" [disabled]="isSubmitting"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg disabled:opacity-50">
+                {{ isSubmitting ? 'Creating...' : 'Create Event' }}
+            </button>
+        </div>
+
+    </form>
+</div>

@@ -16,6 +16,7 @@ namespace viko_api.Models.Dto
         public string Category { get; set; }
         public int EventStatus { get; set; }
         public string Location { get; set; }
+        public string City { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public DateTime RegistrationDeadline { get; set; }

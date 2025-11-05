@@ -2,10 +2,11 @@ import { Component, inject, OnInit } from '@angular/core';
 import { MyeventsComponent } from "../../myevents/myevents.component";
 import { EventFetched } from '../../../../interfaces/interfaces';
 import { EventService } from '../../../../services/event.service';
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-my-events-teacher',
-  imports: [MyeventsComponent],
+  imports: [MyeventsComponent, RouterLink],
   templateUrl: './my-events-teacher.component.html',
   styleUrl: './my-events-teacher.component.scss'
 })
@@ -61,7 +62,9 @@ export class MyEventsTeacherComponent implements OnInit {
         const events: EventFetched[] = e
 
         //Filters not finished events
-        this.finishedEvents = events.filter(event => event.eventStatus = 3);
+        this.finishedEvents = events
+            .filter(event => event.eventStatus != 1)
+            .filter(event => event.eventStatus != 2);
 
         this.loading = false;
       },
