@@ -55,4 +55,16 @@ export class EventService {
   createEvent(dto: CreateEventDto): Observable<CreateEventDto>{
     return this.http.post<CreateEventDto>(`${environment.apiUrl}/CreateEvent`, dto);
   }
+
+  GetEvent(guid: string | null): Observable<EventFetched | false>{
+    return this.http.get<any>(`${environment.apiUrl}/GetEvent?guid=${guid}`).pipe(
+      map((res) => {
+        if (res?.eventFetched) {
+          return res.eventFetched
+        }
+
+        return false
+      })
+    )
+  }
 }

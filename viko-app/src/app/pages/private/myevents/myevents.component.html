@@ -13,21 +13,28 @@
                     <th class="py-2">Location</th>
                     <th class="py-2">Start Date</th>
                     <th class="py-2">End Date</th>
+                    <th class="py-2"></th>
+
                 </tr>
             </thead>
             <tbody>
                 @for (event of upcomingEvents; track $index) {
 
-                    <tr class="border-t border-gray-200">
-                        <td class="py-2">{{ event.title }}</td>
-                        <td class="py-2">{{ event.language }}</td>
-                        <td class="py-2">{{ event.category }}</td>
-                        <td class="py-2">{{ event.city }}</td>
-                        <td class="py-2">{{ event.location }}</td>
-                        <td class="py-2">{{ event.startDate }}</td>
-                        <td class="py-2">{{ event.endDate }}</td>
+                <tr class="border-t border-gray-200">
+                    <td class="py-2">{{ event.title }}</td>
+                    <td class="py-2">{{ event.language }}</td>
+                    <td class="py-2">{{ event.category }}</td>
+                    <td class="py-2">{{ event.city }}</td>
+                    <td class="py-2">{{ event.location }}</td>
+                    <td class="py-2">{{ event.startDate }}</td>
+                    <td class="py-2">{{ event.endDate }}</td>
+                    <td class="py-2">
+                        <a href="private/event/{{event.guid}}" class="text-blue-500 hover:underline">
+                            View Event
+                        </a>
+                    </td>
 
-                    </tr>
+                </tr>
                 }
             </tbody>
         </table>
@@ -54,14 +61,19 @@
                 @for (event of finishedEvents; track $index) {
 
                 <tr class="border-t border-gray-200">
-                        <td class="py-2">{{ event.title }}</td>
-                        <td class="py-2">{{ event.language }}</td>
-                        <td class="py-2">{{ event.category }}</td>
-                        <td class="py-2">{{ event.city }}</td>
-                        <td class="py-2">{{ event.location }}</td>
-                        <td class="py-2">{{ event.startDate }}</td>
-                        <td class="py-2">{{ event.endDate }}</td>
-                    </tr>
+                    <td class="py-2">{{ event.title }}</td>
+                    <td class="py-2">{{ event.language }}</td>
+                    <td class="py-2">{{ event.category }}</td>
+                    <td class="py-2">{{ event.city }}</td>
+                    <td class="py-2">{{ event.location }}</td>
+                    <td class="py-2">{{ event.startDate }}</td>
+                    <td class="py-2">{{ event.endDate }}</td>
+                    <td class="py-2">
+                        <a href="private/event/{{event.guid}}" class="text-blue-500 hover:underline">
+                            View Event
+                        </a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

@@ -15,6 +15,9 @@ import { MyeventsComponent } from './pages/private/myevents/myevents.component';
 import { MyEventsStudentComponent } from './pages/private/student/my-events-student/my-events-student.component';
 import { MyEventsTeacherComponent } from './pages/private/teacher/my-events-teacher/my-events-teacher.component';
 import { NewEventComponent } from './pages/private/teacher/new-event/new-event.component';
+import { ViewEventComponent } from './pages/private/view-event/view-event.component';
+import { ViewEventStudentComponent } from './pages/private/student/view-event-student/view-event-student.component';
+import { ViewEventTeacherComponent } from './pages/private/teacher/view-event-teacher/view-event-teacher.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -48,7 +51,7 @@ export const routes: Routes = [
                     }
                 }
             },
-            
+
             {
                 path: 'dashboard',
                 component: DashboardComponent,
@@ -61,12 +64,26 @@ export const routes: Routes = [
                     }
                 }
             },
-            
+
             {
                 path: 'event/newevent',
                 component: NewEventComponent,
                 canActivate: [roleGuard],
-                data: {roles: ['Admin', 'Teacher']}
+                data: { roles: ['Admin', 'Teacher'] }
+            },
+
+            {
+                path: 'event/:guid',
+                component: ViewEventComponent,
+                canActivate: [roleRedirectGuard],
+                data: {
+                    redirectMap: {
+                        Student: '/private/student/event/:guid',
+                        Teacher: '/private/teacher/event/:guid',
+                        // Admin: '/private/admin/dashboard'
+                    }
+                }
+
             },
 
             //Student
@@ -81,7 +98,13 @@ export const routes: Routes = [
                 path: 'student/myevents',
                 component: MyEventsStudentComponent,
                 canActivate: [roleGuard],
-                data: {roles: ['Student']}
+                data: { roles: ['Student'] }
+            },
+            {
+                path: 'student/event/:guid',
+                component: ViewEventStudentComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Student'] }
             },
 
             //Teacher
@@ -99,6 +122,12 @@ export const routes: Routes = [
                 data: { roles: ['Teacher'] }
             },
 
+            {
+                path: 'teacher/event/:guid',
+                component: ViewEventTeacherComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Teacher'] }
+            },
 
             //Admin
             /**

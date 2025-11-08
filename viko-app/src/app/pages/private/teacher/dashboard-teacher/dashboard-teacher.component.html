@@ -16,7 +16,11 @@
         <tbody>
           @for (event of upcomingEvents; track $index) {
           <tr class="border-t hover:bg-gray-50">
-            <td class="py-2">{{ event.title }}</td>
+            <td class="py-2">
+              <a href="private/event/{{event.guid}}">
+                {{ event.title }}
+              </a>
+            </td>
           </tr>
           }
         </tbody>
@@ -43,7 +47,11 @@
         <tbody>
           @for (event of registeredEvents; track $index) {
           <tr class="border-t hover:bg-gray-50">
-            <td class="py-2">{{ event.title }}</td>
+            <td class="py-2">
+              <a href="private/event/{{event.guid}}">
+                {{ event.title }}
+              </a>
+            </td>
           </tr>
           }
         </tbody>
@@ -70,7 +78,11 @@
         <tbody>
           @for (event of finishedEvents; track $index) {
           <tr class="border-t hover:bg-gray-50">
-            <td class="py-2">{{ event.title }}</td>
+            <td class="py-2">
+              <a href="private/event/{{event.guid}}">
+                {{ event.title }}
+              </a>
+            </td>
           </tr>
           }
         </tbody>

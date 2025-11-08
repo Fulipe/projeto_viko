@@ -15,9 +15,9 @@ export class DashboardTeacherComponent {
 
   loading = true;
 
-  upcomingEvents: EventItem[] = [];
-  registeredEvents: EventItem[] = [];
-  finishedEvents: EventItem[] = [];
+  upcomingEvents: EventFetched[] = [];
+  registeredEvents: EventFetched[] = [];
+  finishedEvents: EventFetched[] = [];
   filteredEvents: any[] = []
 
   constructor() { }

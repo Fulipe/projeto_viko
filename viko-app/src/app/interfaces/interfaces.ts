@@ -27,6 +27,7 @@ export interface UserInfo {
 
 export interface EventItem {
     title: string;
+    guid:string;
 }
 
 export interface CreateEventDto {

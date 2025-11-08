@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, Router } from '@angular/router';
+import { CanActivateFn, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
-export const roleRedirectGuard: CanActivateFn = (route, state) => {
+export const roleRedirectGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) => {
   const router = inject(Router);
   const authService = inject(AuthService);
 
@@ -13,16 +13,20 @@ export const roleRedirectGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  // Permite definir redirecionamentos específicos via data
+  // Gets redirect map defined in the routes (if it exists)
   const redirectMap = route.data?.['redirectMap'] as Record<string, string> | undefined;
 
-  // Se existir um redirectMap, tenta aplicar o caminho definido para o role
+  // Gets GUID (if exists) 
+  const guid = route.params?.['guid'];
+
+  //If theres a redirect map, aplies it with a dynamic substituition of the :guid
   if (redirectMap && redirectMap[role]) {
-    router.navigate([redirectMap[role]]);
+    const redirectPath = redirectMap[role].replace(':guid', guid ?? '');
+    router.navigateByUrl(redirectPath);
     return false;
   }
 
-  // Caso contrário, aplica o comportamento padrão
+  //If theres not a redirectMap, does the default behavior
   switch (role) {
     case 'Student':
       router.navigate(['/private/student']);
@@ -37,5 +41,7 @@ export const roleRedirectGuard: CanActivateFn = (route, state) => {
       router.navigate(['/unauthorized']);
       break;
   }
-  return false; // impede o carregamento de /dashboard
+
+  // Stops the loading of the original routes (because theres a redirect)
+  return false;
 };

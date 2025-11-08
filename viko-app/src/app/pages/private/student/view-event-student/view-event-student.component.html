@@ -1,0 +1,13 @@
+<app-view-event>
+  @if (!isRegistered && showRegisterButton) {
+    <button registration-button class="bg-blue-500 hover:bg-blue-600 text-white font-medium px-6 py-2 rounded-md shadow-sm transition" (click)="registerToEvent()">
+      Sign up to this Event
+    </button>
+  }
+
+  @if (isRegistered) {
+    <p registration-button class="text-green-600 mt-3">
+      You are already registered for this event!
+    </p>
+  }
+</app-view-event>

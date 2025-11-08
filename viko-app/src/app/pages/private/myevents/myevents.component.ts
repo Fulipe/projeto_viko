@@ -2,9 +2,11 @@ import { Component, inject, Input, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { EventFetched } from '../../../interfaces/interfaces';
 import { EventService } from '../../../services/event.service';
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: 'app-myevents',
+  standalone: true,
   imports: [],
   templateUrl: './myevents.component.html',
   styleUrl: './myevents.component.scss'

@@ -19,11 +19,10 @@ export class MyEventsTeacherComponent implements OnInit {
   loading = true
 
   ngOnInit(): void {
-    this.loadUpcomingEvents()
-    this.loadFinishedEvents()
+    this.loadEvents()
   }
 
-  private loadUpcomingEvents() { // => registeredEvents | Only events where the users are registered
+  private loadEvents() { 
     this.eventsService.getTeacherEvents().subscribe({
       next: (res) => {
         // console.log(res)
@@ -39,32 +38,10 @@ export class MyEventsTeacherComponent implements OnInit {
         //Filters finished events
         this.upcomingEvents = events.filter(event => event.eventStatus != 3);
 
-        this.loading = false;
-      },
-      error: (_) => {
-        console.error("Error while loading registered events: ", _)
-        this.loading = false;
-      }
-    })
-  }
-
-  private loadFinishedEvents() {
-    this.eventsService.getTeacherEvents().subscribe({
-      next: (res) => {
-        // console.log(res)
-        if (res === false) {
-          console.log("Nenhum evento registado.");
-          this.loading = false;
-          return;
-        }
-
-        const e: any = res;
-        const events: EventFetched[] = e
-
         //Filters not finished events
         this.finishedEvents = events
-            .filter(event => event.eventStatus != 1)
-            .filter(event => event.eventStatus != 2);
+          .filter(event => event.eventStatus != 1)
+          .filter(event => event.eventStatus != 2);
 
         this.loading = false;
       },
@@ -74,6 +51,4 @@ export class MyEventsTeacherComponent implements OnInit {
       }
     })
   }
-
-
 }

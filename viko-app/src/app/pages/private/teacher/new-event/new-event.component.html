@@ -95,8 +95,9 @@
             <ul
                 class="relative z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg max-h-48 overflow-y-auto mt-1">
                 @for (lang of languages; track lang.index) {
-                <li (click)="selectLanguage(lang)" class="px-3 py-2 hover:bg-blue-100 cursor-pointer">{{ lang.name
-                    }}</li>
+                <li (click)="selectLanguage(lang)" class="px-3 py-2 hover:bg-blue-100 cursor-pointer">
+                    {{ lang.name }}
+                </li>
                 }
             </ul>
             }

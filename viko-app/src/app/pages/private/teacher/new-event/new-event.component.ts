@@ -132,7 +132,7 @@ export class NewEventComponent {
         this.successMessage = 'Event created successfully!';
         this.isSubmitting = false;
 
-        // Opcional: redirecionar após 1.5s
+        // Redirect after 1,5 seconds
         setTimeout(() => this.router.navigate(['/private/teacher/myevents']), 1500);
       },
       error: (err) => {

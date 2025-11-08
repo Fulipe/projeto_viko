@@ -17,6 +17,7 @@ namespace viko_api.Services
         Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
         Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
         Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated);
+        Task<(ResponseDto, EventsDto)> GetEvent(string guid);
 
         public class EventService : IEventsService
         {
@@ -187,7 +188,6 @@ namespace viko_api.Services
                     msg = "Events fetched successfully"
                 }, eventsFetched);
             }
-
             public async Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated)
             {
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
@@ -235,6 +235,65 @@ namespace viko_api.Services
                     await transaction.RollbackAsync();
                     throw;
                 }
+            }
+            public async Task<(ResponseDto, EventsDto?)>GetEvent(string guid)
+            {
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return (new ResponseDto { status = false, msg = "GUID is Invalid" }, null);
+
+                var eventFetched = await _dbContext.Events
+                    .Where(ev => ev.EventGuid == parsedGuid)
+                    .Join(_dbContext.Entities,
+                        ev => ev.EntityId, //EntityID field in Events table
+                        e => e.Id,         //Id field in Entities table (Refering to Event, to get Title, Languages, and Image)
+                        (ev, e) => new {ev, e})
+
+                    .Join(_dbContext.Users,
+                        ev => ev.ev.TeacherId, //Teacher ID field in Events table
+                        teacher => teacher.Id, //Id field in Users table
+
+                        (ev, teacher) => new {ev, teacher})
+                    .Join(_dbContext.Entities,
+                        tn => tn.teacher.EntityId, //EntityID field in Users Table
+                        teacherName => teacherName.Id, //Id field in Entities table (Refering to User, to get Teacher name)
+
+                        (tn, teacherName) => new {tn, teacherName})
+                    
+                    /* TO DO: EventRegistration
+                     * To show registrated users 
+                     * (or do in other function for only teachers being able to see who registrated)
+                     */
+
+                    .Select(join => new
+                    {
+                        EventFetched = new EventsDto
+                        {
+                            Title = join.tn.ev.e.Name,
+                            Image = join.tn.ev.e.Image,
+                            Language = join.tn.ev.e.Languages,
+                            Teacher = join.teacherName.Name,
+                            Description = join.tn.ev.ev.Description,
+                            Category = join.tn.ev.ev.Category,
+                            Location = join.tn.ev.ev.Location,
+                            City = join.tn.ev.ev.City,
+                            EventStatus = join.tn.ev.ev.EventStatusId,
+                            StartDate = join.tn.ev.ev.StartDate,
+                            EndDate = join.tn.ev.ev.FinishDate,
+                            guid = join.tn.ev.ev.EventGuid,
+                            RegistrationDeadline = join.tn.ev.ev.RegistrationDeadline,
+                        }
+                    })
+                    .FirstOrDefaultAsync();
+
+                if (eventFetched == null) 
+                    return (new ResponseDto { status = false, msg = "Event not found" }, null);
+
+                return (
+                    new ResponseDto {
+                        status = true, 
+                        msg = "Event found" 
+                    
+                    }, eventFetched.EventFetched);
             }
         }
     }
