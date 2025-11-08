@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Azure.Core;
 using Microsoft.EntityFrameworkCore;
+using viko_api.Functions;
 using viko_api.Models;
 using viko_api.Models.Dto;
 using viko_api.Models.Entities;
@@ -18,6 +19,7 @@ namespace viko_api.Services
         Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
         Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated);
         Task<(ResponseDto, EventsDto)> GetEvent(string guid);
+        Task<ResponseDto> EventRegistration(long studentid, string guid);
 
         public class EventService : IEventsService
         {
@@ -83,7 +85,7 @@ namespace viko_api.Services
             public async Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid)
             {
                 var eventfetched = await _dbContext.EventRegistrations
-                        .Where(u => u.StudentId == userid)
+                        .Where(u => u.StudentId == userid && u.Event.EventStatusId != 3) //Searches for the events of the student and are not classified as 'finished'
                         .Join(_dbContext.Events,
                             regId => regId.EventId,
                             ev => ev.Id,
@@ -295,6 +297,58 @@ namespace viko_api.Services
                     
                     }, eventFetched.EventFetched);
             }
+            public async Task<ResponseDto> EventRegistration(long studentid, string guid)
+            {
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return (new ResponseDto { status = false, msg = "GUID is Invalid" });
+
+                //Get events to register through guid in the params
+                var getGuidEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                if (getGuidEvent == null) 
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+                if (getGuidEvent.EventStatusId != 1)
+                    return new ResponseDto { status = false, msg = "Registration failed. This event is closed or finished" };
+
+                //Get its EventId
+                var eventId = getGuidEvent.Id;
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                try {
+                    //Create a new EventRegistration using that EventId and studentid in params
+                    var newRegistration = new EventRegistration
+                    {
+                        EventId = eventId,
+                        StudentId = studentid,
+                        RegistrationDate = DateTime.UtcNow,
+                    };
+
+                    _dbContext.Add(newRegistration);
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    var res = new ResponseDto
+                    {
+                        status = true,
+                        msg = "Student successfully registered"
+                    };
+                    return res;
+
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+
+
+            }
+
+
         }
     }
 }

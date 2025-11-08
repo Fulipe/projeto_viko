@@ -15,12 +15,13 @@ import { CommonModule } from '@angular/common';
 })
 export class ViewEventComponent implements OnInit {
   private eventService = inject(EventService)
-  eventGUID: string;
+  
+  eventGuid!: string;
   
   event: EventFetched;
 
   constructor(private route: ActivatedRoute) {
-    this.eventGUID = String(this.route.snapshot.paramMap.get('guid'))
+    this.eventGuid = String(this.route.snapshot.paramMap.get('guid'))
 
     this.event = {
       title: '',
@@ -45,7 +46,7 @@ export class ViewEventComponent implements OnInit {
   }
 
   loadEvent() {
-    this.eventService.GetEvent(this.eventGUID).subscribe({
+    this.eventService.GetEvent(this.eventGuid).subscribe({
       next:
         (res) => {
           if (res == false) {

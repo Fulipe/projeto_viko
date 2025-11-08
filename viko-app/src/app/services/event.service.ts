@@ -67,4 +67,8 @@ export class EventService {
       })
     )
   }
+
+  newRegistration(guid: string | null): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/EventRegistration`, guid);
+  }
 }
