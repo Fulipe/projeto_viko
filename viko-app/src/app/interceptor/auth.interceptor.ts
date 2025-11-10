@@ -2,17 +2,17 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-    const router = inject(Router)
+    // const router = inject(Router)
     const authService = inject(AuthService)
 
     if (authService.isLoggedIn()) {
 
         const decode = authService.decodeToken(authService.getToken());
         if (decode && decode.userRole) {
-            console.log(decode.userRole)
+            // console.log(decode.userRole)
             localStorage.setItem('role', decode.userRole);
         }
         
@@ -24,7 +24,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 if (error.status === 401) {
                     // Unauthorized
                     // e.g. force logout and redirect to login
+
                     authService.logout();
+
                 } else if (error.status === 403) {
                     // Forbidden
                     // e.g. navigate to a "no access" page or just log

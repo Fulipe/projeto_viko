@@ -1,9 +1,10 @@
 import { Component, inject, input, Input, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, ɵEmptyOutletComponent } from '@angular/router';
+import { ActivatedRoute, Route, Router, ɵEmptyOutletComponent } from '@angular/router';
 import { EventService } from '../../../services/event.service';
 import { EventFetched } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
+import { catchError, of } from 'rxjs';
 
 // type role = "Student" | "Teacher" | "Admin"
 
@@ -22,16 +23,16 @@ export class ViewEventComponent implements OnInit {
 
   eventGuid!: string;
   event: EventFetched;
-  
+
   roleSaved: string | null = this.authService.getRole()
-  
+
   //Registration 
-  eventStatus: number; 
+  eventStatus: number;
   isHidden = false;
   showRegisterButton = true;
   isRegistered = false;
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private router: Router) {
     this.eventGuid = String(this.route.snapshot.paramMap.get('guid'))
 
     this.event = {
@@ -61,7 +62,7 @@ export class ViewEventComponent implements OnInit {
     this.eventService.GetEvent(this.eventGuid).subscribe({
       next:
         (res) => {
-          if (res == false) {
+          if (res == null) {
             console.log("Event not found")
             return;
           }
@@ -72,7 +73,7 @@ export class ViewEventComponent implements OnInit {
           this.event = event
           this.eventStatus = event.eventStatus
 
-        },
+        }
     })
   }
 
@@ -93,15 +94,14 @@ export class ViewEventComponent implements OnInit {
           this.showRegisterButton = false;
           this.isRegistered = true
 
-          console.log('AA')
+          // console.log('AA')
           // return true
 
         } else {
           this.showRegisterButton = true;
           this.isRegistered = false
 
-          console.log('BB')
-
+          // console.log('BB')
           // return false
 
         }

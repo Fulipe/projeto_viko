@@ -16,13 +16,14 @@ import { MyEventsStudentComponent } from './pages/private/student/my-events-stud
 import { MyEventsTeacherComponent } from './pages/private/teacher/my-events-teacher/my-events-teacher.component';
 import { NewEventComponent } from './pages/private/teacher/new-event/new-event.component';
 import { ViewEventComponent } from './pages/private/view-event/view-event.component';
-import { ViewEventStudentComponent } from './pages/private/student/view-event-student/view-event-student.component';
 import { ViewEventTeacherComponent } from './pages/private/teacher/view-event-teacher/view-event-teacher.component';
+import { NotfoundComponent } from './pages/notfound/notfound.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
     { path: 'unauthorized', component: UnauthorizedComponent },
+    { path: 'notfound', component: NotfoundComponent },
     {
         path: 'private',
         canActivate: [authGuard],
@@ -91,7 +92,7 @@ export const routes: Routes = [
                 canActivate: [roleGuard],
                 data: { roles: ['Student'] }
             },
-            
+
             //Teacher
             {
                 path: 'teacher/dashboard',

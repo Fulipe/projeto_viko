@@ -3,6 +3,7 @@ import { Observable, map, of, catchError } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CreateEventDto, EventFetched } from '../interfaces/interfaces';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class EventService {
   constructor() { }
 
   private http = inject(HttpClient);
+  private router = inject(Router)
 
   getStudentEvents(): Observable<EventFetched | false> {
     return this.http.get<any>(`${environment.apiUrl}/GetStudentEvents`).pipe(
@@ -56,14 +58,18 @@ export class EventService {
     return this.http.post<CreateEventDto>(`${environment.apiUrl}/CreateEvent`, dto);
   }
 
-  GetEvent(guid: string | null): Observable<EventFetched | false>{
+  GetEvent(guid: string | null): Observable<EventFetched | null>{
     return this.http.get<any>(`${environment.apiUrl}/GetEvent?guid=${guid}`).pipe(
       map((res) => {
         if (res?.eventFetched) {
           return res.eventFetched
         }
-
-        return false
+      }), 
+      catchError((error) =>{
+        if (error.status == 404) {
+          this.router.navigate(['/notfound'])
+        }
+        return of (null)
       })
     )
   }
