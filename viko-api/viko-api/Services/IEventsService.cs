@@ -299,6 +299,7 @@ namespace viko_api.Services
             }
             public async Task<ResponseDto> EventRegistration(long studentid, string guid)
             {
+                //Parses incoming string as GUID
                 if (!Guid.TryParse(guid, out Guid parsedGuid))
                     return (new ResponseDto { status = false, msg = "GUID is Invalid" });
 
@@ -307,14 +308,23 @@ namespace viko_api.Services
                     .Where(e => e.EventGuid == parsedGuid)
                     .FirstOrDefaultAsync();
 
+                //Checks if GUID provided exists.
                 if (getGuidEvent == null) 
                     return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
 
+                //Checks if Event is Opened, if not, doesn't allow registration
                 if (getGuidEvent.EventStatusId != 1)
                     return new ResponseDto { status = false, msg = "Registration failed. This event is closed or finished" };
 
-                //Get its EventId
+                //Get EventId of Event provided by the GUID
                 var eventId = getGuidEvent.Id;
+
+                //Checks if Student is already registered in the event
+                bool checkRegistration = await _dbContext.EventRegistrations
+                    .AnyAsync(r => r.EventId == eventId && r.StudentId == studentid);
+
+                if (checkRegistration)
+                    return new ResponseDto { status = false, msg = "Registration failed. Student is already registered in this event" };
 
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
 

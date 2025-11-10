@@ -75,15 +75,6 @@ export const routes: Routes = [
             {
                 path: 'event/:guid',
                 component: ViewEventComponent,
-                canActivate: [roleRedirectGuard],
-                data: {
-                    redirectMap: {
-                        Student: '/private/student/event/:guid',
-                        Teacher: '/private/teacher/event/:guid',
-                        // Admin: '/private/admin/dashboard'
-                    }
-                }
-
             },
 
             //Student
@@ -100,13 +91,7 @@ export const routes: Routes = [
                 canActivate: [roleGuard],
                 data: { roles: ['Student'] }
             },
-            {
-                path: 'student/event/:guid',
-                component: ViewEventStudentComponent,
-                canActivate: [roleGuard],
-                data: { roles: ['Student'] }
-            },
-
+            
             //Teacher
             {
                 path: 'teacher/dashboard',
