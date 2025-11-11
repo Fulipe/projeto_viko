@@ -16,7 +16,6 @@ import { MyEventsStudentComponent } from './pages/private/student/my-events-stud
 import { MyEventsTeacherComponent } from './pages/private/teacher/my-events-teacher/my-events-teacher.component';
 import { NewEventComponent } from './pages/private/teacher/new-event/new-event.component';
 import { ViewEventComponent } from './pages/private/view-event/view-event.component';
-import { ViewEventTeacherComponent } from './pages/private/teacher/view-event-teacher/view-event-teacher.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { eventResolver } from './resolvers/event.resolver';
 
@@ -108,13 +107,6 @@ export const routes: Routes = [
             {
                 path: 'teacher/myevents',
                 component: MyEventsTeacherComponent,
-                canActivate: [roleGuard],
-                data: { roles: ['Teacher'] }
-            },
-
-            {
-                path: 'teacher/event/:guid',
-                component: ViewEventTeacherComponent,
                 canActivate: [roleGuard],
                 data: { roles: ['Teacher'] }
             },

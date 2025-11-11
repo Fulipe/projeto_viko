@@ -49,6 +49,7 @@ export interface EventFetched {
     description: string;
     category: string;
     teacher: string;
+    teacherPhoto: string;
     language: string;
     city: string;
     image: string;

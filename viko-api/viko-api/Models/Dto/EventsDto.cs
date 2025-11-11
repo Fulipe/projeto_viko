@@ -11,6 +11,7 @@ namespace viko_api.Models.Dto
         public string Title { get; set; }
         public string Image {  get; set; }
         public string Teacher { get; set; }
+        public string TeacherPhoto { get; set; }
         public string Language { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }

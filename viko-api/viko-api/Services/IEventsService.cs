@@ -274,6 +274,7 @@ namespace viko_api.Services
                             Image = join.tn.ev.e.Image,
                             Language = join.tn.ev.e.Languages,
                             Teacher = join.teacherName.Name,
+                            TeacherPhoto = join.teacherName.Image,
                             Description = join.tn.ev.ev.Description,
                             Category = join.tn.ev.ev.Category,
                             Location = join.tn.ev.ev.Location,
