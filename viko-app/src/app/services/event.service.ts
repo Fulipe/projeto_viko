@@ -64,13 +64,9 @@ export class EventService {
         if (res?.eventFetched) {
           return res.eventFetched
         }
+
+        return null
       }), 
-      catchError((error) =>{
-        if (error.status == 404) {
-          this.router.navigate(['/notfound'])
-        }
-        return of (null)
-      })
     )
   }
 

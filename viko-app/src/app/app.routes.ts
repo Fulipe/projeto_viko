@@ -18,12 +18,15 @@ import { NewEventComponent } from './pages/private/teacher/new-event/new-event.c
 import { ViewEventComponent } from './pages/private/view-event/view-event.component';
 import { ViewEventTeacherComponent } from './pages/private/teacher/view-event-teacher/view-event-teacher.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
+import { eventResolver } from './resolvers/event.resolver';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'signup', component: SignupComponent },
     { path: 'unauthorized', component: UnauthorizedComponent },
-    { path: 'notfound', component: NotfoundComponent },
+    
+    //Error page if event is not found
+    { path: 'event/notfound', component: NotfoundComponent },
     {
         path: 'private',
         canActivate: [authGuard],
@@ -76,6 +79,7 @@ export const routes: Routes = [
             {
                 path: 'event/:guid',
                 component: ViewEventComponent,
+                resolve: { event: eventResolver },
             },
 
             //Student

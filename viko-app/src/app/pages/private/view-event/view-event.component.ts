@@ -22,59 +22,30 @@ export class ViewEventComponent implements OnInit {
   private authService = inject(AuthService)
 
   eventGuid!: string;
-  event: EventFetched;
+  event!: EventFetched;
 
   roleSaved: string | null = this.authService.getRole()
 
   //Registration 
-  eventStatus: number;
+  eventStatus?: number;
   isHidden = false;
   showRegisterButton = true;
   isRegistered = false;
 
   constructor(private route: ActivatedRoute, private router: Router) {
     this.eventGuid = String(this.route.snapshot.paramMap.get('guid'))
+    this.event = this.route.snapshot.data['event'];
 
-    this.event = {
-      title: '',
-      description: '',
-      category: '',
-      teacher: '',
-      language: '',
-      city: '',
-      image: '',
-      location: '',
-      startDate: '',
-      endDate: '',
-      registrationDeadline: '',
-      guid: '',
-      eventStatus: 0,
-    }
-    this.eventStatus = 0
+    this.eventStatus = this.event.eventStatus;
+
   }
 
   ngOnInit(): void {
-    this.loadEvent()
-    this.checkRegistration()
-  }
-
-  loadEvent() {
-    this.eventService.GetEvent(this.eventGuid).subscribe({
-      next:
-        (res) => {
-          if (res == null) {
-            console.log("Event not found")
-            return;
-          }
-
-          const e: any = res
-          const event: EventFetched = e
-
-          this.event = event
-          this.eventStatus = event.eventStatus
-
-        }
-    })
+    //Checks if role from logged user is Student, so it can check registration
+    if (this.roleSaved == "Student") {
+      this.checkRegistration()  
+    }
+    
   }
 
   //Checks registration, by checking if GUID of opened event, is in the Students events list
@@ -94,15 +65,9 @@ export class ViewEventComponent implements OnInit {
           this.showRegisterButton = false;
           this.isRegistered = true
 
-          // console.log('AA')
-          // return true
-
         } else {
           this.showRegisterButton = true;
           this.isRegistered = false
-
-          // console.log('BB')
-          // return false
 
         }
       },
