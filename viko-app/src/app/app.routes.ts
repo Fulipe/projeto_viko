@@ -18,6 +18,7 @@ import { NewEventComponent } from './pages/private/teacher/new-event/new-event.c
 import { ViewEventComponent } from './pages/private/view-event/view-event.component';
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { eventResolver } from './resolvers/event.resolver';
+import { SearchEventComponent } from './pages/private/search-event/search-event.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -40,6 +41,11 @@ export const routes: Routes = [
             {
                 path: 'profile',
                 component: ProfileComponent,
+            },
+
+            {
+                path: 'search',
+                component: SearchEventComponent
             },
 
             {

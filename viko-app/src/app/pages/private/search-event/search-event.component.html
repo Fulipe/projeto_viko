@@ -1,0 +1,123 @@
+<div class="min-h-screen flex flex-col items-center ">
+    <div class="w-full bg-white rounded-2xl shadow p-8 ">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Search event</h2>
+
+        <!-- Search and filters -->
+        <div class="flex flex-col md:flex-row gap-4 items-center mb-6">
+            <input type="text" placeholder="Search for event..." [(ngModel)]="searchTerm" (input)="applyFilters()"
+                class="w-full md:flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+            <div class="flex gap-2 w-full md:w-auto">
+                <select [(ngModel)]="categoryFilter" (change)="applyFilters()"
+                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    <option value="">All Categories</option>
+                    <option *ngFor="let c of ['Catg1','Catg2','Catg3']">{{ c }}</option>
+                </select>
+
+                <select [(ngModel)]="cityFilter" (change)="applyFilters()"
+                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    <option value="">All Cities</option>
+                    <option *ngFor="let c of ['Vilnius','Kaunas','Klaipeda']">{{ c }}</option>
+                </select>
+
+                <select [(ngModel)]="locationFilter" (change)="applyFilters()"
+                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    <option value="">All Locations</option>
+                    <option *ngFor="let l of ['Loc1','Loc2','Loc3']">{{ l }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full border-collapse">
+                <thead>
+                    <tr class="border-b bg-gray-100 text-gray-700 ">
+                        <th class="px-4 py-2 cursor-pointer" (click)="sortBy('title')">Title</th>
+                        <th class="px-4 py-2">Languages</th>
+                        <th class="px-4 py-2 cursor-pointer" (click)="sortBy('category')">Category</th>
+                        <th class="px-4 py-2 cursor-pointer" (click)="sortBy('location')">Location</th>
+                        <th class="px-4 py-2 cursor-pointer" (click)="sortBy('city')">City</th>
+                        <th class="px-4 py-2 cursor-pointer" (click)="sortBy('startDate')">Start Date</th>
+                        <th class="px-4 py-2 cursor-pointer" (click)="sortBy('eventStatus')">Event Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (loading) {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-gray-500">Loading...</td>
+                    </tr>
+                    }
+                    @if (displayedEvents.length === 0 && !loading) {
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-gray-500">No events found</td>
+                    </tr>
+                    } @else {
+                        @for (event of displayedEvents; track event.title) {
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-2">
+                                    <a href="/private/event/{{event.guid}}">
+                                        {{ event.title }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <a href="/private/event/{{event.guid}}">
+                                        {{ event.language }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <a href="/private/event/{{event.guid}}">
+                                        {{ event.category }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <a href="/private/event/{{event.guid}}">
+                                        {{ event.location }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <a href="/private/event/{{event.guid}}">
+                                        {{ event.city }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <a href="/private/event/{{event.guid}}">
+                                        {{ event.startDate }}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-2 font-medium">
+                                    @switch (event.eventStatus) {
+                                        @case (1) { <a href="/private/event/{{event.guid}}" class="text-green-600"> Opened </a> }
+                                        @case (2) { <a href="/private/event/{{event.guid}}" class="text-yellow-600"> Closed </a> }
+                                        @case (3) { <a href="/private/event/{{event.guid}}" class="text-red-600"> Finished </a> }
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-center gap-2 mt-6">
+            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50"
+                (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+                &lt;
+            </button>
+
+            @for (page of [].constructor(totalPages); let i = $index; track i) {
+            <button class="px-3 py-1 border rounded-md hover:bg-blue-100" [class.bg-blue-500]="currentPage === i + 1"
+                [class.text-white]="currentPage === i + 1" (click)="changePage(i + 1)">
+                {{ i + 1 }}
+            </button>
+            }
+
+            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 disabled:opacity-50"
+                (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                &gt;
+            </button>
+        </div>
+    </div>
+
+</div>

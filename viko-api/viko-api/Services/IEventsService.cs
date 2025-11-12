@@ -54,6 +54,7 @@ namespace viko_api.Services
                             Image = join.tn.t.e.Image,
                             Language = join.tn.t.e.Languages,
                             Teacher = join.teacherName.Name,
+                            TeacherPhoto = join.teacherName.Image,
                             Description = join.tn.t.ev.Description,
                             Category = join.tn.t.ev.Category,
                             Location = join.tn.t.ev.Location,
@@ -192,6 +193,18 @@ namespace viko_api.Services
             }
             public async Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated)
             {
+
+                //Checks if title sent, is already in use
+                bool checkTitle = await _dbContext.Events
+                                .Join(_dbContext.Entities,
+                                    ev => ev.EntityId,
+                                    e => e.Id,
+
+                                    (ev, e) => new {ev, e}
+                                ).AnyAsync(r => r.e.Name == eventCreated.Title);
+
+                if (checkTitle) return new ResponseDto { status = false, msg = "Event not created. Title selected is already in use" };
+
                 using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
                 try
@@ -355,11 +368,7 @@ namespace viko_api.Services
                     await transaction.RollbackAsync();
                     throw;
                 }
-
-
             }
-
-
         }
     }
 }

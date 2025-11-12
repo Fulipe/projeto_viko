@@ -52,17 +52,14 @@ public class CreateEvent
 
         //Send EventCreationDto and ID to CreateEvent() function in IEventService
 
-            //Sends user ID to User Service
             var eventCreated = await _eventsService.CreateEvent(teacherid, request);
 
-            //if (user.Item1.status == false)
-            //{
-            //    var res = req.CreateResponse(HttpStatusCode.NotFound);
-            //    await res.WriteStringAsync(user.Item1.msg);
-            //    return res;
-            //}
-
-            //var userLogged = user.Item2;
+            if (eventCreated.status == false)
+            {
+                var res = req.CreateResponse(HttpStatusCode.Conflict);
+                await res.WriteStringAsync(eventCreated.msg);
+                return res;
+            }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(new { eventCreated });
