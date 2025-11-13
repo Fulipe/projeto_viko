@@ -14,6 +14,12 @@ export interface LanguagesObjectFormat {
     flag?: string
 }
 
+export interface CategoriesObjectFormat {
+    index: number,
+    name: string,
+    emoji?: string
+}
+
 export interface UserInfo {
     name: string;
     email: string;

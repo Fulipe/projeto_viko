@@ -45,12 +45,12 @@
                 <tbody>
                     @if (loading) {
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-gray-500">Loading...</td>
+                        <td colspan="7" class="text-center py-4 text-gray-500">Loading...</td>
                     </tr>
                     }
                     @if (displayedEvents.length === 0 && !loading) {
                     <tr>
-                        <td colspan="6" class="text-center py-4 text-gray-500">No events found</td>
+                        <td colspan="7" class="text-center py-4 text-gray-500">No events found</td>
                     </tr>
                     } @else {
                         @for (event of displayedEvents; track event.title) {

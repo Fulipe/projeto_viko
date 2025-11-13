@@ -18,7 +18,7 @@ namespace viko_api.Services
         Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
         Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
         Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated);
-        Task<(ResponseDto, EventsDto)> GetEvent(string guid);
+        Task<(ResponseDto, EventsDto?)> GetEvent(string guid);
         Task<ResponseDto> EventRegistration(long studentid, string guid);
 
         public class EventService : IEventsService

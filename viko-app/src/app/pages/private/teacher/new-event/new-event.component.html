@@ -26,7 +26,7 @@
                     @if (previewUrl) {
                     <img [src]="previewUrl" class="w-full h-full object-cover" />
                     } @else {
-                    <span class="text-gray-400 text-sm">Poster</span>
+                    <span class="text-gray-400 text-sm">Poster 250x300</span>
                     }
 
                     <label
@@ -46,7 +46,7 @@
             <div class="flex-1 grid grid-cols-2 gap-4 w-full">
                 <div class="col-span-2">
                     <label class="block font-medium mb-1">Title</label>
-                    <input type="text" formControlName="title"
+                    <input type="text" formControlName="title" placeholder="Title"
                         class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
                     @if (eventForm.get('title')?.touched && eventForm.get('title')?.invalid) {
                     <div class="text-sm text-red-500 mt-1">
@@ -57,19 +57,28 @@
 
                 <div class="col-span-2">
                     <label class="block font-medium mb-1">Category</label>
-                    <input type="text" formControlName="category"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
+                    <select formControlName ="category"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                        @for (category of categories; track category.index) {
+                            <option [value]="category.name">
+                                {{category.name}} {{category.emoji}}
+                            </option>
+                        }
+                    </select>
+                    <!-- "border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 w-24" -->
+                    <!-- <input type="text" formControlName="category"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" /> -->
                 </div>
 
                 <div>
                     <label class="block font-medium mb-1">Location</label>
-                    <input type="text" formControlName="location"
+                    <input type="text" formControlName="location" placeholder="Location"
                         class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
                 </div>
 
                 <div>
                     <label class="block font-medium mb-1">City</label>
-                    <input type="text" formControlName="city"
+                    <input type="text" formControlName="city" placeholder="City"
                         class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
                 </div>
             </div>

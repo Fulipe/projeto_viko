@@ -1,10 +1,11 @@
 import { Component, inject, input, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Route, Router, ɵEmptyOutletComponent } from '@angular/router';
 import { EventService } from '../../../services/event.service';
-import { EventFetched } from '../../../interfaces/interfaces';
+import { CategoriesObjectFormat, EventFetched } from '../../../interfaces/interfaces';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { catchError, of } from 'rxjs';
+import { CATEGORIES } from '../../../interfaces/categories';
 
 // type role = "Student" | "Teacher" | "Admin"
 
@@ -26,6 +27,10 @@ export class ViewEventComponent implements OnInit {
 
   roleSaved: string | null = this.authService.getRole()
 
+  //Category
+  categories= [...CATEGORIES]
+  category?: CategoriesObjectFormat;
+
   //Registration 
   eventStatus?: number;
   isHidden = false;
@@ -37,6 +42,9 @@ export class ViewEventComponent implements OnInit {
     this.event = this.route.snapshot.data['event'];
 
     this.eventStatus = this.event.eventStatus;
+    
+    //Sets the category of the event as an Category object
+    this.category = this.categories.find(c => c.name == this.event.category)
 
   }
 

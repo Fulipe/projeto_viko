@@ -5,6 +5,7 @@ import { EventService } from '../../../../services/event.service';
 import { LANGUAGES } from '../../../../interfaces/languages';
 import { CreateEventDto, LanguagesObjectFormat } from '../../../../interfaces/interfaces';
 import { Title } from '@angular/platform-browser';
+import { CATEGORIES } from '../../../../interfaces/categories';
 
 @Component({
   selector: 'app-new-event',
@@ -19,6 +20,10 @@ export class NewEventComponent {
   successMessage = '';
   errorMessage = '';
 
+  //Category
+  categories = [...CATEGORIES]
+  selectedCategory: string = '';
+
   //Language
   languages = [...LANGUAGES];
   selectedLanguages: any[] = [];
@@ -29,11 +34,7 @@ export class NewEventComponent {
   selectedFile?: File;
   previewUrl: string | ArrayBuffer | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private eventService: EventService,
-    private router: Router
-  ) {
+  constructor(private fb: FormBuilder, private eventService: EventService, private router: Router) {
     this.eventForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       image: [null],
@@ -45,6 +46,16 @@ export class NewEventComponent {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
     });
+  }
+
+  //Category
+  checkCategory(){
+    this.selectedCategory = this.eventForm.get('category')?.value || '';
+    if (!this.categories.find(s => s.name == this.selectedCategory)) {
+      return false
+    }
+
+    return true
   }
 
   //Language
@@ -105,12 +116,13 @@ export class NewEventComponent {
       Image: this.previewUrl?.toString(),
       Description: this.eventForm.get('description')?.value,
       Category: this.eventForm.get('category')?.value,
+      // Category: this.selectedCategory,
       Language: this.selectedLanguages.join(','),
       City: this.eventForm.get('city')?.value,
       Location: this.eventForm.get('location')?.value,
       StartDate: this.eventForm.get('startDate')?.value,
       EndDate: this.eventForm.get('endDate')?.value,
-      
+
     }
 
     return dto
