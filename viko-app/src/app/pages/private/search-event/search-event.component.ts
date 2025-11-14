@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { EventService } from '../../../services/event.service';
 import { EventFetched } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/auth.service';
+import { CATEGORIES } from '../../../interfaces/categories';
 
 @Component({
   selector: 'app-event-search',
@@ -24,10 +25,16 @@ export class SearchEventComponent implements OnInit {
 
   role = this.authService.getRole()
 
+  //Filters
   searchTerm = '';
   categoryFilter = '';
+  categoriesAvailable = [...CATEGORIES] //Array with available categories
+
   cityFilter = '';
+  citiesAvailable: string[] = [] //Array with available cities
+  
   locationFilter = '';
+  locationsAvailable: string[] = [] //Array with available locations
 
   currentPage = 1;
   itemsPerPage = 10;
@@ -49,11 +56,17 @@ export class SearchEventComponent implements OnInit {
         const e: any = res;
         this.events = e
 
-        if(this.role == "Student"){  
+        //If user logged in, is a Student, only shows Events with eventstatus set as 'opened' 
+        if (this.role == "Student") {
           this.events = this.events
-              .filter(event => event.eventStatus != 3)
-              .filter(event => event.eventStatus != 2);
-        }          
+            .filter(event => event.eventStatus != 3)
+            .filter(event => event.eventStatus != 2);
+        }
+
+        //Gets all locations and cities to build filters
+        //Populates the arrays, with Sets to avoid duplicates
+        this.locationsAvailable = [...new Set(this.events.map(e => e.location))];
+        this.citiesAvailable = [...new Set(this.events.map(e => e.city))];
 
         this.applyFilters()
 

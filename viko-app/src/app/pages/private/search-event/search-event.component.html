@@ -9,21 +9,27 @@
 
             <div class="flex gap-2 w-full md:w-auto">
                 <select [(ngModel)]="categoryFilter" (change)="applyFilters()"
-                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    class="border border-gray-300 w-36 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
                     <option value="">All Categories</option>
-                    <option *ngFor="let c of ['Catg1','Catg2','Catg3']">{{ c }}</option>
+                    @for (category of categoriesAvailable; track category.index) {
+                        <option [value]="category.name">{{ category.name }} {{ category.emoji }}</option>
+                    }
                 </select>
 
                 <select [(ngModel)]="cityFilter" (change)="applyFilters()"
                     class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
                     <option value="">All Cities</option>
-                    <option *ngFor="let c of ['Vilnius','Kaunas','Klaipeda']">{{ c }}</option>
+                    @for (city of citiesAvailable; track $index) {
+                        <option [value]="city"> {{ city }} </option>
+                    }
                 </select>
 
                 <select [(ngModel)]="locationFilter" (change)="applyFilters()"
-                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    class="border border-gray-300 w-35 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
                     <option value="">All Locations</option>
-                    <option *ngFor="let l of ['Loc1','Loc2','Loc3']">{{ l }}</option>
+                    @for (loc of locationsAvailable; track $index) {
+                        <option [value]="loc">{{ loc }}</option>
+                    }
                 </select>
             </div>
         </div>
