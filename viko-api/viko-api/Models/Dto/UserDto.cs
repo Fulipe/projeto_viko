@@ -7,9 +7,5 @@ public class UserDto
 {
     public long Id { get; set; }
     public string Username { get; set; } = null!;
-    public string Email { get; set; } = null!;
-    public string Phone { get; set; }
     public string Role {  get; set; }
-    public DateOnly Birthdate { get; set; }
-    public long EntityId { get; set; }
 }

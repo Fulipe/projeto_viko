@@ -20,6 +20,7 @@ namespace viko_api.Services
         Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated);
         Task<(ResponseDto, EventsDto?)> GetEvent(string guid);
         Task<ResponseDto> EventRegistration(long studentid, string guid);
+        Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
 
         public class EventService : IEventsService
         {
@@ -368,6 +369,57 @@ namespace viko_api.Services
                     await transaction.RollbackAsync();
                     throw;
                 }
+            }
+            public async Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return (new ResponseDto { status = false, msg = "GUID is Invalid" }, null);
+
+                //Get events to register through guid in the params
+                var getGuidEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getGuidEvent == null)
+                    return (new ResponseDto { status = false, msg = "No event was found with the given GUID" }, null);
+
+                //Get EventId of Event provided by the GUID
+                var eventId = getGuidEvent.Id;
+
+                var registrations = await _dbContext.EventRegistrations
+                                    .Where(r => r.EventId == eventId)
+                                    .Join(_dbContext.Users,
+                                        er => er.StudentId,
+                                        u => u.Id,
+
+                                        (er, u) => new {er, u})
+                                    .Join(_dbContext.Entities,
+                                        u => u.u.EntityId,
+                                        e => e.Id,
+
+                                        (u, e) => new {u, e})
+                                    .Join(_dbContext.Roles,
+                                        u => u.u.u.RoleId,
+                                        role => role.Id,
+                                        
+                                        (u, role) => new {u, role})
+                                    .Select( userRegistrations => new UserInfoDto
+                                    {
+                                        Name = userRegistrations.u.e.Name,
+                                        Email = userRegistrations.u.u.u.Email,
+                                        Username = userRegistrations.u.u.u.Username,
+                                        Role = userRegistrations.role.Name,
+                                        Language = userRegistrations.u.e.Languages,
+                                        Birthdate = userRegistrations.u.u.u.Birthdate,
+                                        Phone = userRegistrations.u.u.u.Phone,
+                                        Photo = userRegistrations.u.e.Image,
+
+                                    }).ToListAsync();
+
+                return (new ResponseDto { status = true, msg = "Registrations fetched successfully!" }, registrations);
+
             }
         }
     }

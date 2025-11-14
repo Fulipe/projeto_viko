@@ -116,7 +116,6 @@ export class NewEventComponent {
       Image: this.previewUrl?.toString(),
       Description: this.eventForm.get('description')?.value,
       Category: this.eventForm.get('category')?.value,
-      // Category: this.selectedCategory,
       Language: this.selectedLanguages.join(','),
       City: this.eventForm.get('city')?.value,
       Location: this.eventForm.get('location')?.value,

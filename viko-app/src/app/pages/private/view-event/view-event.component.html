@@ -1,13 +1,14 @@
 <!-- Status bar -->
 
 @switch(event.eventStatus){
-@case (1) {<div class="text-center font-semibold text-white py-2 bg-green-700"> Registrations are open </div>}
-@case (2) {<div class="text-center font-semibold text-white py-2 bg-red-700"> Registrations are closed </div>}
-@case (3) {<div class="text-center font-semibold text-white py-2 bg-red-700"> This event is finished </div>}
-
+    @case (1) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-green-700 mx-10"> Registrations are open </div>}
+    @case (2) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-red-700 mx-10"> Registrations are closed </div>}
+    @case (3) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-red-700 mx-10"> This event is finished </div>}
 }
+
 <!-- Main content -->
-<main class="flex flex-col lg:flex-row justify-between items-start gap-8 p-8 bg-white flex-grow">
+<main class="flex flex-col lg:flex-row justify-between rounded-lg items-start gap-8 py-8 mx-10 bg-white flex-grow">
+
     <!-- Image -->
     <div class="w-full lg:w-1/4 flex justify-center">
         @if (event.image) {
@@ -89,3 +90,9 @@
 
     </div>
 </main>
+
+@if (roleSaved == "Teacher" || roleSaved == "Admin") {
+    <div class="mt-3 w-1/2 mx-10">
+        <app-registrations [eventGuid]="eventGuid"></app-registrations>
+    </div>
+}

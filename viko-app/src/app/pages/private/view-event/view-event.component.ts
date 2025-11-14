@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { catchError, of } from 'rxjs';
 import { CATEGORIES } from '../../../interfaces/categories';
+import { RegistrationsComponent } from "../../../components/teacher/registrations/registrations.component";
 
 // type role = "Student" | "Teacher" | "Admin"
 
@@ -14,7 +15,8 @@ import { CATEGORIES } from '../../../interfaces/categories';
   standalone: true,
   imports: [
     CommonModule,
-  ],
+    RegistrationsComponent
+],
   templateUrl: './view-event.component.html',
   styleUrl: './view-event.component.scss'
 })
