@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, map, of, catchError } from 'rxjs';
+import { Observable, map, of, catchError, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { CreateEventDto, EventFetched } from '../interfaces/interfaces';
 import { HttpClient } from '@angular/common/http';
@@ -84,5 +84,9 @@ export class EventService {
         return null
       })
     )
+  }
+
+  editEvent (guid: string | null, eventUpdate: EventFetched): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/EditEvent`, {guid, eventUpdate})
   }
 }

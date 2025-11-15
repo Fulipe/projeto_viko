@@ -11,41 +11,41 @@ namespace viko_api.Models.Dto
     public class EventCreationDto
     {
         [Required]
-        [JsonPropertyName("Title")]
+        //[JsonPropertyName("Title")]
         public string Title { get; set; }
 
-        [JsonPropertyName("Image")]
+        //[JsonPropertyName("Image")]
         public string Image { get; set; }
 
         [Required]
-        [JsonPropertyName("Language")]
+        //[JsonPropertyName("Language")]
         public string Language { get; set; }
 
-        //[Required]
+        [Required]
         //[JsonPropertyName("Teacher")]
-        //public long Teacher{ get; set; }
+        public string Teacher { get; set; }
 
-        [JsonPropertyName("Description")]
+        //[JsonPropertyName("Description")]
         public string Description { get; set; }
 
         [Required]
-        [JsonPropertyName("Category")]
+        //[JsonPropertyName("Category")]
         public string Category { get; set; }
 
         [Required]
-        [JsonPropertyName("Location")]
+        //[JsonPropertyName("Location")]
         public string Location { get; set; }
 
         [Required]
-        [JsonPropertyName("City")]
+        //[JsonPropertyName("City")]
         public string City { get; set; }
 
         [Required]
-        [JsonPropertyName("StartDate")]
+        //[JsonPropertyName("StartDate")]
         public DateTime StartDate { get; set; }
         
         [Required]
-        [JsonPropertyName("EndDate")]
+        //[JsonPropertyName("EndDate")]
         public DateTime EndDate { get; set; }
 
         //[Required]

@@ -1,13 +1,16 @@
 <!-- Status bar -->
 
 @switch(event.eventStatus){
-    @case (1) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-green-700 mx-10"> Registrations are open </div>}
-    @case (2) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-red-700 mx-10"> Registrations are closed </div>}
-    @case (3) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-red-700 mx-10"> This event is finished </div>}
+@case (1) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-green-700 mx-10"> Registrations are open
+</div>}
+@case (2) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-red-700 mx-10"> Registrations are closed
+</div>}
+@case (3) {<div class="text-center font-semibold text-white py-2 rounded-lg bg-red-700 mx-10"> This event is finished
+</div>}
 }
 
 <!-- Main content -->
-<main class="flex flex-col lg:flex-row justify-between rounded-lg items-start gap-8 py-8 mx-10 bg-white flex-grow">
+<main class="flex flex-col lg:flex-row justify-between rounded-lg items-start gap-8 py-8 mt-3 mx-10 bg-white flex-grow">
 
     <!-- Image -->
     <div class="w-full lg:w-1/4 flex justify-center">
@@ -35,6 +38,11 @@
                 <p class="font-semibold text-gray-700">Category</p>
                 <p> {{category?.name}} {{category?.emoji}} </p>
             </div>
+        </div>
+
+        <div>
+            <p class="font-semibold text-gray-700">Languages</p>
+            <p> {{event.language}} </p>
         </div>
 
         <div class="flex flex-wrap gap-10 text-sm text-gray-700">
@@ -91,8 +99,177 @@
     </div>
 </main>
 
+<!-- Overlay + Sidebar Container (mantém sempre no DOM) -->
+<div class="fixed inset-0 z-40 pointer-events-none">
+
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+        [class.opacity-0]="!editAside" [class.pointer-events-auto]="editAside" (click)="closeEditAside()"></div>
+
+    <!-- Sidebar -->
+    <div class="absolute top-0 right-0 h-full w-full sm:w-[450px] bg-white shadow-xl p-6 overflow-y-auto
+           transition-transform duration-300 ease-in-out pointer-events-auto" [class.translate-x-full]="!editAside"
+        [class.translate-x-0]="editAside">
+
+        <h2 class="text-2xl font-semibold mb-6">Edit Event</h2>
+
+        <form [formGroup]="eventEdit" class="space-y-4">
+
+            <!-- Photo -->
+            <div class="relative w-24 h-24">
+                <!-- Foto / Placeholder -->
+                @if (eventEdit.get('image')?.value) {
+                <img [src]="eventEdit.get('image')?.value"
+                    class="w-24 h-24 rounded object-cover border border-gray-300" />
+                } @else {
+                <div class="w-24 h-24 bg-gray-200 rounded flex items-center justify-center text-gray-500 text-sm">
+                    Photo
+                </div>
+                }
+
+                <!-- Label / botão de upload -->
+                <label
+                    class="absolute bottom-0 right-0 bg-gray-800 text-white text-xs p-1 rounded-full cursor-pointer flex items-center justify-center z-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-8 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                    </svg>
+
+                    <!-- Input escondido -->
+                    <input type="file" accept="image/*" (change)="onFileSelected($event)" class="hidden" />
+                </label>
+            </div>
+
+
+            <!-- Title -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input type="text" formControlName="title" name="title"
+                    class="w-full border border-gray-400 rounded px-3 py-2" />
+            </div>
+
+            @if (roleSaved == "Admin") {
+            <!-- Teacher -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Teacher</label>
+                <input type="text" formControlName="teacher" name="teacher"
+                    class="w-full border border-gray-400 rounded px-3 py-2" />
+            </div>
+            }
+
+            <!-- Category -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+
+                <select formControlName="category" name="category"
+                    class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    @for (category of categories; track category.name) {
+                    <option [value]="category.name">
+                        {{ category.name }} {{ category.emoji }}
+                    </option>
+                    }
+                </select>
+            </div>
+
+            <!-- Languages -->
+                <div
+                    class="relative w-full border border-gray-300 rounded-md px-2 py-2 flex flex-wrap items-center gap-2 focus-within:ring focus-within:ring-blue-200">
+                    <label class="block text-sm font-medium text-gray-600">Languages</label>
+
+                    <!-- Tags (línguas selecionadas) -->
+                    @for (lang of selectedLanguages; track $index) {
+                    <span class="flex items-center gap-1 bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm">
+                        {{ lang }}
+                        <button type="button" class="ml-1 text-blue-500 hover:text-red-500 focus:outline-none"
+                            (click)="removeLanguage(lang)">
+                            ✕
+                        </button>
+                    </span>
+                    }
+
+                    <input type="text" name="languages" #inputEl (input)="onSearch()"
+                        (focus)="onSearch()" (blur)="onInputBlur()" placeholder="Select your languages"
+                        class="w-full border border-gray-300 rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring focus:ring-blue-200">
+
+                    @if (searching) {
+                    <ul
+                        class="relative z-10 bg-white border border-gray-300 w-full rounded-md shadow-lg max-h-48 overflow-y-auto">
+                        @for (lang of languages; track lang.index){
+                        <li (click)="selectLanguage(lang)"
+                            class="px-3 py-2 hover:bg-blue-100 cursor-pointer items-center gap-2">
+                            <span>{{ lang.name }}</span>
+                        </li>
+                        }
+                    </ul>
+                    }
+                </div>
+
+            <!-- Dates -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+                    <input type="datetime-local" formControlName="startDate" name="startDate"
+                        class="w-full border border-gray-400 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+                    <input type="datetime-local" formControlName="endDate" name="endDate"
+                        class="w-full border border-gray-400 rounded px-3 py-2" />
+                </div>
+            </div>
+
+            <!-- Location -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <input type="text" formControlName="location" name="location"
+                    class="w-full border border-gray-400 rounded px-3 py-2" />
+            </div>
+
+            <!-- City -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                <input type="text" formControlName="city" name="city"
+                    class="w-full border border-gray-400 rounded px-3 py-2" />
+            </div>
+
+            <!-- Description -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea formControlName="description" name="description" rows="4"
+                    class="w-full border border-gray-400 rounded px-3 py-2 resize-none"></textarea>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end gap-3 mt-6">
+                <button type="button" class="px-4 py-2 border rounded text-gray-700 hover:bg-gray-100"
+                    (click)="closeEditAside()">
+                    Cancel
+                </button>
+
+                <button type="button" class="px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 
+                           disabled:bg-gray-400 disabled:cursor-not-allowed" (click)="saveEventChanges()"
+                    [disabled]="eventEdit.invalid || formUnchanged ">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 @if (roleSaved == "Teacher" || roleSaved == "Admin") {
-    <div class="mt-3 w-1/2 mx-10">
+<div class="grid grid-cols-3 gap-6 mt-3 mx-10">
+    <div>
         <app-registrations [eventGuid]="eventGuid"></app-registrations>
     </div>
+    <div>
+        <app-actions 
+            [event]="eventEdited" 
+            [eventGuid]="eventGuid" 
+            (editAside)="onEditAside($event)" 
+            (updated)="reloadEvent()">
+        </app-actions>
+    </div>
+</div>
 }

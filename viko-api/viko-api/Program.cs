@@ -44,7 +44,7 @@ builder.Services.Configure<JsonSerializerOptions>(jsonSerializerOptions =>
     jsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
     jsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     // override the default value
-    jsonSerializerOptions.PropertyNameCaseInsensitive = false;
+    jsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")

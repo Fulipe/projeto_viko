@@ -21,6 +21,8 @@ namespace viko_api.Services
         Task<(ResponseDto, EventsDto?)> GetEvent(string guid);
         Task<ResponseDto> EventRegistration(long studentid, string guid);
         Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
+        Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate);
+
 
         public class EventService : IEventsService
         {
@@ -419,6 +421,110 @@ namespace viko_api.Services
                                     }).ToListAsync();
 
                 return (new ResponseDto { status = true, msg = "Registrations fetched successfully!" }, registrations);
+
+            }
+            public async Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return new ResponseDto { status = false, msg = "GUID is Invalid" };
+
+                //Get events to register through guid in the params
+                var getGuidEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getGuidEvent == null)
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+                //Get EventId of Event provided by the GUID
+                var eventId = getGuidEvent.Id;
+
+                var eventToUpdate = await _dbContext.Events
+                    .Where(ev => ev.Id == eventId)
+                    .Join(_dbContext.Entities,
+                        ev => ev.EntityId,
+                        e => e.Id,
+
+                        (ev, e) => new {ev, e})
+                    .FirstOrDefaultAsync();
+
+                if (eventToUpdate == null)
+                    return new ResponseDto{ status = false, msg = "Event not found."} ;
+
+                // Gets Teachers UserId to save it on the Event table
+                var getTeacherId = await _dbContext.Entities
+                    .Where(e => e.Name == eventUpdate.Teacher)
+                    .Join(_dbContext.Users,
+                        u => u.Id,
+                        ue => ue.EntityId,
+
+                        (u, ue) => new {u, ue})
+                    .FirstOrDefaultAsync();
+
+                if (getTeacherId == null)
+                    return new ResponseDto { status = false, msg = "Teacher not found." };
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    if (!string.IsNullOrEmpty(eventUpdate.Title))
+                        eventToUpdate.e.Name = eventUpdate.Title;
+
+                    if (!string.IsNullOrEmpty(eventUpdate.Image))
+                        eventToUpdate.e.Image = eventUpdate.Image;
+
+                    if (!string.IsNullOrEmpty(eventUpdate.Language))
+                        eventToUpdate.e.Languages = eventUpdate.Language;
+                    
+                    if (!string.IsNullOrEmpty(eventUpdate.Teacher))
+                        eventToUpdate.ev.TeacherId = getTeacherId.ue.Id;
+
+                    if (!string.IsNullOrEmpty(eventUpdate.Description))
+                        eventToUpdate.ev.Description = eventUpdate.Description;
+
+                    if (!string.IsNullOrEmpty(eventUpdate.Category))
+                        eventToUpdate.ev.Category = eventUpdate.Category;
+
+                    if (!string.IsNullOrEmpty(eventUpdate.Description))
+                        eventToUpdate.ev.Description = eventUpdate.Description;
+
+                    if (!string.IsNullOrEmpty(eventUpdate.Location))
+                        eventToUpdate.ev.Location = eventUpdate.Location;
+
+                    if (eventUpdate.StartDate != default)
+                        eventToUpdate.ev.StartDate = eventUpdate.StartDate;
+
+                    if (eventUpdate.EndDate != default)
+                        eventToUpdate.ev.FinishDate = eventUpdate.EndDate;
+
+                    //TO DO: Do when crontab for status monitoring is online
+                    //if (eventUpdate.RegistrationDate != default)
+                    //    eventToUpdate.ev.RegistrationDeadline = eventUpdate.RegistrationDate;
+
+                    _dbContext.Events.Update(eventToUpdate.ev);
+                    _dbContext.Entities.Update(eventToUpdate.e);
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event updated!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event not updated - " + ex.Message
+                    };
+                    throw;
+                }
 
             }
         }

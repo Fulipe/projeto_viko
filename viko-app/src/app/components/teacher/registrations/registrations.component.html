@@ -4,7 +4,7 @@
     @if (registration.length === 0 && !loading) {
         <p class="text-gray-600 italic">No registrations yet</p>
     } @else if (registration.length > 0 && !loading) {
-        <table class="min-w-1/3">
+        <table class="min-w-full">
             <thead>
                 <tr class="text-left text-blue-900 "> 
                     <th>Name</th>
@@ -15,8 +15,8 @@
                 
                 @for (r of registration; track $index) {
                     <tr class="text-left text-blue-500">
-                        <td class="py-2">{{r.name}}</td>
-                        <td class="py-2">{{r.username}}</td>
+                        <td class="">{{r.name}}</td>
+                        <td class="">{{r.username}}</td>
                     </tr>
                 }
             </tbody>
