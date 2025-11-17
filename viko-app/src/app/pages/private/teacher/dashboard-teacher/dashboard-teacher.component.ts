@@ -42,8 +42,10 @@ export class DashboardTeacherComponent {
         const events: EventFetched[] = e
 
         //Filters finished events
-        this.registeredEvents = events.filter(event => event.eventStatus != 3);
+        const filteredEvents = events.filter(event => event.eventStatus != 3);
 
+        this.registeredEvents = filteredEvents.slice(0, 10)
+        
         this.loading = false;
       },
       error: (_) => {

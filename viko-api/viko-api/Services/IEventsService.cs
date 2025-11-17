@@ -22,6 +22,8 @@ namespace viko_api.Services
         Task<ResponseDto> EventRegistration(long studentid, string guid);
         Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
         Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate);
+        // Method to update event status
+        Task<ResponseDto> UpdateEventStatus(string guid, int newStatus);
 
 
         public class EventService : IEventsService
@@ -526,6 +528,53 @@ namespace viko_api.Services
                     throw;
                 }
 
+            }
+            public async Task<ResponseDto> UpdateEventStatus(string guid, int newStatus)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return new ResponseDto { status = false, msg = "GUID is Invalid" };
+
+                //Get events to register through guid in the params
+                var getGuidEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getGuidEvent == null)
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+                //Get EventId of Event provided by the GUID
+                var eventId = getGuidEvent.Id;
+                var eventToUpdate = await _dbContext.Events
+                    .Where(ev => ev.Id == eventId)
+                    .FirstOrDefaultAsync();
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                { 
+                    eventToUpdate.EventStatusId = newStatus;
+
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event Status updated!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event Status not updated - " + ex.Message
+                    };
+                    throw;
+                }
             }
         }
     }

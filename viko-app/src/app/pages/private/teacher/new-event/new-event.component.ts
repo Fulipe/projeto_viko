@@ -49,7 +49,7 @@ export class NewEventComponent {
   }
 
   //Category
-  checkCategory(){
+  checkCategory() {
     this.selectedCategory = this.eventForm.get('category')?.value || '';
     if (!this.categories.find(s => s.name == this.selectedCategory)) {
       return false
@@ -80,6 +80,7 @@ export class NewEventComponent {
 
     this.selectedLanguages.push(lang.name)
 
+    this.eventForm.get('languages')?.setValue(this.selectedLanguages);
     this.inputEl.nativeElement.value = ''
     this.eventForm.markAsDirty();
 
@@ -87,6 +88,7 @@ export class NewEventComponent {
 
   removeLanguage(lang: any): void {
     this.selectedLanguages = this.selectedLanguages.filter(l => l !== lang);
+    this.eventForm.get('languages')?.setValue(this.selectedLanguages);
     this.eventForm.markAsDirty();
   }
 
@@ -131,6 +133,14 @@ export class NewEventComponent {
     if (this.eventForm.invalid) {
       this.eventForm.markAllAsTouched();
       console.log("Invalid Form")
+      Object.keys(this.eventForm.controls).forEach(key => {
+        const control = this.eventForm.get(key);
+        if (control?.invalid) {
+          console.log(`${key} is invalid`, control.errors);
+        }
+      });
+
+      console.log(this.saveNewEvent());
       return;
     }
 
