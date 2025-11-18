@@ -10,22 +10,25 @@ import { Router } from '@angular/router';
   templateUrl: './actions.component.html',
   styleUrl: './actions.component.scss'
 })
-export class ActionsComponent implements OnChanges {
+export class ActionsComponent implements OnChanges{
   @Input() event!: EventFetched;
   @Input() eventGuid!: string;
-  @Output() editAside = new EventEmitter<boolean>()
+
+  // Edit
+  @Output() editAside = new EventEmitter<boolean>();
   @Output() updated = new EventEmitter<void>();
 
+  @Output() deletePopUp = new EventEmitter<boolean>();
+
+  @Input() eventStatus!: number;
 
   private eventService = inject(EventService)
-  private routes = inject(Router)
 
   ngOnChanges(changes: SimpleChanges) {
     const evt = changes['event'];
     // const guid = changes['eventGuid'];
 
     // se foi a primeira mudança (carregamento inicial), ignora
-    //
     if (evt?.firstChange) return;
 
     this.updateBackend(
@@ -53,5 +56,9 @@ export class ActionsComponent implements OnChanges {
         console.error('Erro ao guardar evento:', err);
       }
     });
+  }
+
+  onDeleteClick(){
+    this.deletePopUp.emit(true)
   }
 }

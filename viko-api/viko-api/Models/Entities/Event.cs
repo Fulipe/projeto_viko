@@ -23,5 +23,7 @@ public partial class Event
     public long EntityId { get; set; }
     public Entity Entity { get; set; } = null!;
 
+    public bool isViewed { get; set; } = true;
+
     public virtual ICollection<EventRegistration> EventRegistrations { get; set; } = new List<EventRegistration>();
 }

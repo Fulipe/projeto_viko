@@ -52,8 +52,12 @@ export class ViewEventComponent implements OnInit {
   categories = [...CATEGORIES]
   category?: CategoriesObjectFormat;
 
+  //Delete
+  deletePopup: boolean = false
+  toDelete: boolean = false
+
   //Registration 
-  eventStatus?: number;
+  eventStatus: number;
   isHidden = false;
   showRegisterButton = true;
   isRegistered = false;
@@ -243,9 +247,34 @@ export class ViewEventComponent implements OnInit {
       });
     }
     
-    //#endregion
+  //#endregion
     
-    
+  //#region Delete
+  onDeletePopUp(value: boolean){
+    this.deletePopup = value;
+  }
+
+  onCancelPopup(){
+    this.deletePopup = false
+  }
+
+  confirmDelete(){
+    this.toDelete = true
+
+    this.eventService.deleteEvent(this.eventGuid).subscribe({
+      next: (res)=>{
+        console.log("DELETED EVENT", this.toDelete)
+        this.router.navigate(['/private/dashboard'])
+        this.deletePopup = false
+
+      },
+      error: (_)=>{
+        console.log("Event wasn't deleted! ")
+      }
+    })
+  }
+  //#endregion
+  
   //Checks registration, by checking if GUID of opened event, is in the Students events list
   private checkRegistration() {
     this.eventService.getStudentEvents().subscribe({

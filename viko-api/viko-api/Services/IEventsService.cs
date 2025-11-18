@@ -24,6 +24,8 @@ namespace viko_api.Services
         Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate);
         // Method to update event status
         Task<ResponseDto> UpdateEventStatus(string guid, int newStatus);
+        Task<ResponseDto> DeleteEvent(string guid);
+
 
 
         public class EventService : IEventsService
@@ -37,6 +39,7 @@ namespace viko_api.Services
             public async Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents()
             {
                 var eventfetched = await _dbContext.Events
+                    .Where(e => e.isViewed == true)
                     .Join( _dbContext.Entities,
                         ev => ev.EntityId,
                         e => e.Id,
@@ -91,7 +94,7 @@ namespace viko_api.Services
             public async Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid)
             {
                 var eventfetched = await _dbContext.EventRegistrations
-                        .Where(u => u.StudentId == userid && u.Event.EventStatusId != 3) //Searches for the events of the student and are not classified as 'finished'
+                        .Where(u => u.StudentId == userid && u.Event.EventStatusId != 3 && u.Event.isViewed == true) //Searches for the events of the student and are not classified as 'finished'
                         .Join(_dbContext.Events,
                             regId => regId.EventId,
                             ev => ev.Id,
@@ -148,7 +151,7 @@ namespace viko_api.Services
             public async Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid)
             {
                 var eventsFetched = await _dbContext.Events
-                    .Where(t => t.TeacherId == userid)
+                    .Where(t => t.TeacherId == userid && t.isViewed == true)
                     .Join( _dbContext.Entities,
                         events => events.EntityId,
                         e => e.Id,
@@ -236,7 +239,8 @@ namespace viko_api.Services
                         FinishDate = eventCreated.EndDate,
                         RegistrationDeadline = eventCreated.StartDate.AddDays(-1),
                         EventStatusId = 1,
-                        EventGuid = Guid.NewGuid()
+                        EventGuid = Guid.NewGuid(),
+                        isViewed = true,
                     };
 
                     _dbContext.Add(newEvent);
@@ -253,7 +257,11 @@ namespace viko_api.Services
                 }
                 catch (Exception ex) {
                     await transaction.RollbackAsync();
-                    throw;
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event Creation failed - " + ex.Message
+                    };
                 }
             }
             public async Task<(ResponseDto, EventsDto?)>GetEvent(string guid)
@@ -525,7 +533,6 @@ namespace viko_api.Services
                         status = false,
                         msg = "Event not updated - " + ex.Message
                     };
-                    throw;
                 }
 
             }
@@ -573,8 +580,48 @@ namespace viko_api.Services
                         status = false,
                         msg = "Event Status not updated - " + ex.Message
                     };
-                    throw;
                 }
+            }
+            public async Task<ResponseDto> DeleteEvent (string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return new ResponseDto { status = false, msg = "GUID is Invalid" };
+
+                //Get events to register through guid in the params
+                var getEvent= await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getEvent == null)
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    getEvent.isViewed = false;
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event Deleted!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event not deleted - " + ex.Message
+                    };
+                }
+
             }
         }
     }

@@ -89,4 +89,8 @@ export class EventService {
   editEvent (guid: string | null, eventUpdate: EventFetched): Observable<any>{
     return this.http.post<any>(`${environment.apiUrl}/EditEvent`, {guid, eventUpdate})
   }
+
+  deleteEvent (guid: string | null): Observable<any>{
+    return this.http.delete<any>(`${environment.apiUrl}/DeleteEvent?guid=${guid}`)
+  }
 }
