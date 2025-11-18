@@ -53,6 +53,53 @@ public class DailyScanner
             if (scheduleDate != today)
                 continue; // Ignores events that are not from actual date
 
+            // calcula delay até à hora exata
+            var eventTimeUtc = scheduleDate.Value.ToUniversalTime();
+            var nowUtc = DateTime.UtcNow;
+
+            var delay = eventTimeUtc - nowUtc;
+
+            // A hora já passou => faz o update imediato do status
+            if (delay <= TimeSpan.Zero)
+            {
+
+                var eventGuid = ev.guid.ToString();
+
+                var fetched = await _eventsService.GetEvent(eventGuid);
+
+                if (!fetched.Item1.status)
+                {
+                    _logger.LogWarning($"Event {eventGuid} not found for immediate update.");
+                    continue;
+                }
+
+                var eventData = fetched.Item2;
+
+                int newStatus = eventData.EventStatus switch
+                {
+                    1 => 2, // Open > Closed
+                    2 => 3, // Closed > Finished
+                    _ => eventData.EventStatus
+                };
+
+                if (newStatus != eventData.EventStatus)
+                {
+                    await _eventsService.UpdateEventStatus(eventGuid, newStatus);
+
+                    _logger.LogInformation(
+                        $"Event {eventGuid} updated IMMEDIATELY from {eventData.EventStatus} to {newStatus}"
+                    );
+                }
+                else
+                {
+                    _logger.LogInformation(
+                        $"Event {eventGuid} ignored (no further status transition)."
+                    );
+                }
+
+                continue; // já tratou, não precisa meter na queue
+            }
+
             Console.WriteLine(ev.Title);
 
             var payload = JsonSerializer.Serialize(new QueuePayload
@@ -63,7 +110,10 @@ public class DailyScanner
             
             // Encodes payload, so QueueStorage can storage it 
             var bytes = Encoding.UTF8.GetBytes(payload);
-            await _queueClient.SendMessageAsync(Convert.ToBase64String(bytes));
+            await _queueClient.SendMessageAsync(
+                Convert.ToBase64String(bytes),
+                visibilityTimeout: delay
+            );
 
             _logger.LogInformation($"Event {ev.guid} added to queue for status update.");
         }
