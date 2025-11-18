@@ -221,60 +221,49 @@ export class ViewEventComponent implements OnInit {
       language: this.selectedLanguages.join(',') // Send languages selected as string
     };
 
-    // Updates "original state"
-    this.originalEvent = { ...this.eventEdit.value };
-    this.originalLanguages = [...this.selectedLanguages];
-
-    // Send to ActionsComponent
-
-    this.eventEdited = updatedEvent
-
+    this.eventService.editEvent(this.eventGuid, updatedEvent).subscribe({
+      next: () => {
+        console.log('Evento guardado com sucesso!');
+        this.reloadEvent()
+      },
+      error: (err) => {
+        console.error('Erro ao guardar evento:', err);
+      }
+    });
   }
   // After editing, reloads page
   reloadEvent() {
-    this.eventService.GetEvent(this.eventGuid).subscribe(
-      (e) => {
-        if (!e) return;
-        
-        this.event = e;
-        this.eventStatus = e.eventStatus;
-        this.category = this.categories.find(c => c.name == e.category);
-        
-        // Atualiza também o form se estiver aberto
-        if (this.eventEdit) {
-          this.eventEdit.patchValue({ ...e });
-        }
-      });
-    }
-    
+    return window.location.reload()
+  }
+
   //#endregion
-    
+
   //#region Delete
-  onDeletePopUp(value: boolean){
+  onDeletePopUp(value: boolean) {
     this.deletePopup = value;
   }
 
-  onCancelPopup(){
+  onCancelPopup() {
     this.deletePopup = false
   }
 
-  confirmDelete(){
+  confirmDelete() {
     this.toDelete = true
 
     this.eventService.deleteEvent(this.eventGuid).subscribe({
-      next: (res)=>{
+      next: (res) => {
         console.log("DELETED EVENT", this.toDelete)
         this.router.navigate(['/private/dashboard'])
         this.deletePopup = false
 
       },
-      error: (_)=>{
+      error: (_) => {
         console.log("Event wasn't deleted! ")
       }
     })
   }
   //#endregion
-  
+
   //Checks registration, by checking if GUID of opened event, is in the Students events list
   private checkRegistration() {
     this.eventService.getStudentEvents().subscribe({

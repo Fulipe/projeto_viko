@@ -24,9 +24,21 @@
         </button>
     </div>
 
-    <h2 class="text-lg font-semibold text-blue-800 mb-4">Event Status</h2>
+    <h2 class="text-lg font-semibold text-blue-800 mb-4">Change Status</h2>
 
-    <div class="flex justify-between items-center mb-6">
-        <!-- fazer botoes -->
+    <div class="flex justify-start items-center mb-6" [formGroup]="statusForm">
+        <select formControlName="status" class="border rounded-lg px-3 py-1">
+            @for (status of EventStatus; track status.id) {
+            <option [ngValue]="status.id">
+                {{ status.status }}
+            </option>
+            }
+        </select>
+
+        <button
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded ml-4 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            (click)="saveStatus()" [disabled]="!onStatusChange()">
+            Save
+        </button>
     </div>
 </div>

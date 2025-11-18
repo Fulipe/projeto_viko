@@ -51,6 +51,11 @@ export interface CreateEventDto {
 
 }
 
+export interface EventStatus{
+    id: number;
+    status: string;
+}
+
 export interface EventFetched {
     title: string;
     description: string;

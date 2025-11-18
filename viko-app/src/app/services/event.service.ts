@@ -93,4 +93,8 @@ export class EventService {
   deleteEvent (guid: string | null): Observable<any>{
     return this.http.delete<any>(`${environment.apiUrl}/DeleteEvent?guid=${guid}`)
   }
+
+  updateStatus (guid: string | null, eventStatus: number): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/UpdateEventStatus`, {guid, eventStatus})
+  }
 }

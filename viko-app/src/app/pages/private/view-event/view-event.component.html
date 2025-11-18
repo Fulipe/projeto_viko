@@ -100,8 +100,6 @@
 </main>
 
 @if (roleSaved == "Teacher" || roleSaved == "Admin") {
-
-
     <!-- Overlay + Sidebar Container (mantém sempre no DOM) -->
     <div class="fixed inset-0 z-40 pointer-events-none">
 
@@ -298,8 +296,13 @@
             <app-registrations [eventGuid]="eventGuid"></app-registrations>
         </div>
         <div>
-            <app-actions [event]="eventEdited" [eventGuid]="eventGuid" (editAside)="onEditAside($event)"
-                (updated)="reloadEvent()" [eventStatus]="eventStatus" (deletePopUp)="onDeletePopUp($event)">
+            <app-actions 
+                [event]="eventEdited" 
+                [eventGuid]="eventGuid" 
+                (editAside)="onEditAside($event)"
+                (updated)="reloadEvent()" 
+                [eventStatus]="eventStatus" 
+                (deletePopUp)="onDeletePopUp($event)">
             </app-actions>
         </div>
     </div>
