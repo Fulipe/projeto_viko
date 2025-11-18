@@ -12,15 +12,7 @@
                     class="border border-gray-300 w-36 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
                     <option value="">All Categories</option>
                     @for (category of categoriesAvailable; track category.index) {
-                        <option [value]="category.name">{{ category.name }} {{ category.emoji }}</option>
-                    }
-                </select>
-
-                <select [(ngModel)]="cityFilter" (change)="applyFilters()"
-                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
-                    <option value="">All Cities</option>
-                    @for (city of citiesAvailable; track $index) {
-                        <option [value]="city"> {{ city }} </option>
+                    <option [value]="category.name">{{ category.name }} {{ category.emoji }}</option>
                     }
                 </select>
 
@@ -28,7 +20,15 @@
                     class="border border-gray-300 w-35 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
                     <option value="">All Locations</option>
                     @for (loc of locationsAvailable; track $index) {
-                        <option [value]="loc">{{ loc }}</option>
+                    <option [value]="loc">{{ loc }}</option>
+                    }
+                </select>
+
+                <select [(ngModel)]="cityFilter" (change)="applyFilters()"
+                    class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                    <option value="">All Cities</option>
+                    @for (city of citiesAvailable; track $index) {
+                    <option [value]="city"> {{ city }} </option>
                     }
                 </select>
             </div>
@@ -59,47 +59,47 @@
                         <td colspan="7" class="text-center py-4 text-gray-500">No events found</td>
                     </tr>
                     } @else {
-                        @for (event of displayedEvents; track event.title) {
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="px-4 py-2">
-                                    <a href="/private/event/{{event.guid}}">
-                                        {{ event.title }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2">
-                                    <a href="/private/event/{{event.guid}}">
-                                        {{ event.language }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2">
-                                    <a href="/private/event/{{event.guid}}">
-                                        {{ event.category }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2">
-                                    <a href="/private/event/{{event.guid}}">
-                                        {{ event.location }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2">
-                                    <a href="/private/event/{{event.guid}}">
-                                        {{ event.city }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2">
-                                    <a href="/private/event/{{event.guid}}">
-                                        {{ event.startDate }}
-                                    </a>
-                                </td>
-                                <td class="px-4 py-2 font-medium">
-                                    @switch (event.eventStatus) {
-                                        @case (1) { <a href="/private/event/{{event.guid}}" class="text-green-600"> Opened </a> }
-                                        @case (2) { <a href="/private/event/{{event.guid}}" class="text-yellow-600"> Closed </a> }
-                                        @case (3) { <a href="/private/event/{{event.guid}}" class="text-red-600"> Finished </a> }
-                                    }
-                                </td>
-                            </tr>
-                        }
+                    @for (event of displayedEvents; track event.title) {
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.title }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.language }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.category }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.location }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.city }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.startDate }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2 font-medium">
+                            @switch (event.eventStatus) {
+                            @case (1) { <a href="/private/event/{{event.guid}}" class="text-green-600"> Opened </a> }
+                            @case (2) { <a href="/private/event/{{event.guid}}" class="text-yellow-600"> Closed </a> }
+                            @case (3) { <a href="/private/event/{{event.guid}}" class="text-red-600"> Finished </a> }
+                            }
+                        </td>
+                    </tr>
+                    }
                     }
                 </tbody>
             </table>
