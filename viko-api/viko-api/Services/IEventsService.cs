@@ -229,7 +229,13 @@ namespace viko_api.Services
 
                     _dbContext.Entities.Add(newEntity);
                     await _dbContext.SaveChangesAsync();
-  
+
+                    // If registrationDeadline is set when creating, sets it with the incoming value,
+                    // If not sets value as 1 day before startDate.
+                    var registrationDeadline = eventCreated.RegistrationDeadline != default 
+                                            ? eventCreated.RegistrationDeadline 
+                                            : eventCreated.StartDate.AddDays(-1);
+
                     var newEvent = new Event
                     {
                         EntityId = newEntity.Id,
@@ -240,7 +246,7 @@ namespace viko_api.Services
                         City = eventCreated.City,
                         StartDate = eventCreated.StartDate,
                         FinishDate = eventCreated.EndDate,
-                        RegistrationDeadline = eventCreated.StartDate.AddDays(-1),
+                        RegistrationDeadline = registrationDeadline,
                         EventStatusId = 1,
                         EventGuid = Guid.NewGuid(),
                         isViewed = true,
@@ -290,10 +296,6 @@ namespace viko_api.Services
 
                         (tn, teacherName) => new {tn, teacherName})
                     
-                    /* TO DO: EventRegistration
-                     * To show registrated users 
-                     * (or do in other function for only teachers being able to see who registrated)
-                     */
 
                     .Select(join => new
                     {
@@ -515,8 +517,8 @@ namespace viko_api.Services
                         eventToUpdate.ev.FinishDate = eventUpdate.EndDate;
 
                     //TO DO: Do when crontab for status monitoring is online
-                    //if (eventUpdate.RegistrationDate != default)
-                    //    eventToUpdate.ev.RegistrationDeadline = eventUpdate.RegistrationDate;
+                    if (eventUpdate.RegistrationDeadline != default)
+                            eventToUpdate.ev.RegistrationDeadline = eventUpdate.RegistrationDeadline;
 
                     _dbContext.Events.Update(eventToUpdate.ev);
                     _dbContext.Entities.Update(eventToUpdate.e);

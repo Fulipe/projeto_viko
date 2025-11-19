@@ -50,7 +50,7 @@ namespace viko_api.Models.Dto
 
         //[Required]
         //[JsonPropertyName("RegistrationDeadline")]
-        //public DateTime RegistrationDeadline { get; set; }
+        public DateTime RegistrationDeadline { get; set; }
 
     }
 }

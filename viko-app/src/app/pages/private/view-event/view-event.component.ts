@@ -164,6 +164,7 @@ export class ViewEventComponent implements OnInit {
       language: new FormControl('', Validators.required),
       startDate: new FormControl('', Validators.required),
       endDate: new FormControl('', Validators.required),
+      registrationDeadline: new FormControl('', Validators.required),
       location: new FormControl('', Validators.required),
       city: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required),

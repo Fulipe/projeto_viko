@@ -46,7 +46,7 @@ export interface CreateEventDto {
     Image: string | undefined;
     Location: string;
     StartDate: string;
-    // registrationDeadline: string;
+    RegistrationDeadline: string;
     EndDate: string;
 
 }

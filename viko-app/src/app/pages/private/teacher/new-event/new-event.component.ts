@@ -47,6 +47,7 @@ export class NewEventComponent {
       city: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
+      registrationDeadline: ['']
     });
 
     // Prohibit selection of date before tomorrow date
@@ -131,6 +132,7 @@ export class NewEventComponent {
       Location: this.eventForm.get('location')?.value,
       StartDate: this.eventForm.get('startDate')?.value,
       EndDate: this.eventForm.get('endDate')?.value,
+      RegistrationDeadline: this.eventForm.get('registrationDeadline')?.value,
 
     }
 
