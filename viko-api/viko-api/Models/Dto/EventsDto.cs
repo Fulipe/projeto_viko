@@ -22,6 +22,7 @@ namespace viko_api.Models.Dto
         public DateTime EndDate { get; set; }
         public DateTime RegistrationDeadline { get; set; }
         public Guid guid { get; set; }
+        public bool HasPendingStatusChange { get; set; }
 
     }
 }

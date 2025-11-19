@@ -1,9 +1,11 @@
 using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
+using viko_api.Models;
 using viko_api.Services;
 
 public class DailyScanner
@@ -11,11 +13,13 @@ public class DailyScanner
     private readonly ILogger<DailyScanner> _logger;
     private readonly QueueClient _queueClient;
     private readonly IEventsService _eventsService;
+    private readonly VikoDbContext _dbContext;
 
-    public DailyScanner(ILogger<DailyScanner> logger, IEventsService eventsService)
+    public DailyScanner(ILogger<DailyScanner> logger, IEventsService eventsService, VikoDbContext dbContext)
     {
         _logger = logger;
         _eventsService = eventsService;
+        _dbContext = dbContext;
 
         // Queue storage init
         var queueConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage")
@@ -31,7 +35,7 @@ public class DailyScanner
 
     [Function("DailyScanner")]
     //Crontab is set to run everyday at midnight.
-    public async Task Run([TimerTrigger("0 0 0 * * *")] TimerInfo timer)
+    public async Task Run([TimerTrigger("0 */1 * * * *")] TimerInfo timer)
     {
         _logger.LogInformation("DailyScanner started.");
 
@@ -42,80 +46,89 @@ public class DailyScanner
 
         foreach (var ev in events.Item2)
         {
+            DateTime? scheduleDateExact = null;
             DateTime? scheduleDate = null;
 
             if (ev.EventStatus == 1)
+            {
+                scheduleDateExact = ev.RegistrationDeadline;
                 scheduleDate = ev.RegistrationDeadline.Date;
+            }
 
             else if (ev.EventStatus == 2)
+            {
+                scheduleDateExact = ev.EndDate;
                 scheduleDate = ev.EndDate.Date;
+            }
 
             if (scheduleDate != today)
                 continue; // Ignores events that are not from actual date
 
-            // calcula delay até à hora exata
-            var eventTimeUtc = scheduleDate.Value.ToUniversalTime();
+            // Calculates delay until the exact hour
+            var eventTimeUtc = scheduleDateExact.Value.ToUniversalTime();
             var nowUtc = DateTime.UtcNow;
 
             var delay = eventTimeUtc - nowUtc;
 
-            // A hora já passou => faz o update imediato do status
+            // If schedule has passed do the update of the status
             if (delay <= TimeSpan.Zero)
             {
-
-                var eventGuid = ev.guid.ToString();
-
-                var fetched = await _eventsService.GetEvent(eventGuid);
-
-                if (!fetched.Item1.status)
+                // Only schedules if theres not an already pending queue
+                if (!ev.HasPendingStatusChange)
                 {
-                    _logger.LogWarning($"Event {eventGuid} not found for immediate update.");
-                    continue;
-                }
+                    var payloadNoQueue = JsonSerializer.Serialize(new QueuePayload
+                    {
+                        guid = ev.guid,
+                        CurrentStatus = ev.EventStatus
+                    });
 
-                var eventData = fetched.Item2;
+                    // Encodes payload, so QueueStorage can storage it 
+                    var bytesNoQueue = Encoding.UTF8.GetBytes(payloadNoQueue);
 
-                int newStatus = eventData.EventStatus switch
-                {
-                    1 => 2, // Open > Closed
-                    2 => 3, // Closed > Finished
-                    _ => eventData.EventStatus
-                };
-
-                if (newStatus != eventData.EventStatus)
-                {
-                    await _eventsService.UpdateEventStatus(eventGuid, newStatus);
-
-                    _logger.LogInformation(
-                        $"Event {eventGuid} updated IMMEDIATELY from {eventData.EventStatus} to {newStatus}"
+                    await _queueClient.SendMessageAsync(
+                        Convert.ToBase64String(bytesNoQueue),
+                        visibilityTimeout: delay
                     );
-                }
-                else
-                {
-                    _logger.LogInformation(
-                        $"Event {eventGuid} ignored (no further status transition)."
-                    );
+
+                    var eventNoQueue =  await _dbContext.Events.Where(e => e.EventGuid == ev.guid).FirstOrDefaultAsync();
+                    if (eventNoQueue == null)
+                        return;
+
+                    eventNoQueue.HasPendingStatusChange = true;
+                    await _dbContext.SaveChangesAsync();
                 }
 
-                continue; // já tratou, não precisa meter na queue
+                continue; 
             }
 
-            Console.WriteLine(ev.Title);
+            // Only schedules if theres not an already pending queue
+            if (!ev.HasPendingStatusChange)
+            { 
 
-            var payload = JsonSerializer.Serialize(new QueuePayload
-            {
-                guid = ev.guid,
-                CurrentStatus = ev.EventStatus
-            });
+                Console.WriteLine(ev.Title);
+
+                var payload = JsonSerializer.Serialize(new QueuePayload
+                {
+                    guid = ev.guid,
+                    CurrentStatus = ev.EventStatus
+                });
             
-            // Encodes payload, so QueueStorage can storage it 
-            var bytes = Encoding.UTF8.GetBytes(payload);
-            await _queueClient.SendMessageAsync(
-                Convert.ToBase64String(bytes),
-                visibilityTimeout: delay
-            );
+                // Encodes payload, so QueueStorage can storage it 
+                var bytes = Encoding.UTF8.GetBytes(payload);
+                await _queueClient.SendMessageAsync(
+                    Convert.ToBase64String(bytes),
+                    visibilityTimeout: delay
+                );
 
-            _logger.LogInformation($"Event {ev.guid} added to queue for status update.");
+                var eventToQueue = await _dbContext.Events.Where(e => e.EventGuid == ev.guid).FirstOrDefaultAsync();
+                if (eventToQueue == null)
+                    return;
+
+                eventToQueue.HasPendingStatusChange = true;
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation($"Event {ev.guid} added to queue for status update.");
+            }
         }
 
         _logger.LogInformation("DailyScanner finished.");

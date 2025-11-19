@@ -3,7 +3,9 @@ using System.Text.Json;
 using Azure.Storage.Queues;
 using Azure.Storage.Queues.Models;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using viko_api.Models;
 using viko_api.Services;
 
 namespace viko_api.Functions.Scanners;
@@ -12,11 +14,13 @@ public class EventStatusUpdater
 {
     private readonly ILogger<EventStatusUpdater> _logger;
     private readonly IEventsService _eventsService;
+    private readonly VikoDbContext _dbContext;
 
-    public EventStatusUpdater(ILogger<EventStatusUpdater> logger, IEventsService eventsService)
+    public EventStatusUpdater(ILogger<EventStatusUpdater> logger, IEventsService eventsService, VikoDbContext dbContext)
     {
         _logger = logger;
         _eventsService = eventsService;
+        _dbContext = dbContext;
 
     }
 
@@ -64,6 +68,14 @@ public class EventStatusUpdater
 
         // Updates event of eventGuid for its new Status
         await _eventsService.UpdateEventStatus(eventGuid, newStatus);
+
+        var eventToQueue = await _dbContext.Events.Where(e => e.EventGuid == eventFetched.guid).FirstOrDefaultAsync();
+        if (eventToQueue == null)
+            return;
+
+        eventToQueue.HasPendingStatusChange = false; // Changes HasPendingStatusChange back to false
+        await _dbContext.SaveChangesAsync();
+
 
         _logger.LogInformation(
             $"Event {eventGuid} status changed FROM {eventFetched.EventStatus} TO {newStatus}."

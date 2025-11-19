@@ -24,6 +24,7 @@ public partial class Event
     public Entity Entity { get; set; } = null!;
 
     public bool isViewed { get; set; } = true;
+    public bool HasPendingStatusChange { get; set; } = false;
 
     public virtual ICollection<EventRegistration> EventRegistrations { get; set; } = new List<EventRegistration>();
 }

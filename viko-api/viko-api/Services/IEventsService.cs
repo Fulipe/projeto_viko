@@ -72,6 +72,7 @@ namespace viko_api.Services
                             RegistrationDeadline = join.tn.t.ev.RegistrationDeadline,
                             EventStatus = join.tn.t.ev.EventStatusId,
                             guid = join.tn.t.ev.EventGuid,
+                            HasPendingStatusChange = join.tn.t.ev.HasPendingStatusChange
                         }
                     )
                     .ToListAsync();
@@ -129,7 +130,8 @@ namespace viko_api.Services
                                 EndDate = join.events.tn.t.ev.FinishDate,
                                 RegistrationDeadline = join.events.tn.t.ev.RegistrationDeadline,
                                 EventStatus = join.events.tn.t.ev.EventStatusId,
-                                guid = join.events.tn.t.ev.EventGuid
+                                guid = join.events.tn.t.ev.EventGuid,
+                                HasPendingStatusChange = join.events.tn.t.ev.HasPendingStatusChange,
                             }
                         ).ToListAsync();
                 
@@ -181,7 +183,8 @@ namespace viko_api.Services
                             EndDate = teacherEvents.tn.t.events.FinishDate,
                             RegistrationDeadline = teacherEvents.tn.t.events.RegistrationDeadline,
                             EventStatus = teacherEvents.tn.t.events.EventStatusId,
-                            guid = teacherEvents.tn.t.events.EventGuid
+                            guid = teacherEvents.tn.t.events.EventGuid,
+                            HasPendingStatusChange = teacherEvents.tn.t.events.HasPendingStatusChange,
                         }).ToListAsync();
 
                 if (eventsFetched == null || !eventsFetched.Any())
