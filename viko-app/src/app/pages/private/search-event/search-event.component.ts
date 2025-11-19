@@ -59,8 +59,15 @@ export class SearchEventComponent implements OnInit {
         //If user logged in, is a Student, only shows Events with eventstatus set as 'opened' 
         if (this.role == "Student") {
           this.events = this.events
+            .filter(event => event.isViewed == true)
             .filter(event => event.eventStatus != 3)
-            .filter(event => event.eventStatus != 2);
+            .filter(event => event.eventStatus != 2)
+        }
+
+        if (this.role == "Teacher"){
+          this.events = this.events
+            .filter(event => event.isViewed == true)
+            .filter(event => event.eventStatus != 3)
         }
 
         //Gets all locations and cities to build filters
@@ -74,6 +81,7 @@ export class SearchEventComponent implements OnInit {
 
       },
     })
+
   }
 
   //Function to apply filters

@@ -46,6 +46,9 @@
                         <th class="px-4 py-2 cursor-pointer" (click)="sortBy('city')">City</th>
                         <th class="px-4 py-2 cursor-pointer" (click)="sortBy('startDate')">Start Date</th>
                         <th class="px-4 py-2 cursor-pointer" (click)="sortBy('eventStatus')">Event Status</th>
+                        @if (role == "Admin") {
+                            <th class="px-4 py-2 cursor-pointer" (click)="sortBy('isViewed')">Is Viewed</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -98,6 +101,11 @@
                             @case (3) { <a href="/private/event/{{event.guid}}" class="text-red-600"> Finished </a> }
                             }
                         </td>
+                        @if (role == "Admin") {
+                            <td class="px-4 py-2 font-medium">
+                                {{event.isViewed}}
+                            </td>                        
+                        }
                     </tr>
                     }
                     }

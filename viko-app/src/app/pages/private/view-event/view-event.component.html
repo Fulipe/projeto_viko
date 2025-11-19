@@ -271,7 +271,7 @@
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
 
-            <h2 class="text-xl font-semibold mb-4 text-red-500">
+            <h2 class="text-xl font-semibold mb-4 text-red-600">
                 Delete Event
             </h2>
 
@@ -299,20 +299,94 @@
     </div>
     }
 
+    @if (republishPopup) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+
+            <h2 class="text-xl font-semibold mb-4 text-green-600">
+                Republish Event
+            </h2>
+
+            <p class="text-gray-700  mb-6">
+                Are you sure you want to republish this event?
+            </p>
+
+            <div class="flex justify-end space-x-3">
+                <button (click)="onCancelRepublishPopup()"
+                    class="flex px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold">
+                    Cancel
+                </button>
+
+                <button (click)="confirmRepublish()"
+                    class="flex px-4 py-2 gap-2 item-center rounded bg-green-600 hover:bg-green-700 text-white font-semibold">
+                    Republish
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+    @if (erasePopup) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+
+            <h2 class="text-xl font-semibold mb-4 text-red-800">
+                Erase Event
+            </h2>
+
+            <p class="text-gray-700  mb-6">
+                Are you sure you want to Erase this event from the <strong>Database</strong>? 
+                By confirming this action you are erasing this event from the database.
+            </p>
+
+            <div class="flex justify-end space-x-3">
+                <button (click)="onCancelErasePopup()"
+                    class="flex px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold">
+                    Cancel
+                </button>
+
+                <button (click)="confirmErase()"
+                    class="flex px-4 py-2 gap-2 item-center rounded bg-red-800 hover:bg-red-900 text-white font-semibold">
+                    Erase from the database
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+
     <div class="grid grid-cols-3 gap-6 mt-3 mx-10">
         <div>
             <app-registrations [eventGuid]="eventGuid"></app-registrations>
         </div>
-        <div>
-            <app-actions 
-                [event]="eventEdited" 
-                [eventGuid]="eventGuid"
-                [eventIsViewed]="eventIsViewed" 
-                (editAside)="onEditAside($event)"
-                (updated)="reloadEvent()" 
-                [eventStatus]="eventStatus" 
-                (deletePopUp)="onDeletePopUp($event)">
-            </app-actions>
-        </div>
+        @if (event.isViewed) {
+            <div>
+                <app-actions 
+                    [event]="eventEdited" 
+                    [eventGuid]="eventGuid"
+                    [role]="roleSaved"
+                    [eventIsViewed]="eventIsViewed" 
+                    (editAside)="onEditAside($event)"
+                    (updated)="reloadEvent()" 
+                    [eventStatus]="eventStatus" 
+                    (deletePopUp)="onDeletePopUp($event)"
+                    (republishPopUp)="onRepublishPopUp($event)"
+                    (erasePopUp)="onErasePopUp($event)">
+                </app-actions>
+            </div>
+        } @else if (!event.isViewed && roleSaved == "Admin") {
+            <div>
+                <app-actions 
+                    [event]="eventEdited" 
+                    [eventGuid]="eventGuid"
+                    [role]="roleSaved"
+                    [eventIsViewed]="eventIsViewed" 
+                    (editAside)="onEditAside($event)"
+                    (updated)="reloadEvent()" 
+                    [eventStatus]="eventStatus" 
+                    (deletePopUp)="onDeletePopUp($event)"
+                    (republishPopUp)="onRepublishPopUp($event)"
+                    (erasePopUp)="onErasePopUp($event)">
+                </app-actions>
+            </div>
+        }
     </div>
 }

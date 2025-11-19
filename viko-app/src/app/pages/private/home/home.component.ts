@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit{
           return;
         }
 
-        this.userName = res.name
+        this.userName = res.username
       },
       error: (_) =>{
         console.error("Name not found", _)

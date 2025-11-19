@@ -17,6 +17,7 @@ export class ActionsComponent implements OnChanges, OnInit {
 
   @Input() event!: EventFetched;
   @Input() eventGuid!: string;
+  @Input() role!: string;
 
   // Edit
   @Output() editAside = new EventEmitter<boolean>();
@@ -25,6 +26,12 @@ export class ActionsComponent implements OnChanges, OnInit {
   // Delete
   @Output() deletePopUp = new EventEmitter<boolean>();
   @Input() eventIsViewed!: boolean;
+
+  // Republish
+  @Output() republishPopUp = new EventEmitter<boolean>();
+
+  // Republish
+  @Output() erasePopUp = new EventEmitter<boolean>();
 
   // Change Status
   EventStatus: EventStatus[] = [
@@ -64,22 +71,6 @@ export class ActionsComponent implements OnChanges, OnInit {
     this.editAside.emit(true)
   }
 
-  // updateBackend(valueGuid: any, valueEvt: any) {
-  //   console.log(valueGuid)
-  //   console.log(valueEvt)
-
-  //   //Endpoint to backend
-
-  //   this.eventService.editEvent(valueGuid, valueEvt).subscribe({
-  //     next: () => {
-  //       console.log('Evento guardado com sucesso!');
-  //       this.updated.emit();
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao guardar evento:', err);
-  //     }
-  //   });
-  // }
   //#endregion
 
   //#region Delete
@@ -114,5 +105,17 @@ export class ActionsComponent implements OnChanges, OnInit {
     });
   }
 
+  //#endregion
+
+  //#region Republish
+  republishEvent(){
+    this.republishPopUp.emit(true)
+  }
+  //#endregion
+
+  //#region Erase
+  onEraseClick(){
+    this.erasePopUp.emit(true)
+  }
   //#endregion
 }

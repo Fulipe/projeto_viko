@@ -19,6 +19,7 @@ import { ViewEventComponent } from './pages/private/view-event/view-event.compon
 import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { eventResolver } from './resolvers/event.resolver';
 import { SearchEventComponent } from './pages/private/search-event/search-event.component';
+import { DashboardAdminComponent } from './pages/private/admin/dashboard-admin/dashboard-admin.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -69,7 +70,7 @@ export const routes: Routes = [
                     redirectMap: {
                         Student: '/private/student/dashboard',
                         Teacher: '/private/teacher/dashboard',
-                        // Admin: '/private/admin/dashboard'
+                        Admin: '/private/admin/dashboard'
                     }
                 }
             },
@@ -118,20 +119,15 @@ export const routes: Routes = [
             },
 
             //Admin
-            /**
-             * path: 'dashboardAdmin'
-             * component: DashboardAdminComponent
-             * canActivate: [RoleGuard]
-             * data: Roles.Admin
-             * children: [
-             *      {
-             *          path: children1
-             *          component: childComponent
-             *          canActivate: [RoleGuard]
-             *          data: Roles.Admin
-             *      }
-             * ]
-             */
+            {
+                path: 'admin/dashboard',
+                component: DashboardAdminComponent,
+                canActivate: [roleGuard],
+                data: {roles: ['Admin']}
+            },
+            // {
+            //     //admin/myevents
+            // }
         ]
     },
     { path: '**', redirectTo: 'private/home', pathMatch: 'full' },

@@ -25,7 +25,8 @@ namespace viko_api.Services
         // Method to update event status
         Task<ResponseDto> UpdateEventStatus(string guid, int newStatus);
         Task<ResponseDto> DeleteEvent(string guid);
-
+        Task<ResponseDto> RepublishEvent(string guid);
+        Task<ResponseDto> EraseEvent(string guid);
 
 
         public class EventService : IEventsService
@@ -39,7 +40,7 @@ namespace viko_api.Services
             public async Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents()
             {
                 var eventfetched = await _dbContext.Events
-                    .Where(e => e.isViewed == true)
+                    //.Where(e => e.isViewed == true)
                     .Join( _dbContext.Entities,
                         ev => ev.EntityId,
                         e => e.Id,
@@ -72,7 +73,8 @@ namespace viko_api.Services
                             RegistrationDeadline = join.tn.t.ev.RegistrationDeadline,
                             EventStatus = join.tn.t.ev.EventStatusId,
                             guid = join.tn.t.ev.EventGuid,
-                            HasPendingStatusChange = join.tn.t.ev.HasPendingStatusChange
+                            HasPendingStatusChange = join.tn.t.ev.HasPendingStatusChange,
+                            isViewed = join.tn.t.ev.isViewed
                         }
                     )
                     .ToListAsync();
@@ -132,6 +134,7 @@ namespace viko_api.Services
                                 EventStatus = join.events.tn.t.ev.EventStatusId,
                                 guid = join.events.tn.t.ev.EventGuid,
                                 HasPendingStatusChange = join.events.tn.t.ev.HasPendingStatusChange,
+                                isViewed = join.events.tn.t.ev.isViewed
                             }
                         ).ToListAsync();
                 
@@ -185,6 +188,7 @@ namespace viko_api.Services
                             EventStatus = teacherEvents.tn.t.events.EventStatusId,
                             guid = teacherEvents.tn.t.events.EventGuid,
                             HasPendingStatusChange = teacherEvents.tn.t.events.HasPendingStatusChange,
+                            isViewed = teacherEvents.tn.t.events.HasPendingStatusChange
                         }).ToListAsync();
 
                 if (eventsFetched == null || !eventsFetched.Any())
@@ -630,6 +634,100 @@ namespace viko_api.Services
                     };
                 }
 
+            }
+            public async Task<ResponseDto> RepublishEvent (string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return new ResponseDto { status = false, msg = "GUID is Invalid" };
+
+                //Get events to register through guid in the params
+                var getEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getEvent == null)
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    getEvent.isViewed = true;
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event Republished!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event was not republished - " + ex.Message
+                    };
+                }
+
+            }
+            public async Task<ResponseDto> EraseEvent (string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return new ResponseDto { status = false, msg = "GUID is Invalid" };
+
+                //Get events to register through guid in the params
+                var getEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getEvent == null)
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+                var registrationsToDelete = await _dbContext.EventRegistrations.Where(e => e.EventId == getEvent.Id).ToListAsync();
+                
+                //Checks if registration exists.
+                if (registrationsToDelete == null)
+                    return new ResponseDto { status = false, msg = "No registration was found " };
+
+                var entityToDelete = await _dbContext.Entities.Where(e => e.Id == getEvent.EntityId).FirstOrDefaultAsync();
+
+                //Checks if entity exists.
+                if (entityToDelete == null)
+                    return new ResponseDto { status = false, msg = "No entity was found " };
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    _dbContext.Events.Remove(getEvent);
+                    _dbContext.EventRegistrations.RemoveRange(registrationsToDelete);
+                    _dbContext.Entities.Remove(entityToDelete);
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event Erased permanantly!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event not Erased - " + ex.Message
+                    };
+                }
             }
         }
     }

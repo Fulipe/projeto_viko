@@ -57,7 +57,16 @@ export class ViewEventComponent implements OnInit {
   //Delete
   deletePopup: boolean = false
   toDelete: boolean = false
+  
   eventIsViewed: boolean = true
+
+  //Republish
+  republishPopup: boolean = false
+  toRepublish: boolean = false
+
+  //Erase
+  erasePopup: boolean = false
+  toErase: boolean = false
 
   //Registration 
   eventStatus: number;
@@ -68,7 +77,7 @@ export class ViewEventComponent implements OnInit {
   constructor(private route: ActivatedRoute, private router: Router) {
     this.eventGuid = String(this.route.snapshot.paramMap.get('guid'))
     this.event = this.route.snapshot.data['event'];
-
+    
     this.eventStatus = this.event.eventStatus;
 
     this.eventIsViewed = this.event.isViewed;
@@ -277,6 +286,60 @@ export class ViewEventComponent implements OnInit {
   }
   //#endregion
 
+  //#region Republish
+  onRepublishPopUp(value: boolean) {
+    this.republishPopup = value;
+  }
+
+  onCancelRepublishPopup() {
+    this.republishPopup = false
+  }
+
+  confirmRepublish() {
+    this.republishPopup = true
+
+    this.eventService.republishEvent(this.eventGuid).subscribe({
+      next: (res) => {
+        console.log("Republished EVENT", this.toRepublish)
+        this.router.navigate(['/private/dashboard'])
+        this.republishPopup = false
+
+      },
+      error: (_) => {
+        console.log("Event wasn't republished! ")
+      }
+    })
+  }
+  //#endregion
+
+  //#region Erase
+  onErasePopUp(value: boolean) {
+    this.erasePopup = value;
+  }
+
+  onCancelErasePopup() {
+    this.erasePopup = false
+  }
+
+  confirmErase() {
+    this.erasePopup = true
+
+    this.eventService.eraseEvent(this.eventGuid).subscribe({
+      next: (res) => {
+        console.log("Erase EVENT", this.toErase)
+        this.router.navigate(['/private/dashboard'])
+        this.erasePopup = false
+
+      },
+      error: (_) => {
+        console.log("Event wasn't Erased! ")
+      }
+    })
+  }
+  //#endregion
+
+
+  //#region Registration
   //Checks registration, by checking if GUID of opened event, is in the Students events list
   private checkRegistration() {
     this.eventService.getStudentEvents().subscribe({
@@ -322,4 +385,5 @@ export class ViewEventComponent implements OnInit {
       }
     })
   }
+  //#endregion
 }

@@ -109,7 +109,7 @@ public partial class VikoDbContext : DbContext
             entity.HasOne(d => d.Entity)
                 .WithMany(p => p.Events)
                 .HasForeignKey(d => d.EntityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Event_Entity");
 
             entity.HasOne(d => d.EventStatus)
@@ -135,7 +135,7 @@ public partial class VikoDbContext : DbContext
             entity.HasOne(d => d.Event)
                 .WithMany(p => p.EventRegistrations)
                 .HasForeignKey(d => d.EventId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Registration_Event");
 
             entity.HasOne(d => d.Student)
