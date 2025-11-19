@@ -114,13 +114,13 @@
 
         <div>
             <label class="block font-medium mb-1">Start Date</label>
-            <input type="datetime-local" formControlName="startDate"
+            <input type="datetime-local" formControlName="startDate" [min]="minDate"
                 class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
         </div>
 
         <div>
             <label class="block font-medium mb-1">End Date</label>
-            <input type="datetime-local" formControlName="endDate"
+            <input type="datetime-local" formControlName="endDate" [min]="minDate"
                 class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" />
         </div>
 

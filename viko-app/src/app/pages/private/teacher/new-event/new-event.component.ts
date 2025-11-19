@@ -20,6 +20,8 @@ export class NewEventComponent {
   successMessage = '';
   errorMessage = '';
 
+  minDate!: string;
+
   //Category
   categories = [...CATEGORIES]
   selectedCategory: string = '';
@@ -46,6 +48,12 @@ export class NewEventComponent {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
     });
+
+    // Prohibit selection of date before tomorrow date
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    this.minDate = tomorrow.toISOString().slice(0, 16);
   }
 
   //Category

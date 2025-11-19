@@ -41,6 +41,8 @@ export class ViewEventComponent implements OnInit {
   selectedFile?: File;
   previewUrl: string | ArrayBuffer | null = null;
 
+  minDate!: string;
+
   //Language
   languages = [...LANGUAGES];
   selectedLanguages: any[] = [];
@@ -82,6 +84,13 @@ export class ViewEventComponent implements OnInit {
     if (this.roleSaved == "Teacher" || this.roleSaved == "Admin") {
       this.initEditForm()
       this.originalEvent = this.cleanFormValue(this.eventEdit.getRawValue());
+
+      // Prohibit selection of date before tomorrow date
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      this.minDate = tomorrow.toISOString().slice(0, 16);
+
     }
   }
   //#region Edit - Image
