@@ -313,6 +313,8 @@ namespace viko_api.Services
                             EndDate = join.tn.ev.ev.FinishDate,
                             guid = join.tn.ev.ev.EventGuid,
                             RegistrationDeadline = join.tn.ev.ev.RegistrationDeadline,
+                            isViewed = join.tn.ev.ev.isViewed
+                            
                         }
                     })
                     .FirstOrDefaultAsync();
@@ -605,6 +607,7 @@ namespace viko_api.Services
                 try
                 {
                     getEvent.isViewed = false;
+                    getEvent.EventStatusId = 3;
 
                     await _dbContext.SaveChangesAsync();
                     await transaction.CommitAsync();

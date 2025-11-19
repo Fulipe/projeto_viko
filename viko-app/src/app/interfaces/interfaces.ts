@@ -71,4 +71,5 @@ export interface EventFetched {
     endDate: string;
     registrationDeadline: string;
     guid: string;
+    isViewed: boolean;
 }

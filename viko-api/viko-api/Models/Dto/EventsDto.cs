@@ -23,6 +23,7 @@ namespace viko_api.Models.Dto
         public DateTime RegistrationDeadline { get; set; }
         public Guid guid { get; set; }
         public bool HasPendingStatusChange { get; set; }
+        public bool isViewed { get; set; }
 
     }
 }

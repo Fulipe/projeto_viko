@@ -24,6 +24,7 @@ export class ActionsComponent implements OnChanges, OnInit {
 
   // Delete
   @Output() deletePopUp = new EventEmitter<boolean>();
+  @Input() eventIsViewed!: boolean;
 
   // Change Status
   EventStatus: EventStatus[] = [
@@ -41,7 +42,7 @@ export class ActionsComponent implements OnChanges, OnInit {
 
     this.statusForm = this.fb.group({
       status: [this.eventStatus]
-    });
+    });    
 
   }
 

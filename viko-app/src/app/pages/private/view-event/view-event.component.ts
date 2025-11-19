@@ -57,6 +57,7 @@ export class ViewEventComponent implements OnInit {
   //Delete
   deletePopup: boolean = false
   toDelete: boolean = false
+  eventIsViewed: boolean = true
 
   //Registration 
   eventStatus: number;
@@ -69,6 +70,8 @@ export class ViewEventComponent implements OnInit {
     this.event = this.route.snapshot.data['event'];
 
     this.eventStatus = this.event.eventStatus;
+
+    this.eventIsViewed = this.event.isViewed;
 
     //Sets the category of the event as an Category object
     this.category = this.categories.find(c => c.name == this.event.category)
