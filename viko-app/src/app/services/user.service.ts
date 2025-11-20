@@ -48,4 +48,15 @@ export class UserService {
       })
     )
   }
+  getAllUsers():Observable<any>{
+    return this.http.get<any>(`${environment.apiUrl}/GetAllUsers`).pipe(
+      map((res) => {
+        if(res?.users){
+          return res.users
+        }
+
+        return false;
+      })
+    )
+  }
 }

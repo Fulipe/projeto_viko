@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using viko_api.Helpers;
 using viko_api.Services;
 
-namespace viko_api.Functions;
+namespace viko_api.Functions.Admin;
 
 public class GetTeachers
 {
@@ -23,7 +23,7 @@ public class GetTeachers
     [Function("GetTeachers")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext context)
     {
-        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher");
+        var roleCheck = await RoleValidator.RequireRole(context, req, "Admin");
         if (roleCheck != null)
             return roleCheck;
 

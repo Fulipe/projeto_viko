@@ -1,1 +1,25 @@
-<p>dashboard-admin works!</p>
+<div class="p-8 space-y-9">
+
+  <!-- Title + Create Event button -->
+  <div class="flex justify-between items-center">
+    <h1 class="text-3xl font-bold">Admin Dashboard</h1>
+  </div>
+
+  <!-- Users Table -->
+  <section>
+    <h2 class="text-3xl font-semibold">Users</h2>
+    <app-users-table></app-users-table>
+  </section>
+
+  <!-- Events Table -->
+  <section>
+    <div class="flex justify-between items-center mb-2">
+        <a routerLink= "/private/event/newevent" type="button" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+            + Create Event
+        </a>
+    </div>
+    <h2 class="text-xl font-semibold mb-2">Eventos</h2>
+    <!-- <app-events-table [events]="events"></app-events-table> -->
+  </section>
+
+</div>

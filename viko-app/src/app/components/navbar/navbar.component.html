@@ -13,12 +13,25 @@
           <span class="text-2xl font-bold text-blue-600">VikoEvents</span>
         </a>
       </div>
+      @if (role == "Admin") {
+        <div class="hidden md:flex items-center space-x-6">
+          <!-- <a routerLink="/private/myevents" class="hover:text-blue-600 transition"></a> -->
+          <a routerLink="/private/dashboard" class="hover:text-blue-600 transition">Dashboard</a>
+          <a routerLink="/private/search" class="hover:text-blue-600 transition">Search Events</a>
+          
+        </div>
+
+      }
+      @else {
+
         <div class="hidden md:flex items-center space-x-6">
           <a routerLink="/private/myevents" class="hover:text-blue-600 transition">My Events</a>
           <a routerLink="/private/dashboard" class="hover:text-blue-600 transition">Dashboard</a>
           <a routerLink="/private/search" class="hover:text-blue-600 transition">Search Events</a>
-
+          
         </div>
+      
+      }
       <div class="flex items-center space-x-2">
         <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>account_circle</mat-icon>

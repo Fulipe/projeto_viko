@@ -23,6 +23,8 @@ export class NavbarComponent {
   private authService = inject(AuthService)
   isMobileMenuOpen = false;
 
+  role: string | null = this.authService.getRole()
+
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }

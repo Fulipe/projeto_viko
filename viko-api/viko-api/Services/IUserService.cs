@@ -18,6 +18,7 @@ namespace viko_api.Services
         Task<(ResponseDto, UserInfoDto?)> GetUserById(long id);
         Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
         Task<(ResponseDto, List<TeacherShortInfoDto>)> GetAllTeachers();
+        Task<(ResponseDto, List<UserInfoDto>?)> GetAllUsers();
 
         public class UserService : IUserService
         {
@@ -262,6 +263,41 @@ namespace viko_api.Services
 
                 return (new ResponseDto { status = true, msg = "Teachers were found" }, teachers);
 
+            }
+            public async Task<(ResponseDto, List<UserInfoDto>?)> GetAllUsers()
+            {
+                var allUsers = await _dbContext.Users
+                    .Join(_dbContext.Entities,
+                        e => e.EntityId,
+                        u => u.Id,
+
+                        (u, e) => new {u,e})
+                    .Join(_dbContext.Roles,
+                        u => u.u.RoleId,
+                        r => r.Id,
+
+                        (u,r) => new {u,r})
+                    .Select( users => new UserInfoDto
+                    {
+                        Photo = users.u.e.Image,
+                        Name = users.u.e.Name,
+                        Language = users.u.e.Languages,
+                        Username = users.u.u.Username,
+                        Role = users.r.Name,
+                        Phone = users.u.u.Phone,
+                        Email = users.u.u.Email,
+                        Birthdate = users.u.u.Birthdate,
+                    })
+                    .ToListAsync();
+
+                if (allUsers == null)
+                {
+                    return (new ResponseDto { status = false, msg = "No Users were found" }, null);
+                }
+
+                return (new ResponseDto { status = true, msg = "Users Found" }, allUsers);
+
+                
             }
         }
     }

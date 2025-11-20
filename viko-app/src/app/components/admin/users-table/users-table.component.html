@@ -1,0 +1,95 @@
+<div class="grid grid-cols-2 gap-8">
+    <!-- Teachers -->
+    <div class="overflow-x-auto mt-6">
+        <h3 class="text-xl font-semibold">Teachers</h3>
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="border-b bg-gray-100 text-gray-700">
+                    <th class="px-4 py-2 cursor-pointer">Photo</th>
+                    <th class="px-4 py-2 cursor-pointer">Name</th>
+                    <th class="px-4 py-2 cursor-pointer">Username</th>
+                    <th class="px-4 py-2 cursor-pointer">Email</th>
+                    <th class="px-4 py-2 cursor-pointer">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (loading) {
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-gray-500">Loading...</td>
+                </tr>
+                }
+
+                @if (teachers.length === 0 && !loading) {
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-gray-500">No Teachers found</td>
+                </tr>
+                } @else {
+                @for (teacher of teachers; track $index) {
+                <tr class="border-b hover:bg-gray-50 text-center align-middle">
+                    <td class="px-4 py-2 text-center">
+                        @if (teacher.photo) {
+                        <img [src]="teacher.photo" alt="" class="w-10 h-10 rounded-full object-cover mx-auto">
+                        } @else {
+                        <div
+                            class="w-10 h-10 bg-gray-200 rounded-full mx-auto flex items-center justify-center text-gray-500 text-sm">
+                            Photo
+                        </div>
+                        }
+                    </td>
+                    <td class="px-4 py-2">{{ teacher.name }}</td>
+                    <td class="px-4 py-2">{{ teacher.username }}</td>
+                    <td class="px-4 py-2">{{ teacher.email }}</td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="overflow-x-auto mt-6">
+        <h3 class="text-xl font-semibold">Students</h3>
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr class="border-b bg-gray-100 text-gray-700">
+                    <th class="px-4 py-2 cursor-pointer">Photo</th>
+                    <th class="px-4 py-2 cursor-pointer">Name</th>
+                    <th class="px-4 py-2 cursor-pointer">Username</th>
+                    <th class="px-4 py-2 cursor-pointer">Email</th>
+                    <th class="px-4 py-2 cursor-pointer">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (loading) {
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-gray-500">Loading...</td>
+                </tr>
+                }
+
+                @if (students.length === 0 && !loading) {
+                <tr>
+                    <td colspan="3" class="text-center py-4 text-gray-500">No Students found</td>
+                </tr>
+                } @else {
+                @for (student of students; track $index) {
+                <tr class="border-b hover:bg-gray-50 text-center align-middle">
+                    <td class="px-4 py-2 text-center">
+                        @if (student.photo) {
+                        <img [src]="student.photo" alt="" class="w-10 h-10 rounded-full object-cover mx-auto">
+                        } @else {
+                        <div
+                            class="w-10 h-10 bg-gray-200 rounded-full mx-auto flex items-center justify-center text-gray-500 text-sm">
+                            Photo
+                        </div>
+                        }
+                    </td>
+                    <td class="px-4 py-2">{{ student.name }}</td>
+                    <td class="px-4 py-2">{{ student.username }}</td>
+                    <td class="px-4 py-2">{{ student.email }}</td>
+                </tr>
+                }
+                }
+            </tbody>
+        </table>
+    </div>
