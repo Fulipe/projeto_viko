@@ -33,7 +33,14 @@
                 <p class="font-semibold text-gray-700">Teacher</p>
                 <div class="flex flex-wrap gap-2">
                     <p>{{ event.teacher }}</p>
-                    <img [src]="event.teacherPhoto" class="w-7 h-7 rounded-full object-cover border border-gray-300">
+                    @if(event.teacherPhoto){
+                        <img [src]="event.teacherPhoto" class="w-7 h-7 rounded-full object-cover border border-gray-300">
+                    }@else {
+                        <div
+                            class="w-7 h-7 bg-gray-200 rounded-full flex items-center justify-center text-gray-500">
+                        </div>
+                        
+                    }
                 </div>
             </div>
             <div>
@@ -156,8 +163,14 @@
                 <!-- Teacher -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Teacher</label>
-                    <input type="text" formControlName="teacher" name="teacher"
-                        class="w-full border border-gray-400 rounded px-3 py-2" />
+                    <select formControlName="teacher" name="teacher"
+                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                        @for (teacher of teachers; track teacher.name) {
+                        <option [value]="teacher.name">
+                            {{ teacher.name }} {{ teacher.emoji }}
+                        </option>
+                        }
+                    </select>
                 </div>
                 }
 
@@ -299,6 +312,7 @@
     </div>
     }
 
+    <!-- MODAL REPUBLISH -->
     @if (republishPopup) {
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -325,6 +339,8 @@
         </div>
     </div>
     }
+
+    <!-- MODAL ERASE -->
     @if (erasePopup) {
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-white dark:bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -357,22 +373,7 @@
         <div>
             <app-registrations [eventGuid]="eventGuid"></app-registrations>
         </div>
-        @if (event.isViewed) {
-            <div>
-                <app-actions 
-                    [event]="eventEdited" 
-                    [eventGuid]="eventGuid"
-                    [role]="roleSaved"
-                    [eventIsViewed]="eventIsViewed" 
-                    (editAside)="onEditAside($event)"
-                    (updated)="reloadEvent()" 
-                    [eventStatus]="eventStatus" 
-                    (deletePopUp)="onDeletePopUp($event)"
-                    (republishPopUp)="onRepublishPopUp($event)"
-                    (erasePopUp)="onErasePopUp($event)">
-                </app-actions>
-            </div>
-        } @else if (!event.isViewed && roleSaved == "Admin") {
+        @if (event.isViewed || !event.isViewed && roleSaved == "Admin") {
             <div>
                 <app-actions 
                     [event]="eventEdited" 

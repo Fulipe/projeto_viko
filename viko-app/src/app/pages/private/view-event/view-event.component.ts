@@ -9,6 +9,7 @@ import { RegistrationsComponent } from "../../../components/teacher/registration
 import { ActionsComponent } from "../../../components/teacher/actions/actions.component";
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LANGUAGES } from '../../../interfaces/languages';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-view-event',
@@ -26,6 +27,7 @@ import { LANGUAGES } from '../../../interfaces/languages';
 export class ViewEventComponent implements OnInit {
   private eventService = inject(EventService)
   private authService = inject(AuthService)
+  private userService = inject(UserService)
 
   eventGuid!: string;
   event!: EventFetched;
@@ -42,6 +44,9 @@ export class ViewEventComponent implements OnInit {
   previewUrl: string | ArrayBuffer | null = null;
 
   minDate!: string;
+
+  //Teachers
+  teachers: any[] = []
 
   //Language
   languages = [...LANGUAGES];
@@ -188,6 +193,8 @@ export class ViewEventComponent implements OnInit {
 
     if (this.eventEdit.value.language) this.eventEdit.value.language.split(',').forEach((langs: any) => this.selectedLanguages.push(langs))
 
+    this.getAllTeachers()
+    
     this.eventEdit.markAsPristine();
     this.originalEvent = { ...this.event }; //Sets the originalEvent as the event from db
     this.originalLanguages = [...(this.selectedLanguages || [])];
@@ -206,6 +213,18 @@ export class ViewEventComponent implements OnInit {
       this.selectedLanguages.every(lang => this.originalLanguages.includes(lang));
 
     return formEqual && languagesEqual;
+  }
+
+  getAllTeachers(){
+    this.userService.getAllTeachers().subscribe({
+      next: (res)=>{
+        const e:any = res
+        const teachers = e
+
+        this.teachers = teachers
+        console.log(this.teachers)
+      }
+    })
   }
 
   // Cleans values before comparison
@@ -337,7 +356,6 @@ export class ViewEventComponent implements OnInit {
     })
   }
   //#endregion
-
 
   //#region Registration
   //Checks registration, by checking if GUID of opened event, is in the Students events list

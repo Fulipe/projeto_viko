@@ -99,10 +99,12 @@ export class DashboardTeacherComponent {
         const events: EventFetched[] = e
 
         //Filters opened and closed events out
-        this.finishedEvents =
+        this.filteredEvents =
           events
             .filter(event => event.eventStatus != 1)
             .filter(event => event.eventStatus != 2);
+
+        this.finishedEvents = this.filteredEvents.slice(0, 10)
 
         this.loading = false;
 

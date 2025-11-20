@@ -35,4 +35,17 @@ export class UserService {
   userUpdate(user: UserInfo):Observable<UserInfo>{
     return this.http.post<any>(`${environment.apiUrl}/UpdateUser`, user)
   }
+
+  getAllTeachers():Observable<any>{
+    return this.http.get<any>(`${environment.apiUrl}/GetTeachers`).pipe(
+      map((res)=>{
+        console.log(res)
+        if(res?.teachers){
+          return res.teachers
+        }
+
+        return false;
+      })
+    )
+  }
 }

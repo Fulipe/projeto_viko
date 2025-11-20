@@ -17,6 +17,7 @@ namespace viko_api.Services
         Task<ResponseDto> RegisterUser(SignUpRequestDto request);
         Task<(ResponseDto, UserInfoDto?)> GetUserById(long id);
         Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
+        Task<(ResponseDto, List<TeacherShortInfoDto>)> GetAllTeachers();
 
         public class UserService : IUserService
         {
@@ -236,6 +237,30 @@ namespace viko_api.Services
                     };
                     throw;
                 }
+
+            }
+            public async Task<(ResponseDto, List<TeacherShortInfoDto>?)> GetAllTeachers()
+            {
+                var teachers = await _dbContext.Users.Where(e => e.RoleId == 2)
+                    .Join(_dbContext.Entities,
+                        u => u.EntityId,
+                        e => e.Id,
+
+                        (u, e) => new {u, e})
+                    .Select( 
+                        teacher => new TeacherShortInfoDto {
+                            Id = teacher.u.Id,
+                            Name = teacher.e.Name,
+                            Username = teacher.u.Username,
+                        }
+                    ).ToListAsync();
+
+                if (teachers == null)
+                {
+                    return (new ResponseDto { status = false, msg = "No teachers were found" }, null);
+                }
+
+                return (new ResponseDto { status = true, msg = "Teachers were found" }, teachers);
 
             }
         }
