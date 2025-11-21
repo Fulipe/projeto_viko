@@ -35,7 +35,7 @@ public class DailyScanner
 
     [Function("DailyScanner")]
     //Crontab is set to run everyday at midnight.
-    public async Task Run([TimerTrigger("0 */1 * * * *")] TimerInfo timer)
+    public async Task Run([TimerTrigger("0 0 0 * * *")] TimerInfo timer)
     {
         _logger.LogInformation("DailyScanner started.");
 
