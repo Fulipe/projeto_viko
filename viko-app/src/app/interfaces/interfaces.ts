@@ -40,7 +40,7 @@ export interface CreateEventDto {
     Title: string;
     Description: string;
     Category: string;
-    //Teacher: number => serve Teachers UserID in a select box
+    Teacher: string;
     Language: string;
     City: string;
     Image: string | undefined;

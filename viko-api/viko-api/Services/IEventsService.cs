@@ -22,6 +22,7 @@ namespace viko_api.Services
         Task<ResponseDto> EventRegistration(long studentid, string guid);
         Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
         Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate);
+
         // Method to update event status
         Task<ResponseDto> UpdateEventStatus(string guid, int newStatus);
         Task<ResponseDto> DeleteEvent(string guid);
@@ -234,12 +235,6 @@ namespace viko_api.Services
                     _dbContext.Entities.Add(newEntity);
                     await _dbContext.SaveChangesAsync();
 
-                    // If registrationDeadline is set when creating, sets it with the incoming value,
-                    // If not sets value as 1 day before startDate.
-                    var registrationDeadline = eventCreated.RegistrationDeadline != default 
-                                            ? eventCreated.RegistrationDeadline 
-                                            : eventCreated.StartDate.AddDays(-1);
-
                     var newEvent = new Event
                     {
                         EntityId = newEntity.Id,
@@ -250,7 +245,7 @@ namespace viko_api.Services
                         City = eventCreated.City,
                         StartDate = eventCreated.StartDate,
                         FinishDate = eventCreated.EndDate,
-                        RegistrationDeadline = registrationDeadline,
+                        RegistrationDeadline = eventCreated.RegistrationDeadline,
                         EventStatusId = 1,
                         EventGuid = Guid.NewGuid(),
                         isViewed = true,

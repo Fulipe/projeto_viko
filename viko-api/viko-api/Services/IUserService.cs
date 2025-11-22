@@ -16,8 +16,9 @@ namespace viko_api.Services
         Task<(UserDto?, ResponseDto)> Authenticate(string username, string password);
         Task<ResponseDto> RegisterUser(SignUpRequestDto request);
         Task<(ResponseDto, UserInfoDto?)> GetUserById(long id);
+        Task<TeacherShortInfoDto> GetTeacherByUsername(string teacherUsername);
         Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
-        Task<(ResponseDto, List<TeacherShortInfoDto>)> GetAllTeachers();
+        Task<(ResponseDto, List<TeacherShortInfoDto>?)> GetAllTeachers();
         Task<(ResponseDto, List<UserInfoDto>?)> GetAllUsers();
         Task<ResponseDto> UpdateUserRole (string username, string role);
 
@@ -37,13 +38,19 @@ namespace viko_api.Services
                         u => u.RoleId,
                         r => r.Id,
                         (u, r) =>  new { u, r })
+                    .Join(_dbContext.Entities,
+                        u => u.u.EntityId,
+                        e => e.Id,
+
+                        (u, e) => new { u, e })
                     .Select(join => new
                     {
                         UserDto = new UserDto
                         {
-                            Id = join.u.Id,
-                            Username = join.u.Username,
-                            Role = join.r.Name,
+                            Id = join.u.u.Id,
+                            Username = join.u.u.Username,
+                            Name = join.e.Name,
+                            Role = join.u.r.Name,
                         },
                     }).FirstOrDefaultAsync();
 
@@ -173,6 +180,30 @@ namespace viko_api.Services
                     status = true,
                     msg = "User was found and sent" 
                 }, user.UserInfoDto);
+            }
+
+            //Refactor: Erase and send id directly from frontend
+            public async Task<TeacherShortInfoDto> GetTeacherByUsername(string teacherUsername)
+            {
+                var teacher = await _dbContext.Users
+                    .Where(t => t.Username == teacherUsername)
+                    .Join(_dbContext.Entities,
+                        u => u.EntityId,
+                        e => e.Id,
+
+                        (u, e) => new { u, e }
+                    )
+                    .Select(teacher => new
+                    {
+                        Teacher = new TeacherShortInfoDto
+                        {
+                            Id = teacher.u.Id,
+                            Username = teacher.u.Username,
+                            Name = teacher.e.Name,
+                        }
+                    }).FirstOrDefaultAsync();
+
+                return teacher.Teacher;
             }
             public async Task<ResponseDto> UpdateUser(long id, UserInfoDto userinfo)
             {

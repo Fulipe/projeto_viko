@@ -39,7 +39,8 @@ namespace viko_api.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim("userId", user.Id.ToString()),
                 new Claim("userRole", user.Role),
-                //new Claim("username", user.Username.ToString()),
+                new Claim("username", user.Username.ToString()),
+                new Claim("name", user.Name.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

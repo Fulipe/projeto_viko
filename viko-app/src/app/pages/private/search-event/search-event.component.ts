@@ -5,11 +5,12 @@ import { EventService } from '../../../services/event.service';
 import { EventFetched } from '../../../interfaces/interfaces';
 import { AuthService } from '../../../services/auth.service';
 import { CATEGORIES } from '../../../interfaces/categories';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-event-search',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './search-event.component.html'
 })
 export class SearchEventComponent implements OnInit {

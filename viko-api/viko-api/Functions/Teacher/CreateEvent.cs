@@ -15,12 +15,14 @@ public class CreateEvent
 {
     private readonly ILogger<CreateEvent> _logger;
     private readonly IEventsService _eventsService;
+    private readonly IUserService _userService;
     private readonly JWTService _jwtService;
 
-    public CreateEvent(ILogger<CreateEvent> logger, IEventsService eventsService, JWTService jwtService)
+    public CreateEvent(ILogger<CreateEvent> logger, IEventsService eventsService, JWTService jwtService, IUserService userService)
     {
         _jwtService = jwtService;
         _eventsService = eventsService;
+        _userService = userService;
         _logger = logger;
     }
 
@@ -42,17 +44,53 @@ public class CreateEvent
             return badResponse;
         }
 
-        var detachid = _jwtService.DetachInfo(req);
+        var userRole = context.Items["UserRole"]?.ToString();
+        
+        Console.WriteLine();
+        Console.WriteLine(userRole);
+        Console.WriteLine();
 
-        if (detachid.status == true)
+        // If Function is activated by Teacher
+        if (userRole == "Teacher")
         {
-        //Detach ID logged in from token 
+            var detachid = _jwtService.DetachInfo(req);
 
-            var teacherid = detachid.valueLong;
+            if (detachid.status == true)
+            {
+            //Detach ID logged in from token 
 
-        //Send EventCreationDto and ID to CreateEvent() function in IEventService
+                var teacherid = detachid.valueLong;
 
-            var eventCreated = await _eventsService.CreateEvent(teacherid, request);
+            //Send EventCreationDto and ID to CreateEvent() function in IEventService
+
+                var eventCreated = await _eventsService.CreateEvent(teacherid, request);
+
+                if (eventCreated.status == false)
+                {
+                    var res = req.CreateResponse(HttpStatusCode.Conflict);
+                    await res.WriteStringAsync(eventCreated.msg);
+                    return res;
+                }
+
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                await response.WriteAsJsonAsync(new { eventCreated });
+                return response;
+
+            //Return full EventDto
+            }
+            else
+            {
+                var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
+                await badresponse.WriteStringAsync(detachid.msg);
+                return badresponse;
+            }
+        }
+
+        // If Function is activated by Admin
+        else
+        {
+            var getTeacherId = await _userService.GetTeacherByUsername(request.Teacher);
+            var eventCreated = await _eventsService.CreateEvent(getTeacherId.Id, request);
 
             if (eventCreated.status == false)
             {
@@ -65,13 +103,6 @@ public class CreateEvent
             await response.WriteAsJsonAsync(new { eventCreated });
             return response;
 
-        //Return full EventDto
-        }
-        else
-        {
-            var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteStringAsync(detachid.msg);
-            return badresponse;
         }
 
 

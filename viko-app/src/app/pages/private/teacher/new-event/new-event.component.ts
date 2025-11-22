@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventService } from '../../../../services/event.service';
@@ -6,6 +6,8 @@ import { LANGUAGES } from '../../../../interfaces/languages';
 import { CreateEventDto, LanguagesObjectFormat } from '../../../../interfaces/interfaces';
 import { Title } from '@angular/platform-browser';
 import { CATEGORIES } from '../../../../interfaces/categories';
+import { UserService } from '../../../../services/user.service';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-new-event',
@@ -15,6 +17,14 @@ import { CATEGORIES } from '../../../../interfaces/categories';
   styleUrl: './new-event.component.scss'
 })
 export class NewEventComponent {
+  private fb = inject( FormBuilder) 
+  private authService = inject(AuthService)
+  private eventService = inject(EventService)
+  private router = inject(Router)
+  private userService = inject(UserService)
+
+  roleSaved: string | null = this.authService.getRole()
+
   eventForm: FormGroup;
   isSubmitting = false;
   successMessage = '';
@@ -36,10 +46,14 @@ export class NewEventComponent {
   selectedFile?: File;
   previewUrl: string | ArrayBuffer | null = null;
 
-  constructor(private fb: FormBuilder, private eventService: EventService, private router: Router) {
+  //Teachers
+  teachers: any[] = []
+
+  constructor() {
     this.eventForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
       image: [null],
+      teacher: ['', Validators.required],
       description: [''],
       category: ['', Validators.required],
       languages: ['', Validators.required],
@@ -47,7 +61,7 @@ export class NewEventComponent {
       city: ['', Validators.required],
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
-      registrationDeadline: ['']
+      registrationDeadline: ['', Validators.required]
     });
 
     // Prohibit selection of date before tomorrow date
@@ -55,8 +69,24 @@ export class NewEventComponent {
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     this.minDate = tomorrow.toISOString().slice(0, 16);
+
+        // Only activates function getAllTeachers if role is Admin
+    if(this.roleSaved == "Admin"){
+      this.getAllTeachers()
+    }
   }
 
+  getAllTeachers(){
+    this.userService.getAllTeachers().subscribe({
+      next: (res)=>{
+        const e:any = res
+        const teachers = e
+
+        this.teachers = teachers
+        console.log(this.teachers)
+      }
+    })
+  }
   //Category
   checkCategory() {
     this.selectedCategory = this.eventForm.get('category')?.value || '';
@@ -122,20 +152,25 @@ export class NewEventComponent {
   }
 
   private saveNewEvent() {
+    const start = new Date(this.eventForm.get('startDate')?.value);
+    const end  = new Date(this.eventForm.get('endDate')?.value);
+    const deadline = new Date(this.eventForm.get('registrationDeadline')?.value);
+
     const dto: CreateEventDto = {
       Title: this.eventForm.get('title')?.value,
       Image: this.previewUrl?.toString(),
+      Teacher: this.eventForm.get('teacher')?.value,
       Description: this.eventForm.get('description')?.value,
       Category: this.eventForm.get('category')?.value,
       Language: this.selectedLanguages.join(','),
       City: this.eventForm.get('city')?.value,
       Location: this.eventForm.get('location')?.value,
-      StartDate: this.eventForm.get('startDate')?.value,
-      EndDate: this.eventForm.get('endDate')?.value,
-      RegistrationDeadline: this.eventForm.get('registrationDeadline')?.value,
-
+      StartDate: start.toISOString(),
+      EndDate: end.toISOString(),
+      RegistrationDeadline: deadline.toISOString()
     }
 
+    console.log(dto)
     return dto
   }
 
@@ -159,12 +194,17 @@ export class NewEventComponent {
     this.errorMessage = '';
 
     this.eventService.createEvent(this.saveNewEvent()).subscribe({
-      next: (res) => {
+      next: (res) => {        
+        // Redirect after 1,5 seconds
+        if (this.roleSaved == "Teacher") { 
+          setTimeout(() => this.router.navigate(['/private/teacher/myevents']), 1500);
+        }
+        
+        if (this.roleSaved == "Admin") {
+          setTimeout(() => this.router.navigate(['/private/search']), 1500);
+        }
         this.successMessage = 'Event created successfully!';
         this.isSubmitting = false;
-
-        // Redirect after 1,5 seconds
-        setTimeout(() => this.router.navigate(['/private/teacher/myevents']), 1500);
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Failed to create event';

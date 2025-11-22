@@ -33,6 +33,9 @@ export class ViewEventComponent implements OnInit {
   event!: EventFetched;
 
   roleSaved: string | null = this.authService.getRole()
+  nameSaved: string | null = this.authService.getName()
+
+  compareNames!: boolean;
 
   //Edit
   editAside: boolean = false;
@@ -86,6 +89,9 @@ export class ViewEventComponent implements OnInit {
     this.eventStatus = this.event.eventStatus;
 
     this.eventIsViewed = this.event.isViewed;
+
+    // Checks if event opened, is from teacher logged in, to show, or not, Actions component 
+    this.compareNames = this.nameSaved === this.event.teacher;
 
     //Sets the category of the event as an Category object
     this.category = this.categories.find(c => c.name == this.event.category)
@@ -193,7 +199,10 @@ export class ViewEventComponent implements OnInit {
 
     if (this.eventEdit.value.language) this.eventEdit.value.language.split(',').forEach((langs: any) => this.selectedLanguages.push(langs))
 
-    this.getAllTeachers()
+    // Only activates function getAllTeachers if role is Admin
+    if(this.roleSaved == "Admin"){
+      this.getAllTeachers()
+    }
     
     this.eventEdit.markAsPristine();
     this.originalEvent = { ...this.event }; //Sets the originalEvent as the event from db

@@ -15,6 +15,9 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             // console.log(decode.userRole)
             localStorage.setItem('role', decode.userRole);
         }
+        if (decode && decode.name){ 
+            localStorage.setItem('name', decode.name);
+        }
         
         const cloned = req.clone({
             setHeaders: { Authorization: `Bearer ${authService.getToken()}`, Role: decode.userRole },

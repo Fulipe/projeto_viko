@@ -54,6 +54,21 @@
                     </div>
                     }
                 </div>
+                @if (roleSaved == "Admin") {
+
+                    <div class="col-span-2">
+                        <label class="block font-medium mb-1">Teacher | Name - Username</label>
+                        <select formControlName ="teacher"
+                            class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400">
+                            @for (teacher of teachers; track teacher.name) {
+                                <option [value]="teacher.username">
+                                    {{teacher.name}} -- user: {{teacher.username}} 
+                                </option>
+                            }
+                        </select>
+                    
+                    </div>
+                }
 
                 <div class="col-span-2">
                     <label class="block font-medium mb-1">Category</label>
@@ -65,9 +80,6 @@
                             </option>
                         }
                     </select>
-                    <!-- "border border-gray-300 rounded-md px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200 w-24" -->
-                    <!-- <input type="text" formControlName="category"
-                        class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-400" /> -->
                 </div>
 
                 <div>
