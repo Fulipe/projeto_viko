@@ -19,6 +19,7 @@ namespace viko_api.Services
         Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
         Task<(ResponseDto, List<TeacherShortInfoDto>)> GetAllTeachers();
         Task<(ResponseDto, List<UserInfoDto>?)> GetAllUsers();
+        Task<ResponseDto> UpdateUserRole (string username, string role);
 
         public class UserService : IUserService
         {
@@ -234,7 +235,7 @@ namespace viko_api.Services
                     return new ResponseDto
                     {
                         status = false,
-                        msg = "User not update - " + ex.Message 
+                        msg = "User did not update - " + ex.Message 
                     };
                     throw;
                 }
@@ -299,6 +300,43 @@ namespace viko_api.Services
 
                 
             }
+            public async Task<ResponseDto> UpdateUserRole(string username, string role)
+            {
+                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Username == username);
+                var roleId = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == role);
+
+                if (user == null || roleId == null)
+                    return new ResponseDto { status = false, msg = "User or RoleId came null" };
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try
+                {
+                    user.Role = roleId;
+
+                    _dbContext.Users.Update(user);
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto
+                    {
+                        status = true,
+                        msg = "User Role updated!"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "User Role did not update - " + ex.Message
+                    };
+                    throw;
+                }
+
+            }
+
         }
     }
 }

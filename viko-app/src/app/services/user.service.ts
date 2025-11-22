@@ -59,4 +59,8 @@ export class UserService {
       })
     )
   }
+
+  updateUserRole(username: string, role: string): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/UpdateUserRole`, {username, role})
+  }
 }
