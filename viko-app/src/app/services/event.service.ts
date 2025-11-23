@@ -77,6 +77,10 @@ export class EventService {
     return this.http.post<any>(`${environment.apiUrl}/EventRegistration`, guid);
   }
 
+  cancelRegistration(guid: string | null): Observable<any>{
+    return this.http.post<any>(`${environment.apiUrl}/CancelEventRegistration`, guid);
+  }
+
   getRegistrations(guid: string | null):Observable<any>{
     return this.http.get<any>(`${environment.apiUrl}/GetRegistrations?guid=${guid}`).pipe(
       map((res) => {

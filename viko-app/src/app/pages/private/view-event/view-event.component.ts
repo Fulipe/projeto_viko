@@ -402,13 +402,31 @@ export class ViewEventComponent implements OnInit {
       next: (res) => {
         console.log('Registered!');
 
-        this.checkRegistration()
-
         console.log(this.showRegisterButton)
         console.log(this.isRegistered)
+
+        alert("Registration Successfull in this event!")
+        window.location.reload()
       },
       error: (err) => {
         console.log("Couldn't register in this event")
+      }
+    })
+  }
+
+  unregister(){
+    this.eventService.cancelRegistration(this.eventGuid).subscribe({
+      next: (res) => {
+        console.log('Registration Canceled!');
+                
+        console.log(this.showRegisterButton)
+        console.log(this.isRegistered)
+        
+        alert("Registration Cancelled!")
+        window.location.reload()
+      },
+      error: (err) => {
+        console.log("Couldn't cancel registration to this event")
       }
     })
   }

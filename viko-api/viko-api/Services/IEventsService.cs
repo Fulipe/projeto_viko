@@ -21,6 +21,7 @@ namespace viko_api.Services
         Task<ResponseDto> TeacherCreateEvent(long teacherid, TeacherEventCreationDto eventCreated);
         Task<(ResponseDto, EventsDto?)> GetEvent(string guid);
         Task<ResponseDto> EventRegistration(long studentid, string guid);
+        Task<ResponseDto> CancelEventRegistration(long studentid, string guid);
         Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
         Task<ResponseDto> EditEvent(string guid, EventEditDto eventUpdate);
 
@@ -446,6 +447,59 @@ namespace viko_api.Services
                     {
                         status = true,
                         msg = "Student successfully registered"
+                    };
+                    return res;
+
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
+            public async Task<ResponseDto> CancelEventRegistration(long studentid, string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return (new ResponseDto { status = false, msg = "GUID is Invalid" });
+
+                //Get events to register through guid in the params
+                var getGuidEvent = await _dbContext.Events
+                    .Where(e => e.EventGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getGuidEvent == null)
+                    return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
+
+                //Checks if Event is Opened, if not, doesn't allow registration
+                if (getGuidEvent.EventStatusId != 1)
+                    return new ResponseDto { status = false, msg = "Cancellation of Registration failed. This event is closed or finished" };
+
+                //Get EventId of Event provided by the GUID
+                var eventId = getGuidEvent.Id;
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                try
+                {
+                    //Checks if Student is already registered in the event
+                    var registration = await _dbContext.EventRegistrations
+                        .Where(er => er.EventId == eventId && er.StudentId == studentid)
+                        .FirstOrDefaultAsync();
+
+                    if (registration == null)
+                        return new ResponseDto { status = false, msg = "Cancellation of Registration failed. Student is not registered in this event" };
+
+
+                    _dbContext.Remove(registration);
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    var res = new ResponseDto
+                    {
+                        status = true,
+                        msg = "Student registration cancelled successfully"
                     };
                     return res;
 
