@@ -36,11 +36,25 @@ export interface EventItem {
     guid:string;
 }
 
-export interface CreateEventDto {
+export interface AdminCreateEventDto {
     Title: string;
     Description: string;
     Category: string;
-    Teacher: string;
+    Teacher: number;
+    Language: string;
+    City: string;
+    Image: string | undefined;
+    Location: string;
+    StartDate: string;
+    RegistrationDeadline: string;
+    EndDate: string;
+
+}
+
+export interface TeacherCreateEventDto {
+    Title: string;
+    Description: string;
+    Category: string;
     Language: string;
     City: string;
     Image: string | undefined;

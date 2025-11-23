@@ -17,11 +17,12 @@ namespace viko_api.Services
         Task<(ResponseDto, List<EventsDto>)> GetAllPublicEvents();
         Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid);
         Task<(ResponseDto, List<EventsDto>)> GetTeacherEvents(long userid);
-        Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated);
+        Task<ResponseDto> AdminCreateEvent(AdminEventCreationDto eventCreated);
+        Task<ResponseDto> TeacherCreateEvent(long teacherid, TeacherEventCreationDto eventCreated);
         Task<(ResponseDto, EventsDto?)> GetEvent(string guid);
         Task<ResponseDto> EventRegistration(long studentid, string guid);
         Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
-        Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate);
+        Task<ResponseDto> EditEvent(string guid, EventEditDto eventUpdate);
 
         // Method to update event status
         Task<ResponseDto> UpdateEventStatus(string guid, int newStatus);
@@ -207,7 +208,74 @@ namespace viko_api.Services
                     msg = "Events fetched successfully"
                 }, eventsFetched);
             }
-            public async Task<ResponseDto> CreateEvent(long teacherid, EventCreationDto eventCreated)
+            public async Task<ResponseDto> AdminCreateEvent(AdminEventCreationDto eventCreated)
+            {
+
+                //Checks if title sent, is already in use
+                bool checkTitle = await _dbContext.Events
+                                .Join(_dbContext.Entities,
+                                    ev => ev.EntityId,
+                                    e => e.Id,
+
+                                    (ev, e) => new { ev, e }
+                                ).AnyAsync(r => r.e.Name == eventCreated.Title);
+
+                if (checkTitle) return new ResponseDto { status = false, msg = "Event not created. Title selected is already in use" };
+
+                
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+                try
+                {
+                    var newEntity = new Entity
+                    {
+                        Name = eventCreated.Title,
+                        Image = eventCreated.Image,
+                        Languages = eventCreated.Language,
+                    };
+
+                    _dbContext.Entities.Add(newEntity);
+                    await _dbContext.SaveChangesAsync();
+
+                    var newEvent = new Event
+                    {
+                        EntityId = newEntity.Id,
+                        TeacherId = eventCreated.Teacher,
+                        Description = eventCreated.Description,
+                        Category = eventCreated.Category,
+                        Location = eventCreated.Location,
+                        City = eventCreated.City,
+                        StartDate = eventCreated.StartDate,
+                        FinishDate = eventCreated.EndDate,
+                        RegistrationDeadline = eventCreated.RegistrationDeadline,
+                        EventStatusId = 1,
+                        EventGuid = Guid.NewGuid(),
+                        isViewed = true,
+                    };
+
+                    _dbContext.Add(newEvent);
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    var res = new ResponseDto
+                    {
+                        status = true,
+                        msg = "Event was successfully created."
+                    };
+                    return res;
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Event Creation failed - " + ex.Message
+                    };
+                }
+            }
+            public async Task<ResponseDto> TeacherCreateEvent(long teacherid, TeacherEventCreationDto eventCreated)
             {
 
                 //Checks if title sent, is already in use
@@ -439,7 +507,7 @@ namespace viko_api.Services
                 return (new ResponseDto { status = true, msg = "Registrations fetched successfully!" }, registrations);
 
             }
-            public async Task<ResponseDto> EditEvent(string guid, EventCreationDto eventUpdate)
+            public async Task<ResponseDto> EditEvent(string guid, EventEditDto eventUpdate)
             {
                 //Parses incoming string as GUID
                 if (!Guid.TryParse(guid, out Guid parsedGuid))

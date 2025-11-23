@@ -58,5 +58,5 @@ public class EditEvent
 public class UpdateEventRequest
 {
     public string guid { get; set; }
-    public EventCreationDto eventUpdate { get; set; }
+    public EventEditDto eventUpdate { get; set; }
 }

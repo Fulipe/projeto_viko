@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, map, of, catchError, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { CreateEventDto, EventFetched } from '../interfaces/interfaces';
+import { TeacherCreateEventDto, EventFetched, AdminCreateEventDto } from '../interfaces/interfaces';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
@@ -54,8 +54,11 @@ export class EventService {
     )
   }
 
-  createEvent(dto: CreateEventDto): Observable<CreateEventDto>{
-    return this.http.post<CreateEventDto>(`${environment.apiUrl}/CreateEvent`, dto);
+  teacherCreateEvent(dto: TeacherCreateEventDto): Observable<TeacherCreateEventDto>{
+    return this.http.post<TeacherCreateEventDto>(`${environment.apiUrl}/CreateEventTeacher`, dto);
+  }
+  adminCreateEvent(dto: AdminCreateEventDto): Observable<AdminCreateEventDto>{
+    return this.http.post<AdminCreateEventDto>(`${environment.apiUrl}/CreateEventAdmin`, dto)
   }
 
   GetEvent(guid: string | null): Observable<EventFetched | null>{

@@ -20,6 +20,8 @@ import { NotfoundComponent } from './pages/notfound/notfound.component';
 import { eventResolver } from './resolvers/event.resolver';
 import { SearchEventComponent } from './pages/private/search-event/search-event.component';
 import { DashboardAdminComponent } from './pages/private/admin/dashboard-admin/dashboard-admin.component';
+import { AdminNewEventComponent } from './pages/private/admin/admin-new-event/admin-new-event.component';
+import { TeacherNewEventComponent } from './pages/private/teacher/teacher-new-event/teacher-new-event.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -77,9 +79,27 @@ export const routes: Routes = [
 
             {
                 path: 'event/newevent',
-                component: NewEventComponent,
+                component: LayoutComponent,
+                canActivate: [roleRedirectGuard],
+                data: {
+                    redirectMap: {
+                        Teacher: '/private/teacher/event/newevent',
+                        Admin: '/private/admin/event/newevent'
+                    }
+                }
+            },
+
+            {
+                path: 'teacher/event/newevent',
+                component: TeacherNewEventComponent,
                 canActivate: [roleGuard],
-                data: { roles: ['Admin', 'Teacher'] }
+                data: { roles: ['Teacher'] }
+            },
+            {
+                path: 'admin/event/newevent',
+                component: AdminNewEventComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Admin'] }
             },
 
             {

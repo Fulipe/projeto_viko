@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace viko_api.Models.Dto
 {
-    public class EventCreationDto
+    public class TeacherEventCreationDto
     {
         [Required]
         //[JsonPropertyName("Title")]
@@ -20,10 +19,6 @@ namespace viko_api.Models.Dto
         [Required]
         //[JsonPropertyName("Language")]
         public string Language { get; set; }
-
-        [Required]
-        //[JsonPropertyName("Teacher")]
-        public string Teacher { get; set; }
 
         //[JsonPropertyName("Description")]
         public string Description { get; set; }
@@ -43,7 +38,7 @@ namespace viko_api.Models.Dto
         [Required]
         //[JsonPropertyName("StartDate")]
         public DateTime StartDate { get; set; }
-        
+
         [Required]
         //[JsonPropertyName("EndDate")]
         public DateTime EndDate { get; set; }
