@@ -20,6 +20,7 @@ namespace viko_api.Services
         Task<ResponseDto> AdminCreateEvent(AdminEventCreationDto eventCreated);
         Task<ResponseDto> TeacherCreateEvent(long teacherid, TeacherEventCreationDto eventCreated);
         Task<(ResponseDto, EventsDto?)> GetEvent(string guid);
+        Task<(ResponseDto, List<EventsDto?>)> GetEventOfUser(string guid);
         Task<ResponseDto> EventRegistration(long studentid, string guid);
         Task<ResponseDto> CancelEventRegistration(long studentid, string guid);
         Task<(ResponseDto, List<UserInfoDto>?)> RegistrationsList(string guid);
@@ -399,6 +400,39 @@ namespace viko_api.Services
                     
                     }, eventFetched.EventFetched);
             }
+            public async Task<(ResponseDto, List<EventsDto>?)> GetEventOfUser(string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return (new ResponseDto { status = false, msg = "GUID is Invalid" }, null);
+
+                //Get user through guid in the params
+                var getUser = await _dbContext.Users
+                    .Where(e => e.UserGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getUser == null)
+                    return (new ResponseDto { status = false, msg = "No event was found with the given GUID" }, null);
+
+                //Get User Id of User provided by the GUID
+                var userId = getUser.Id;
+
+                //Get User Role of User provided by the GUID
+                var userRole = getUser.RoleId;
+
+                if (userRole == 1)
+                {
+                    var events = await this.GetStudentEvents(userId);
+                    return (events.Item1, events.Item2);
+                }
+                else 
+                {
+                    var events = await this.GetTeacherEvents(userId);
+                    return (events.Item1, events.Item2);
+                }
+
+            }
             public async Task<ResponseDto> EventRegistration(long studentid, string guid)
             {
                 //Parses incoming string as GUID
@@ -555,6 +589,7 @@ namespace viko_api.Services
                                         Birthdate = userRegistrations.u.u.u.Birthdate,
                                         Phone = userRegistrations.u.u.u.Phone,
                                         Photo = userRegistrations.u.e.Image,
+                                        UserGuid = userRegistrations.u.u.u.UserGuid,
 
                                     }).ToListAsync();
 

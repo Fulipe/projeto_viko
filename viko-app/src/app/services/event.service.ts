@@ -73,6 +73,18 @@ export class EventService {
     )
   }
 
+  getEventOfUser(guid: string | null): Observable<EventFetched | null>{
+    return this.http.get<any>(`${environment.apiUrl}/GetEventOfUser?guid=${guid}`).pipe(
+      map((res) => {
+        if (res?.eventsList) {
+          return res.eventsList
+        }
+
+        return null
+      }), 
+    )
+  }
+
   newRegistration(guid: string | null): Observable<any>{
     return this.http.post<any>(`${environment.apiUrl}/EventRegistration`, guid);
   }

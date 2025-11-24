@@ -1,0 +1,125 @@
+<div class="min-h-screen bg-gray-100 p-8">
+
+    <!-- BANNER DO UTILIZADOR -->
+    <div class="bg-blue-200 shadow-md rounded-xl p-6 flex items-center gap-6">
+
+        <!-- FOTO -->
+        @if (user.photo) {
+        <img [src]="user.photo" alt="User Photo" class="w-28 h-28 rounded-full object-cover" />
+        } @else {
+        <div class="w-28 h-28 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 text-sm">
+            Photo
+        </div>
+        }
+
+        <!-- INFO DO UTILIZADOR -->
+        <div class="grid grid-cols-2 gap-y-2 gap-x-10">
+
+            <div>
+                <p class="text-gray-500 text-sm">Name</p>
+                <p class="text-xl font-semibold">{{ user.name }}</p>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-sm">Username</p>
+                <p class="text-xl font-semibold">@{{ user.username }}</p>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-sm">Role</p>
+                <p class="text-lg font-medium">{{ user.role }}</p>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-sm">Birthdate</p>
+                <p class="text-lg">{{ user.birthdate | date:'dd/MM/yyyy' }}</p>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-sm">Email</p>
+                <p class="text-lg">{{ user.email }}</p>
+            </div>
+
+            <div>
+                <p class="text-gray-500 text-sm">Phone</p>
+                <p class="text-lg">{{ user.phone }}</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ESPAÇAMENTO -->
+    <div class="mt-10"></div>
+
+    <!-- TÍTULO DA TABELA -->
+    <h2 class="text-2xl font-bold mb-4">User Events</h2>
+
+    <!-- TABELA DE EVENTOS -->
+    <div class="bg-white shadow-lg rounded-xl overflow-hidden">
+
+        <table class="w-full table-auto border-collapse">
+            <thead class="bg-gray-200 text-gray-700">
+                <tr>
+                    <th class="px-4 py-2 cursor-pointer text-left" (click)="sortUserEvent('title')">Title</th>
+                    <th class="px-4 py-2 cursor-pointer text-left" (click)="sortUserEvent('category')">Category</th>
+                    <th class="px-4 py-2 text-left">Languages</th>
+                    <th class="px-4 py-2 cursor-pointer text-left" (click)="sortUserEvent('startDate')">Start Date</th>
+                    <th class="px-4 py-2 cursor-pointer text-left" (click)="sortUserEvent('endDate')">End Date</th>
+                    <th class="px-4 py-2 cursor-pointer text-left" (click)="sortUserEvent('eventStatus')">Event Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (loading) {
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-gray-500">Loading...</td>
+                </tr>
+                }
+                @if (userEvents.length == 0 && !loading) {
+                <tr>
+                    <td colspan="6" class="text-center py-4 text-gray-500">No events found</td>
+                </tr>
+                } @else {
+                    @for (event of userEvents; track $index) {
+                    <tr class="border-b hover:bg-gray-50 transition">
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.title }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.category }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.language }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.startDate | date:'dd/MM/yyyy' }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            <a href="/private/event/{{event.guid}}">
+                                {{ event.endDate | date:'dd/MM/yyyy' }}
+                            </a>
+                        </td>
+                        <td class="px-4 py-2">
+                            @switch (event.eventStatus) {
+                            @case (1) { <a href="/private/event/{{event.guid}}" class="text-green-600"> Opened </a> }
+                            @case (2) { <a href="/private/event/{{event.guid}}" class="text-yellow-600"> Closed </a> }
+                            @case (3) { <a href="/private/event/{{event.guid}}" class="text-red-600"> Finished </a> }
+                            }
+                        </td>
+                    </tr>
+                    }
+                }
+            </tbody>
+
+        </table>
+    </div>
+
+</div>

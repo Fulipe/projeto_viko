@@ -16,6 +16,7 @@ namespace viko_api.Services
         Task<(UserDto?, ResponseDto)> Authenticate(string username, string password);
         Task<ResponseDto> RegisterUser(SignUpRequestDto request);
         Task<(ResponseDto, UserInfoDto?)> GetUserById(long id);
+        Task<(ResponseDto, UserInfoDto?)> GetUserByGUID(string guid);
         Task<TeacherShortInfoDto> GetTeacherByUsername(string teacherUsername);
         Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
         Task<(ResponseDto, List<TeacherShortInfoDto>?)> GetAllTeachers();
@@ -118,6 +119,7 @@ namespace viko_api.Services
                         PasswordHash = request.Password,
                         Phone = request.Phone,
                         RoleId = 1,
+                        UserGuid = Guid.NewGuid(),
                     };
 
                     _dbContext.Users.Add(newUser);
@@ -136,6 +138,69 @@ namespace viko_api.Services
                     await transaction.RollbackAsync();
                     throw;
                 }
+            }
+
+            public async Task<(ResponseDto, UserInfoDto?)> GetUserByGUID(string guid)
+            {
+                //Parses incoming string as GUID
+                if (!Guid.TryParse(guid, out Guid parsedGuid))
+                    return (new ResponseDto { status = false, msg = "GUID is Invalid" }, null);
+
+                //Get users to get through guid in the params
+                var getGuidUser = await _dbContext.Users
+                    .Where(e => e.UserGuid == parsedGuid)
+                    .FirstOrDefaultAsync();
+
+                //Checks if GUID provided exists.
+                if (getGuidUser == null)
+                    return (new ResponseDto { status = false, msg = "No event was found with the given GUID" }, null);
+
+                //Get User Id of User provided by the GUID
+                var userId = getGuidUser.Id;
+
+
+                var user = await _dbContext.Users
+                    .Where(user => user.Id == userId)
+                    .Join(_dbContext.Entities,
+                        u => u.EntityId,
+                        e => e.Id,
+                        (u, e) => new { u, e })
+                    .Join(_dbContext.Roles,
+                        u => u.u.RoleId,
+                        r => r.Id,
+                        (u, r) => new { u, r })
+                    .Select(join => new
+                    {
+                        UserInfoDto = new UserInfoDto
+                        {
+                            Name = join.u.e.Name,
+                            Language = join.u.e.Languages,
+                            Username = join.u.u.Username,
+                            Email = join.u.u.Email,
+                            Birthdate = join.u.u.Birthdate,
+                            Phone = join.u.u.Phone,
+                            Photo = join.u.e.Image,
+                            Role = join.r.Name,
+                            UserGuid = join.u.u.UserGuid
+
+                        },
+                    }).FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    return (new ResponseDto
+                    {
+                        status = false,
+                        msg = "User was not found"
+
+                    }, null);
+                }
+
+                return (new ResponseDto
+                {
+                    status = true,
+                    msg = "User was found and sent"
+                }, user.UserInfoDto);
             }
             public async Task<(ResponseDto, UserInfoDto?)> GetUserById(long id)
             {
@@ -160,7 +225,8 @@ namespace viko_api.Services
                             Birthdate = join.u.u.Birthdate,
                             Phone = join.u.u.Phone,
                             Photo = join.u.e.Image,
-                            Role = join.r.Name
+                            Role = join.r.Name,
+                            UserGuid = join.u.u.UserGuid
 
                         },
                     }).FirstOrDefaultAsync();
@@ -182,7 +248,9 @@ namespace viko_api.Services
                 }, user.UserInfoDto);
             }
 
-            //Refactor: Erase and send id directly from frontend
+
+
+            //Refactor: Erase and send guid directly from frontend
             public async Task<TeacherShortInfoDto> GetTeacherByUsername(string teacherUsername)
             {
                 var teacher = await _dbContext.Users
@@ -319,6 +387,7 @@ namespace viko_api.Services
                         Phone = users.u.u.Phone,
                         Email = users.u.u.Email,
                         Birthdate = users.u.u.Birthdate,
+                        UserGuid = users.u.u.UserGuid,
                     })
                     .ToListAsync();
 

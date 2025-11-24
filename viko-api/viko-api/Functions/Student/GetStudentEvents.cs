@@ -39,67 +39,6 @@ public class GetStudentEvents
             var userEvent = await _eventService.GetStudentEvents(userid); //deactivate to API Test
             var eventsFetched = userEvent.Item2;
 
-            //API Test
-            //var eventsFetched = new List<EventsDto>
-            //{
-            //    new EventsDto
-            //    {
-            //        Title = "Tech Summit 2025",
-            //        Image = "https://example.com/image.jpg",
-            //        Description = "Um evento de tecnologia e inovação.",
-            //        Teacher = "Filipe Vaz",
-            //        Category = "Technology",
-            //        Location = "Lisboa",
-            //        Language = "Portuguese, English",
-            //        StartDate = DateTime.UtcNow.AddDays(5),
-            //        EndDate = DateTime.UtcNow.AddDays(6),
-            //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
-            //        EventStatus = 3
-            //    },
-            //    new EventsDto
-            //    {
-            //        Title = "Bread Summit 2025",
-            //        Image = "https://example.com/image.jpg",
-            //        Description = "Um evento de tecnologia e inovação.",
-            //        Teacher = "Filipe Vaz",
-            //        Category = "Technology",
-            //        Location = "Lisboa",
-            //        Language = "Portuguese, English",
-            //        StartDate = DateTime.UtcNow.AddDays(5),
-            //        EndDate = DateTime.UtcNow.AddDays(6),
-            //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
-            //        EventStatus = 1
-            //    },
-            //    new EventsDto
-            //    {
-            //        Title = "Wine Summit 2025",
-            //        Image = "https://example.com/image.jpg",
-            //        Description = "Um evento de tecnologia e inovação.",
-            //        Teacher = "Filipe Vaz",
-            //        Category = "Technology",
-            //        Location = "Lisboa",
-            //        Language = "Portuguese, English",
-            //        StartDate = DateTime.UtcNow.AddDays(5),
-            //        EndDate = DateTime.UtcNow.AddDays(6),
-            //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
-            //        EventStatus = 2
-            //    },
-            //    new EventsDto
-            //    {
-            //        Title = "Juice Summit 2025",
-            //        Image = "https://example.com/image.jpg",
-            //        Description = "Um evento de tecnologia e inovação.",
-            //        Teacher = "Filipe Vaz",
-            //        Category = "Technology",
-            //        Location = "Lisboa",
-            //        Language = "Portuguese, English",
-            //        StartDate = DateTime.UtcNow.AddDays(5),
-            //        EndDate = DateTime.UtcNow.AddDays(6),
-            //        RegistrationDeadline = DateTime.UtcNow.AddDays(3),
-            //        EventStatus = 1
-            //    }
-            //};
-
             if (userEvent.Item1.status == false)
             {
                 var res = req.CreateResponse(HttpStatusCode.OK);

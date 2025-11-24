@@ -16,5 +16,6 @@ namespace viko_api.Models.Dto
         public DateOnly Birthdate { get; set; }
         public string Phone { get; set; }
         public string? Photo {  get; set; }
+        public Guid UserGuid { get; set; }
     }
 }

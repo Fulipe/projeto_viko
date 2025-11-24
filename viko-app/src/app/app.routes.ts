@@ -22,6 +22,8 @@ import { SearchEventComponent } from './pages/private/search-event/search-event.
 import { DashboardAdminComponent } from './pages/private/admin/dashboard-admin/dashboard-admin.component';
 import { AdminNewEventComponent } from './pages/private/admin/admin-new-event/admin-new-event.component';
 import { TeacherNewEventComponent } from './pages/private/teacher/teacher-new-event/teacher-new-event.component';
+import { ViewUserComponent } from './pages/private/view-user/view-user.component';
+import { userResolver } from './resolvers/user.resolver';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -29,7 +31,7 @@ export const routes: Routes = [
     { path: 'unauthorized', component: UnauthorizedComponent },
     
     //Error page if event is not found
-    { path: 'event/notfound', component: NotfoundComponent },
+    { path: 'notfound', component: NotfoundComponent },
     {
         path: 'private',
         canActivate: [authGuard],
@@ -59,7 +61,6 @@ export const routes: Routes = [
                     redirectMap: {
                         Student: '/private/student/myevents',
                         Teacher: '/private/teacher/myevents',
-                        // Admin: '/private/admin/dashboard'
                     }
                 }
             },
@@ -90,22 +91,17 @@ export const routes: Routes = [
             },
 
             {
-                path: 'teacher/event/newevent',
-                component: TeacherNewEventComponent,
-                canActivate: [roleGuard],
-                data: { roles: ['Teacher'] }
-            },
-            {
-                path: 'admin/event/newevent',
-                component: AdminNewEventComponent,
-                canActivate: [roleGuard],
-                data: { roles: ['Admin'] }
-            },
-
-            {
                 path: 'event/:guid',
                 component: ViewEventComponent,
                 resolve: { event: eventResolver },
+            },
+
+            {
+                path: 'user/:guid',
+                component: ViewUserComponent,
+                resolve: { user: userResolver },
+                canActivate: [roleGuard],
+                data: {roles: ['Teacher', 'Admin']}
             },
 
             //Student
@@ -138,6 +134,14 @@ export const routes: Routes = [
                 data: { roles: ['Teacher'] }
             },
 
+            {
+                path: 'teacher/event/newevent',
+                component: TeacherNewEventComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Teacher'] }
+            },
+
+
             //Admin
             {
                 path: 'admin/dashboard',
@@ -145,9 +149,13 @@ export const routes: Routes = [
                 canActivate: [roleGuard],
                 data: {roles: ['Admin']}
             },
-            // {
-            //     //admin/myevents
-            // }
+
+            {
+                path: 'admin/event/newevent',
+                component: AdminNewEventComponent,
+                canActivate: [roleGuard],
+                data: { roles: ['Admin'] }
+            },
         ]
     },
     { path: '**', redirectTo: 'private/home', pathMatch: 'full' },

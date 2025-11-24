@@ -15,14 +15,14 @@ using viko_api.Services;
 
 namespace viko_api.Functions;
 
-public class GetUser
+public class GetUserProfile
 {
-    private readonly ILogger<GetUser> _logger;
+    private readonly ILogger<GetUserProfile> _logger;
     private readonly JWTService _jwtService;
     private readonly IConfiguration _config;
     private readonly IUserService _userService;
 
-    public GetUser(ILogger<GetUser> logger, JWTService jwtservice, IUserService userService, IConfiguration config)
+    public GetUserProfile(ILogger<GetUserProfile> logger, JWTService jwtservice, IUserService userService, IConfiguration config)
     {
         _logger = logger;
         _jwtService = jwtservice;
@@ -30,7 +30,7 @@ public class GetUser
         _userService = userService;        
     }
 
-    [Function("GetUser")]
+    [Function("GetUserProfile")]
     public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Function, "get")] HttpRequestData req, FunctionContext context)
     {
         var roleCheck = await RoleValidator.RequireRole(context, req, "Admin", "Teacher", "Student");

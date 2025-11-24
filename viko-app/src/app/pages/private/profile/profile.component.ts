@@ -90,7 +90,8 @@ export class ProfileComponent implements OnInit {
           birthdate: u.Birthdate ?? u.birthdate ?? '',
           phone: u.Phone ?? u.phone ?? '',
           photo: u.Photo ?? u.photo ?? null,
-          role: u.Role ?? u.role ?? ''
+          role: u.Role ?? u.role ?? '',
+          userGuid: u.UserGuid ?? u.userGuid ?? ''
         }
 
         const { countryCode, number } = splitDialAndNumber(map.phone)

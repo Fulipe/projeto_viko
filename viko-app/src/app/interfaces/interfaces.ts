@@ -29,6 +29,7 @@ export interface UserInfo {
     phone: string;
     photo: string;
     role: string;
+    userGuid: string;
 }
 
 export interface EventItem {

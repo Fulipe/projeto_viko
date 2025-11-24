@@ -2,28 +2,40 @@
     <h2 class="text-xl font-semibold text-blue-800 mb-4">Registered Students</h2>
 
     @if (registration.length === 0 && !loading) {
-        <p class="text-gray-600 italic">No registrations yet</p>
+    <p class="text-gray-600 italic">No registrations yet</p>
     } @else if (registration.length > 0 && !loading) {
-        <table class="min-w-full">
-            <thead>
-                <tr class="text-left text-blue-900 "> 
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                
-                @for (r of registration; track $index) {
-                    <tr class="text-left text-blue-500">
-                        <td class="">{{r.name}}</td>
-                        <td class="">{{r.username}}</td>
-                        <td class="">{{r.email}}</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+    <table class="min-w-full">
+        <thead>
+            <tr class="text-left text-blue-900 ">
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for (r of registration; track $index) {
+            <tr class="text-left text-blue-500">
+                <td class="">
+                    <a href="/private/user/{{r.userGuid}}">
+                        {{r.name}}
+                    </a>
+                </td>
+                <td class="">
+                    <a href="/private/user/{{r.userGuid}}">
+                        {{r.username}}
+                    </a>
+                </td>
+                <td class="">
+                    <a href="/private/user/{{r.userGuid}}">
+                        {{r.email}}
+                    </a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
     } @else {
-        <p class="text-gray-600">Loading...</p>
+    <p class="text-gray-600">Loading...</p>
     }
 </div>

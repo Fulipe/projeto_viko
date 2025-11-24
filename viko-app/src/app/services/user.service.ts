@@ -20,7 +20,7 @@ export class UserService {
   
   //Profile
   userInfo():Observable<UserInfo | false>{
-    return this.http.get<any>(`${environment.apiUrl}/GetUser`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetUserProfile`).pipe(
       map((response) => {
         if(response?.userLogged){
           return response.userLogged;
@@ -31,11 +31,9 @@ export class UserService {
       })
     )
   }
-
   userUpdate(user: UserInfo):Observable<UserInfo>{
     return this.http.post<any>(`${environment.apiUrl}/UpdateUser`, user)
   }
-
   getAllTeachers():Observable<any>{
     return this.http.get<any>(`${environment.apiUrl}/GetTeachers`).pipe(
       map((res)=>{
@@ -59,8 +57,18 @@ export class UserService {
       })
     )
   }
-
   updateUserRole(username: string, role: string): Observable<any>{
     return this.http.post<any>(`${environment.apiUrl}/UpdateUserRole`, {username, role})
+  }
+  viewUser(guid: string | null):Observable<UserInfo | null>{
+    return this.http.get<any>(`${environment.apiUrl}/GetUserViewUser?guid=${guid}`).pipe(
+      map((res) => {
+        if (res?.userFetched){
+          return res.userFetched
+        }
+
+        return null
+      })
+    )
   }
 }
