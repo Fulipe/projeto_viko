@@ -41,7 +41,7 @@ public class DeleteEvent
         if (hideEvent.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.NotModified);
-            await badResponse.WriteStringAsync(hideEvent.msg);
+            await badResponse.WriteAsJsonAsync(new { status = hideEvent.status, msg = hideEvent.msg });
             return badResponse;
         }
 

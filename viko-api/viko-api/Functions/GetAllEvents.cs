@@ -31,17 +31,19 @@ public class GetAllEvents
             return roleCheck;
 
         var events = await _eventService.GetAllPublicEvents();
+
+        var responseDto = events.Item1;
         var eventsFetched = events.Item2;
 
         if (events.Item1.status == false)
         {
             var res = req.CreateResponse(HttpStatusCode.OK);
-            await res.WriteAsJsonAsync(new { events.Item1.msg });
+            await res.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, eventsFetched });
             return res;
         }
 
         var response = req.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(new { eventsFetched, events.Item1.msg });
+        await response.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, eventsFetched });
         return response;    
 
     }

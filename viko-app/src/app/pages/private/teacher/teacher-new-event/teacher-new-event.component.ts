@@ -190,18 +190,17 @@ export class TeacherNewEventComponent {
     this.eventService.teacherCreateEvent(this.saveNewEvent()).subscribe({
       next: (res) => {        
         // Redirect after 1,5 seconds
-        if (this.roleSaved == "Teacher") { 
-          setTimeout(() => this.router.navigate(['/private/teacher/myevents']), 1500);
-        }
+        setTimeout(() => this.router.navigate(['/private/teacher/myevents']), 1500);
         
-        if (this.roleSaved == "Admin") {
-          setTimeout(() => this.router.navigate(['/private/search']), 1500);
-        }
-        this.successMessage = 'Event created successfully!';
+        this.successMessage = res.msg ?? 'Event created successfully!';
+        alert(this.successMessage)
+
         this.isSubmitting = false;
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Failed to create event';
+        this.errorMessage = err.error?.msg || 'Failed to create event';
+        alert(this.errorMessage)
+
         this.isSubmitting = false;
       }
     });

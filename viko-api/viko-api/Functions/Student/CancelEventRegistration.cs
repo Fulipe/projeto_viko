@@ -48,18 +48,18 @@ public class CancelEventRegistration
             if (registration.status == false)
             {
                 var badRes = req.CreateResponse(HttpStatusCode.NotFound);
-                await badRes.WriteStringAsync(registration.msg);
+                await badRes.WriteAsJsonAsync(new { status = registration.status, msg = registration.msg });
                 return badRes;
             }
 
             var res = req.CreateResponse(HttpStatusCode.OK);
-            await res.WriteAsJsonAsync(new { Status = registration.status, Msg = registration.msg });
+            await res.WriteAsJsonAsync(new { status = registration.status, msg = registration.msg });
             return res;
         }
         else
         {
             var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteStringAsync(detachid.msg);
+            await badresponse.WriteAsJsonAsync(new { status = detachid.status, msg = detachid.msg });
             return badresponse;
         }
     }

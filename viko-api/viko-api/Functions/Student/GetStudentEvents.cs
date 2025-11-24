@@ -37,24 +37,26 @@ public class GetStudentEvents
 
             ////Sends user ID to event Service
             var userEvent = await _eventService.GetStudentEvents(userid); //deactivate to API Test
+
+            var responseDto = userEvent.Item1;
             var eventsFetched = userEvent.Item2;
 
             if (userEvent.Item1.status == false)
             {
                 var res = req.CreateResponse(HttpStatusCode.OK);
-                await res.WriteAsJsonAsync(new { userEvent.Item1.msg });
+                await res.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, eventsFetched});
                 return res;
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new { eventsFetched, userEvent.Item1.msg});
+            await response.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, eventsFetched});
             return response;
 
         }
         else
         {
             var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteStringAsync(detachid.msg);
+            await badresponse.WriteAsJsonAsync(new { status = detachid.status, msg = detachid.msg});
             return badresponse;
         }
     }

@@ -35,12 +35,12 @@ public class GetAllUsers
         if (responseDto.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.NotFound);
-            await badResponse.WriteStringAsync(responseDto.msg);
+            await badResponse.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, users = usersList });
             return badResponse;
         }
 
         var res = req.CreateResponse(HttpStatusCode.OK);
-        await res.WriteAsJsonAsync(new { responseDto, users = usersList });
+        await res.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, users = usersList });
         return res;
     }
 }

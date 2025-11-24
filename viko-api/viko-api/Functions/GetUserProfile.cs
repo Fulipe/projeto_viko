@@ -39,7 +39,7 @@ public class GetUserProfile
 
         var detachid = _jwtService.DetachInfo(req);
 
-        var userRole = context.Items["UserRole"];
+        //var userRole = context.Items["UserRole"];
 
         if(detachid.status == true)
         {
@@ -48,22 +48,24 @@ public class GetUserProfile
             //Sends user ID to User Service
             var user = await _userService.GetUserById(userid);
 
+            var responseDto = user.Item1;
+            var userLogged = user.Item2;
+
             if (user.Item1.status == false)
             {
                 var res = req.CreateResponse(HttpStatusCode.NotFound);
-                await res.WriteStringAsync(user.Item1.msg);
+                await res.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, userLogged });
                 return res;
             }
 
-            var userLogged = user.Item2;
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new { userLogged, Role = userRole });
+            await response.WriteAsJsonAsync(new {status = responseDto.status, msg = responseDto.msg, userLogged});
             return response;
 
         } else {
             var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteStringAsync(detachid.msg);
+            await badresponse.WriteAsJsonAsync(new { status = detachid.status, msg = detachid.msg});
             return badresponse;
         } 
     }

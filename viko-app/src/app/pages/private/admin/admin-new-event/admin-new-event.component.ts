@@ -198,12 +198,16 @@ export class AdminNewEventComponent {
         // Redirect after 1,5 seconds
         setTimeout(() => this.router.navigate(['/private/search']), 1500);
         
-        this.successMessage = 'Event created successfully!';
+        this.successMessage = res.msg ?? 'Event created successfully!';
+        alert(this.successMessage)
+
         this.isSubmitting = false;
     
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Failed to create event';
+        this.errorMessage = err.error?.msg || 'Failed to create event';
+        alert(this.errorMessage)
+        
         this.isSubmitting = false;
       }
     });

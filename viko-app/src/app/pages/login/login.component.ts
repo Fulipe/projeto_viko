@@ -38,11 +38,15 @@ export class LoginComponent {
       next: (res) => {
         if (res.token) {
           this.router.navigate(['/private/home'])
+          alert(res.msg)
+        } else {
+          this.loginAlert = true;
+          this.msg = res.msg ?? "Authentication failed.";
         }
       },
       error: (err) => {
         this.loginAlert = true;
-        this.msg = "Authentication failed. Please check you credentials."
+        this.msg = err.error?.msg ?? "Authentication failed.";
         console.error('Login failed', err)
       }
     });

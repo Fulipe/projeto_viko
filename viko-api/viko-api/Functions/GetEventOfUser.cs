@@ -38,15 +38,18 @@ public class GetEventOfUser
 
         var getEventOfUser = await _eventsService.GetEventOfUser(guid);
 
+        var responseDto = getEventOfUser.Item1;
+        var eventsList = getEventOfUser.Item2;
+
         if (getEventOfUser.Item1.status == false)
         {
             var badres = req.CreateResponse(HttpStatusCode.NotFound);
-            await badres.WriteStringAsync(getEventOfUser.Item1.msg);
+            await badres.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, eventsList = eventsList });
             return badres;
         }
 
         var res = req.CreateResponse(HttpStatusCode.OK);
-        await res.WriteAsJsonAsync(new { msg = getEventOfUser.Item1.msg, eventsList = getEventOfUser.Item2 });
+        await res.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, eventsList = eventsList });
         return res;
     }
 }

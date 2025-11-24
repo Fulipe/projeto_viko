@@ -24,6 +24,7 @@ import { AdminNewEventComponent } from './pages/private/admin/admin-new-event/ad
 import { TeacherNewEventComponent } from './pages/private/teacher/teacher-new-event/teacher-new-event.component';
 import { ViewUserComponent } from './pages/private/view-user/view-user.component';
 import { userResolver } from './resolvers/user.resolver';
+import { ForbiddenComponent } from './pages/forbidden/forbidden.component';
 
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
@@ -32,6 +33,8 @@ export const routes: Routes = [
     
     //Error page if event is not found
     { path: 'notfound', component: NotfoundComponent },
+    //Error page if user dont have enough permissions
+    { path: 'forbidden', component: ForbiddenComponent },
     {
         path: 'private',
         canActivate: [authGuard],

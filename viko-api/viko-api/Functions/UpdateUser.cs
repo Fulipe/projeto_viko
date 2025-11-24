@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using viko_api.Models.Dto;
 using viko_api.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace viko_api.Functions;
 
@@ -42,7 +43,7 @@ public class UpdateUser
             if (body == null)
             {
                 var badresponse = req.CreateResponse(HttpStatusCode.BadRequest);
-                await badresponse.WriteAsJsonAsync("Body is null or invalid");
+                await badresponse.WriteStringAsync("Body is null or invalid");
                 return badresponse;
             }
             var update = await _userService.UpdateUser(userid, body);
@@ -52,8 +53,8 @@ public class UpdateUser
                 var response = req.CreateResponse(HttpStatusCode.Created);
                 await response.WriteAsJsonAsync(new
                 {
-                    Status = update.status,
-                    Message = update.msg
+                    status = update.status,
+                    msg = update.msg
                 });
                 return response;
             }
@@ -62,8 +63,8 @@ public class UpdateUser
                 var response = req.CreateResponse(HttpStatusCode.NotModified);
                 await response.WriteAsJsonAsync(new
                 {
-                    Status = update.status,
-                    Message = update.msg
+                    status = update.status,
+                    msg = update.msg
                 });
                 return response;
             }
@@ -71,7 +72,11 @@ public class UpdateUser
         else
         {
             var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteStringAsync(detachid.msg);
+            await badresponse.WriteAsJsonAsync(new
+            {
+                status = detachid.status,
+                msg = detachid.msg
+            });
             return badresponse;
         }
     }

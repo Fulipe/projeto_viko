@@ -37,21 +37,27 @@ public class GetUserViewUser
         }
 
         var getUser = await _userService.GetUserByGUID(guid);
+        var responseDto = getUser.Item1;
+        var userFetched = getUser.Item2; 
 
-        if (getUser.Item1.status == false)
+        if (responseDto.status == false)
         {
             var res = req.CreateResponse(HttpStatusCode.NotFound);
-            await res.WriteStringAsync(getUser.Item1.msg);
+            await res.WriteAsJsonAsync(new{
+                status = responseDto.status,
+                msg = responseDto.msg,
+                userFetched = userFetched
+            });
             return res;
         }
 
-        var userFetched = getUser.Item2;
 
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(
             new
             {
-                msg = getUser.Item1.msg,
+                status = responseDto.status,
+                msg = responseDto.msg,
                 userFetched = userFetched
             });
         return response;

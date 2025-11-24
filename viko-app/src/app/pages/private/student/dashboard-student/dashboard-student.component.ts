@@ -100,7 +100,8 @@ export class DashboardStudentComponent implements OnInit {
         this.finishedEvents =
           events
             .filter(event => event.eventStatus != 1)
-            .filter(event => event.eventStatus != 2);
+            .filter(event => event.eventStatus != 2)
+            .filter(event => event.isViewed == true);
 
         this.loading = false;
 

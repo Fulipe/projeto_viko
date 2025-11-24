@@ -48,12 +48,12 @@ public class CreateEventAdmin
         if (eventCreated.status == false)
         {
             var res = req.CreateResponse(HttpStatusCode.Conflict);
-            await res.WriteStringAsync(eventCreated.msg);
+            await res.WriteAsJsonAsync(new {status = eventCreated.status, msg = eventCreated.msg });
             return res;
         }
 
         var response = req.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(new { eventCreated });
+        await response.WriteAsJsonAsync(new { status = eventCreated.status, msg = eventCreated.msg});
         return response;
 
         //Return full EventDto

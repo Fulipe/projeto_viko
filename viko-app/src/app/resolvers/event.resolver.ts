@@ -3,10 +3,12 @@ import { EventFetched } from '../interfaces/interfaces';
 import { EventService } from '../services/event.service';
 import { inject } from '@angular/core';
 import { catchError, map, of } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 export const eventResolver: ResolveFn<EventFetched | null> = (route) => {
   const guid = route.paramMap.get('guid');
   const eventsService = inject(EventService);
+  const authService = inject(AuthService)
   const router = inject(Router);
 
   // Verifies format of guid before making a request
@@ -23,6 +25,10 @@ export const eventResolver: ResolveFn<EventFetched | null> = (route) => {
       if (!event) {
         router.navigate(['/notfound']);
         return null;
+      } 
+      if (!event.isViewed && authService.getRole() == "Student") {
+        router.navigate(['/forbidden']);
+        return null;        
       }
       return event;
     }),

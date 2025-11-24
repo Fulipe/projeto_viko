@@ -31,6 +31,11 @@ public class EditEvent
 
         var request = await req.ReadFromJsonAsync<UpdateEventRequest>();
 
+        Console.WriteLine();
+        Console.WriteLine(request);
+        Console.WriteLine();
+        
+
         if (request == null)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
@@ -43,7 +48,7 @@ public class EditEvent
         if (updateEvent.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.NotFound);
-            await badResponse.WriteStringAsync(updateEvent.msg);
+            await badResponse.WriteAsJsonAsync(new { status = updateEvent.status, msg = updateEvent.msg });
             return badResponse;
         }
 

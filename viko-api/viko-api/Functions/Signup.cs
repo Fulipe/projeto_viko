@@ -42,7 +42,7 @@ public class Signup
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await badResponse.WriteAsJsonAsync(new
             {
-                Message = "Passwords confirmations do not match."
+                msg = "Passwords confirmations do not match."
             });
             return badResponse;
         }
@@ -52,7 +52,7 @@ public class Signup
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await badResponse.WriteAsJsonAsync(new
             {
-                Message = "Please insert your birth date."
+                msg = "Please insert your birth date."
             });
             return badResponse;
         }
@@ -66,7 +66,7 @@ public class Signup
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await badResponse.WriteAsJsonAsync(new
             {
-                message = "Validation failed",
+                msg = "Validation failed",
                 errors = validationResults.Select(r => r.ErrorMessage).ToList()
             });
             return badResponse;
@@ -78,8 +78,8 @@ public class Signup
         {
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
             await badResponse.WriteAsJsonAsync(new {
-                Status = user.status,
-                Message = user.msg
+                status = user.status,
+                msg = user.msg
             });
             return badResponse;
         }
@@ -87,8 +87,8 @@ public class Signup
             var response = req.CreateResponse(HttpStatusCode.Created);
             await response.WriteAsJsonAsync(new
             {
-                Status = user.status,
-                Message = user.msg
+                status = user.status,
+                msg = user.msg
             });
             return response;
         }

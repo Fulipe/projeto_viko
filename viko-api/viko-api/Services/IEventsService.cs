@@ -660,6 +660,9 @@ namespace viko_api.Services
                     if (!string.IsNullOrEmpty(eventUpdate.Category))
                         eventToUpdate.ev.Category = eventUpdate.Category;
 
+                    if (!string.IsNullOrEmpty(eventUpdate.City))
+                        eventToUpdate.ev.City = eventUpdate.City;
+
                     if (!string.IsNullOrEmpty(eventUpdate.Description))
                         eventToUpdate.ev.Description = eventUpdate.Description;
 

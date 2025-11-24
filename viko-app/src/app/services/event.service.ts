@@ -16,7 +16,8 @@ export class EventService {
   private router = inject(Router)
 
   getStudentEvents(): Observable<EventFetched | false> {
-    return this.http.get<any>(`${environment.apiUrl}/GetStudentEvents`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetStudentEvents`)
+    .pipe(
       map((res) => {
         // console.log(res)
         if (res?.eventsFetched) {
@@ -29,7 +30,8 @@ export class EventService {
   }
 
   getTeacherEvents():Observable<EventFetched | false>{
-    return this.http.get<any>(`${environment.apiUrl}/GetTeacherEvents`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetTeacherEvents`)
+    .pipe(
       map((res) => {
         // console.log(res)
         if (res?.eventsFetched) {
@@ -42,7 +44,8 @@ export class EventService {
   }
 
   getAllEvents(): Observable<EventFetched | false> {
-    return this.http.get<any>(`${environment.apiUrl}/GetAllEvents`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetAllEvents`)
+    .pipe(
       map((res) => {
         // console.log(res)
         if (res?.eventsFetched) {
@@ -54,15 +57,16 @@ export class EventService {
     )
   }
 
-  teacherCreateEvent(dto: TeacherCreateEventDto): Observable<TeacherCreateEventDto>{
+  teacherCreateEvent(dto: TeacherCreateEventDto): Observable<any>{
     return this.http.post<TeacherCreateEventDto>(`${environment.apiUrl}/CreateEventTeacher`, dto);
   }
-  adminCreateEvent(dto: AdminCreateEventDto): Observable<AdminCreateEventDto>{
+  adminCreateEvent(dto: AdminCreateEventDto): Observable<any>{
     return this.http.post<AdminCreateEventDto>(`${environment.apiUrl}/CreateEventAdmin`, dto)
   }
 
   GetEvent(guid: string | null): Observable<EventFetched | null>{
-    return this.http.get<any>(`${environment.apiUrl}/GetEvent?guid=${guid}`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetEvent?guid=${guid}`)
+    .pipe(
       map((res) => {
         if (res?.eventFetched) {
           return res.eventFetched
@@ -74,15 +78,16 @@ export class EventService {
   }
 
   getEventOfUser(guid: string | null): Observable<EventFetched | null>{
-    return this.http.get<any>(`${environment.apiUrl}/GetEventOfUser?guid=${guid}`).pipe(
-      map((res) => {
-        if (res?.eventsList) {
-          return res.eventsList
-        }
+    return this.http.get<any>(`${environment.apiUrl}/GetEventOfUser?guid=${guid}`)
+    // .pipe(
+    //   map((res) => {
+    //     if (res?.eventsList) {
+    //       return res.eventsList
+    //     }
 
-        return null
-      }), 
-    )
+    //     return null
+    //   }), 
+    // )
   }
 
   newRegistration(guid: string | null): Observable<any>{
@@ -94,15 +99,16 @@ export class EventService {
   }
 
   getRegistrations(guid: string | null):Observable<any>{
-    return this.http.get<any>(`${environment.apiUrl}/GetRegistrations?guid=${guid}`).pipe(
-      map((res) => {
-        if (res?.registrationsList){
-          return res.registrationsList
-        }
+    return this.http.get<any>(`${environment.apiUrl}/GetRegistrations?guid=${guid}`)
+    // .pipe(
+    //   map((res) => {
+    //     if (res?.registrationsList){
+    //       return res.registrationsList
+    //     }
 
-        return null
-      })
-    )
+    //     return null
+    //   })
+    // )
   }
 
   editEvent (guid: string | null, eventUpdate: EventFetched): Observable<any>{

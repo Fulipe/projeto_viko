@@ -37,17 +37,20 @@ public class GetRegistrations
             return badreq;
         }
 
-        var registrations = await _eventsService.RegistrationsList(guid);
+        var registrationsList = await _eventsService.RegistrationsList(guid);
 
-        if (registrations.Item1.status == false)
+        var responseDto = registrationsList.Item1;
+        var registrations = registrationsList.Item2;
+
+        if (responseDto.status == false)
         {
             var badres = req.CreateResponse(HttpStatusCode.NotFound);
-            await badres.WriteStringAsync(registrations.Item1.msg);
+            await badres.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, registrationsList = registrations });
             return badres;
         }
 
         var res = req.CreateResponse(HttpStatusCode.OK);
-        await res.WriteAsJsonAsync(new { msg = registrations.Item1.msg, registrationsList = registrations.Item2 });
+        await res.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, registrationsList = registrations });
         return res;
     }
 }

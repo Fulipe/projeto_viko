@@ -25,12 +25,12 @@ export class RegistrationsComponent implements OnInit {
     this.eventService.getRegistrations(this.eventGuid).subscribe({
       next: (res) => {
         if (res === null) {
-          console.log("Nenhum evento registado.");
+          console.log("No registrations found.");
           this.loading = false;
           return;
         }
-
-        const e: any = res
+        
+        const e: any = res.registrationsList
         this.registration = e
 
         this.loading = false;

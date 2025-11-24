@@ -38,19 +38,22 @@ public class GetEvent
 
         var getEvent = await _eventsService.GetEvent(guid);
 
-        if (getEvent.Item1.status == false)
+        var responseDto = getEvent.Item1;
+        var eventFetched = getEvent.Item2;
+
+        if (responseDto.status == false)
         {
             var res = req.CreateResponse(HttpStatusCode.NotFound);
             await res.WriteStringAsync(getEvent.Item1.msg);
             return res;
         }
 
-        var eventFetched = getEvent.Item2;
 
         var response = req.CreateResponse(HttpStatusCode.OK);
         await response.WriteAsJsonAsync(
             new { 
-                msg =  getEvent.Item1.msg, 
+                status = responseDto.status,
+                msg =  responseDto.msg, 
                 eventFetched = eventFetched
             });
         return response;

@@ -35,12 +35,12 @@ public class GetTeachers
         if (responseDto.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.NotFound);
-            await badResponse.WriteStringAsync(responseDto.msg);
+            await badResponse.WriteAsJsonAsync(new { status = responseDto.status, msg = responseDto.msg, teachers = teachersList });
             return badResponse;
         }
 
         var res = req.CreateResponse(HttpStatusCode.OK);
-        await res.WriteAsJsonAsync(new {responseDto, teachers = teachersList});
+        await res.WriteAsJsonAsync(new {status = responseDto.status, msg = responseDto.msg, teachers = teachersList});
         return res;
     }
 }

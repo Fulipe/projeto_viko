@@ -59,12 +59,12 @@ public class CreateEventTeacher
             if (eventCreated.status == false)
             {
                 var res = req.CreateResponse(HttpStatusCode.Conflict);
-                await res.WriteStringAsync(eventCreated.msg);
+                await res.WriteAsJsonAsync(new { status = eventCreated.status, msg = eventCreated.msg });
                 return res;
             }
 
             var response = req.CreateResponse(HttpStatusCode.OK);
-            await response.WriteAsJsonAsync(new { eventCreated });
+            await response.WriteAsJsonAsync(new { status = eventCreated.status, msg = eventCreated.msg });
             return response;
 
             //Return full EventDto
@@ -72,7 +72,7 @@ public class CreateEventTeacher
         else
         {
             var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteStringAsync(detachid.msg);
+            await badresponse.WriteAsJsonAsync(new { status = detachid.status, msg = detachid.msg });
             return badresponse;
         }
     }

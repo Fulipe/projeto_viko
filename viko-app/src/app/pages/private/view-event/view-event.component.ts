@@ -160,6 +160,7 @@ export class ViewEventComponent implements OnInit {
 
     this.selectedLanguages.push(lang.name)
 
+    this.eventEdit.get('language')?.setValue(this.selectedLanguages);
     this.eventEdit.markAsDirty();
     this.inputEl.nativeElement.value = ''
 
@@ -167,6 +168,7 @@ export class ViewEventComponent implements OnInit {
 
   removeLanguage(lang: any): void {
     this.selectedLanguages = this.selectedLanguages.filter(l => l !== lang);
+    this.eventEdit.get('language')?.setValue(this.selectedLanguages);
     this.eventEdit.markAsDirty();
   }
 
@@ -227,7 +229,7 @@ export class ViewEventComponent implements OnInit {
   getAllTeachers(){
     this.userService.getAllTeachers().subscribe({
       next: (res)=>{
-        const e:any = res
+        const e:any = res.teachers
         const teachers = e
 
         this.teachers = teachers
@@ -272,12 +274,15 @@ export class ViewEventComponent implements OnInit {
     };
 
     this.eventService.editEvent(this.eventGuid, updatedEvent).subscribe({
-      next: () => {
-        console.log('Evento guardado com sucesso!');
+      next: (res) => {
+        console.log(res.msg ?? 'Event saved successfully!');
+        alert(res.msg ?? 'Event saved successfully!')
         this.reloadEvent()
       },
       error: (err) => {
-        console.error('Erro ao guardar evento:', err);
+        console.error('Error while saving event:', err);
+        console.error(err.error.msg ?? 'Event saved successfully!');
+        alert(err.error.msg ?? 'Event saved successfully!')
       }
     });
   }
@@ -391,7 +396,7 @@ export class ViewEventComponent implements OnInit {
         }
       },
       error: (_) => {
-        console.error("Error while loading registered events: ", _)
+        console.error(_.error.msg ?? "Error while loading registered events: ", _)
       }
     })
   }
@@ -400,16 +405,16 @@ export class ViewEventComponent implements OnInit {
   registerToEvent() {
     this.eventService.newRegistration(this.eventGuid).subscribe({
       next: (res) => {
-        console.log('Registered!');
 
         console.log(this.showRegisterButton)
         console.log(this.isRegistered)
 
-        alert("Registration Successfull in this event!")
+        alert(res.msg ?? "Registration Successfull in this event!")
         window.location.reload()
       },
       error: (err) => {
-        console.log("Couldn't register in this event")
+        alert(err.error.msg ?? "Couldn't register in this event")
+        console.log(err.error.msg ?? "Couldn't register in this event")
       }
     })
   }
@@ -417,16 +422,16 @@ export class ViewEventComponent implements OnInit {
   unregister(){
     this.eventService.cancelRegistration(this.eventGuid).subscribe({
       next: (res) => {
-        console.log('Registration Canceled!');
                 
         console.log(this.showRegisterButton)
         console.log(this.isRegistered)
         
-        alert("Registration Cancelled!")
+        alert(res.msg ?? "Registration Cancelled!")
         window.location.reload()
       },
       error: (err) => {
-        console.log("Couldn't cancel registration to this event")
+        alert(err.error.msg ?? "Couldn't cancel registration to this event")
+        console.log(err.error.msg ?? "Couldn't cancel registration to this event")
       }
     })
   }

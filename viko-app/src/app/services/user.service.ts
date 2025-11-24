@@ -20,7 +20,8 @@ export class UserService {
   
   //Profile
   userInfo():Observable<UserInfo | false>{
-    return this.http.get<any>(`${environment.apiUrl}/GetUserProfile`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetUserProfile`)
+    .pipe(
       map((response) => {
         if(response?.userLogged){
           return response.userLogged;
@@ -35,33 +36,36 @@ export class UserService {
     return this.http.post<any>(`${environment.apiUrl}/UpdateUser`, user)
   }
   getAllTeachers():Observable<any>{
-    return this.http.get<any>(`${environment.apiUrl}/GetTeachers`).pipe(
-      map((res)=>{
-        console.log(res)
-        if(res?.teachers){
-          return res.teachers
-        }
+    return this.http.get<any>(`${environment.apiUrl}/GetTeachers`)
+    // .pipe(
+    //   map((res)=>{
+    //     console.log(res)
+    //     if(res?.teachers){
+    //       return res.teachers
+    //     }
 
-        return false;
-      })
-    )
+    //     return false;
+    //   })
+    // )
   }
   getAllUsers():Observable<any>{
-    return this.http.get<any>(`${environment.apiUrl}/GetAllUsers`).pipe(
-      map((res) => {
-        if(res?.users){
-          return res.users
-        }
+    return this.http.get<any>(`${environment.apiUrl}/GetAllUsers`)
+    // .pipe(
+    //   map((res) => {
+    //     if(res?.users){
+    //       return res.users
+    //     }
 
-        return false;
-      })
-    )
+    //     return false;
+    //   })
+    // )
   }
   updateUserRole(username: string, role: string): Observable<any>{
     return this.http.post<any>(`${environment.apiUrl}/UpdateUserRole`, {username, role})
   }
   viewUser(guid: string | null):Observable<UserInfo | null>{
-    return this.http.get<any>(`${environment.apiUrl}/GetUserViewUser?guid=${guid}`).pipe(
+    return this.http.get<any>(`${environment.apiUrl}/GetUserViewUser?guid=${guid}`)
+    .pipe(
       map((res) => {
         if (res?.userFetched){
           return res.userFetched

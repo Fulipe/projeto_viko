@@ -42,12 +42,12 @@ public class UpdateUserRole
         if (update.status == false)
         {
             var res = req.CreateResponse(HttpStatusCode.NotModified);
-            await res.WriteAsJsonAsync(new {Status = update.status, Msg = update.msg});
+            await res.WriteAsJsonAsync(new {status = update.status, msg = update.msg});
             return res;
         }
 
         var response = req.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(new { Status = update.status, Msg = update.msg });
+        await response.WriteAsJsonAsync(new { status = update.status, msg = update.msg });
         return response;
 
     }

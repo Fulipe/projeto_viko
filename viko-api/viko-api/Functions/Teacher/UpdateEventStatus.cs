@@ -41,7 +41,7 @@ public class UpdateEventStatus
         if (updateStatus.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.NotFound);
-            await badResponse.WriteStringAsync(updateStatus.msg);
+            await badResponse.WriteAsJsonAsync(new { status = updateStatus.status, msg = updateStatus.msg});
             return badResponse;
         }
 

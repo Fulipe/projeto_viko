@@ -41,7 +41,7 @@ public class RepublishEvent
         if (republish.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.NotModified);
-            await badResponse.WriteStringAsync(republish.msg);
+            await badResponse.WriteAsJsonAsync(new { status = republish.status, msg = republish.msg });
             return badResponse;
         }
 

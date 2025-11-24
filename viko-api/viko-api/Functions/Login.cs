@@ -9,6 +9,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 using viko_api.Models;
 using viko_api.Models.Dto;
 using viko_api.Services;
@@ -39,20 +40,20 @@ public class Login
 
         var auth = await _userService.Authenticate(body.Username, body.Password);
 
-        var user = auth.Item1;
-        var authResponse = auth.Item2;
+        var authResponse = auth.Item1;
+        var user = auth.Item2;
 
         if (user == null)
         {
             var badresponse = req.CreateResponse(HttpStatusCode.Unauthorized);
-            await badresponse.WriteAsJsonAsync(authResponse);
+            await badresponse.WriteAsJsonAsync(new { status = authResponse.status, msg = authResponse.msg });
             return badresponse;
         }
 
         var token = _jwtService.GenerateJwtToken(user);
 
         var response = req.CreateResponse(HttpStatusCode.OK);
-        await response.WriteAsJsonAsync(new {token, authResponse});
+        await response.WriteAsJsonAsync(new {status = authResponse.status, msg = authResponse.msg, token });
         return response;
 
     }

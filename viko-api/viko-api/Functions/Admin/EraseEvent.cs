@@ -41,7 +41,7 @@ public class EraseEvent
         if (eraseEvent.status == false)
         {
             var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
-            await badResponse.WriteStringAsync(eraseEvent.msg);
+            await badResponse.WriteAsJsonAsync(new { status = eraseEvent.status, msg = eraseEvent.msg });
             return badResponse;
         }
 

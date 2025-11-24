@@ -167,13 +167,13 @@ export class SignupComponent implements OnInit {
     }
 
     this.userService.createUser(this.saveUser()).subscribe({
-      next: () => {
-        console.log('User Created!');
+      next: (res) => {
+        alert(res.msg)
         this.router.navigate(['/login'])
       
       },
       error: (err) => {
-        console.error('Error creating user:', err);
+        alert(err.error?.msg ?? "Invalid Form")
       }
     });
   }
