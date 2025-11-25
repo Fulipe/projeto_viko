@@ -32,6 +32,12 @@ export interface UserInfo {
     userGuid: string;
 }
 
+export interface PasswordPayload {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string
+}
+
 export interface EventItem {
     title: string;
     guid:string;

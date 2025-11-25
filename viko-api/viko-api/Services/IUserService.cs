@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using viko_api.Models;
@@ -18,10 +19,11 @@ namespace viko_api.Services
         Task<(ResponseDto, UserInfoDto?)> GetUserById(long id);
         Task<(ResponseDto, UserInfoDto?)> GetUserByGUID(string guid);
         Task<TeacherShortInfoDto> GetTeacherByUsername(string teacherUsername);
-        Task<ResponseDto> UpdateUser (long id, UserInfoDto userinfo);
+        Task<ResponseDto> UpdateUser(long id, UserInfoDto userinfo);
+        Task<ResponseDto> ChangePassword(long id, PasswordChangeDto request);
         Task<(ResponseDto, List<TeacherShortInfoDto>?)> GetAllTeachers();
         Task<(ResponseDto, List<UserInfoDto>?)> GetAllUsers();
-        Task<ResponseDto> UpdateUserRole (string username, string role);
+        Task<ResponseDto> UpdateUserRole(string username, string role);
 
         public class UserService : IUserService
         {
@@ -34,11 +36,11 @@ namespace viko_api.Services
             public async Task<(ResponseDto, UserDto?)> Authenticate(string username, string password)
             {
                 var user = await _dbContext.Users
-                    .Where (u => u.Username == username && u.PasswordHash == password)
+                    .Where(u => u.Username == username && u.PasswordHash == password)
                     .Join(_dbContext.Roles,
                         u => u.RoleId,
                         r => r.Id,
-                        (u, r) =>  new { u, r })
+                        (u, r) => new { u, r })
                     .Join(_dbContext.Entities,
                         u => u.u.EntityId,
                         e => e.Id,
@@ -58,7 +60,8 @@ namespace viko_api.Services
                 if (user == null)
                 {
                     return (
-                        new ResponseDto {
+                        new ResponseDto
+                        {
                             status = false,
                             msg = "Authentication failed. Please check you credentials."
                         }, null
@@ -66,7 +69,8 @@ namespace viko_api.Services
                 }
 
                 return (
-                    new ResponseDto {
+                    new ResponseDto
+                    {
                         status = true,
                         msg = "Authentication successful!"
                     }, user.UserDto
@@ -134,7 +138,8 @@ namespace viko_api.Services
                     };
                     return res;
                 }
-                catch (Exception ex) {
+                catch (Exception ex)
+                {
                     await transaction.RollbackAsync();
                     throw;
                 }
@@ -241,15 +246,12 @@ namespace viko_api.Services
                     }, null);
                 }
 
-                return (new ResponseDto 
+                return (new ResponseDto
                 {
                     status = true,
-                    msg = "User was found and sent" 
+                    msg = "User was found and sent"
                 }, user.UserInfoDto);
             }
-
-
-
             //Refactor: Erase and send guid directly from frontend
             public async Task<TeacherShortInfoDto> GetTeacherByUsername(string teacherUsername)
             {
@@ -283,7 +285,7 @@ namespace viko_api.Services
                         (u, e) => new { u, e })
                     .FirstOrDefaultAsync();
 
-                if(user == null)
+                if (user == null)
                 {
                     return new ResponseDto
                     {
@@ -303,23 +305,23 @@ namespace viko_api.Services
 
                     if (!string.IsNullOrEmpty(userinfo.Phone))
                         user.u.Phone = userinfo.Phone;
-                    
+
                     if (userinfo.Birthdate != default)
                         user.u.Birthdate = userinfo.Birthdate;
 
                     if (!string.IsNullOrEmpty(userinfo.Name))
                         user.e.Name = userinfo.Name;
-                    
+
                     if (!string.IsNullOrEmpty(userinfo.Language))
                         user.e.Languages = userinfo.Language;
-                    
+
                     if (!string.IsNullOrEmpty(userinfo.Photo))
                         user.e.Image = userinfo.Photo; // base64 string
 
                     _dbContext.Users.Update(user.u);
                     _dbContext.Entities.Update(user.e);
                     await _dbContext.SaveChangesAsync();
-    
+
                     await transaction.CommitAsync();
 
                     return new ResponseDto
@@ -334,10 +336,55 @@ namespace viko_api.Services
                     return new ResponseDto
                     {
                         status = false,
-                        msg = "User did not update - " + ex.Message 
+                        msg = "User did not update - " + ex.Message
                     };
                     throw;
                 }
+
+            }
+            public async Task<ResponseDto> ChangePassword(long id, PasswordChangeDto request)
+            {
+                //When done, apply password decoding from db
+                var user = await _dbContext.Users
+                    .Where(user => user.Id == id)
+                    .FirstOrDefaultAsync();
+
+                if (user == null)
+                    return new ResponseDto { status = false, msg = "User was not found with given Id" };
+
+                if (user.PasswordHash != request.CurrentPassword)
+                    return new ResponseDto { status = false, msg = "Current password is incorrect"};
+
+                if (user.PasswordHash == request.NewPassword)
+                    return new ResponseDto { status = false, msg = "New password and current must be different " };
+
+                if (request.NewPassword != request.ConfirmPassword)
+                    return new ResponseDto { status = false, msg = "Passwords don't match" };
+
+                using var transaction = await _dbContext.Database.BeginTransactionAsync();
+                try {
+
+                    user.PasswordHash = request.NewPassword;
+
+                    _dbContext.Users.Update(user);
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return new ResponseDto { status = true, msg = "Password Changed successfully."};
+                } 
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return new ResponseDto
+                    {
+                        status = false,
+                        msg = "Password did not update - " + ex.Message
+                    };
+                    throw;
+                }
+
+
 
             }
             public async Task<(ResponseDto, List<TeacherShortInfoDto>?)> GetAllTeachers()
@@ -347,9 +394,10 @@ namespace viko_api.Services
                         u => u.EntityId,
                         e => e.Id,
 
-                        (u, e) => new {u, e})
-                    .Select( 
-                        teacher => new TeacherShortInfoDto {
+                        (u, e) => new { u, e })
+                    .Select(
+                        teacher => new TeacherShortInfoDto
+                        {
                             Id = teacher.u.Id,
                             Name = teacher.e.Name,
                             Username = teacher.u.Username,
@@ -371,13 +419,13 @@ namespace viko_api.Services
                         e => e.EntityId,
                         u => u.Id,
 
-                        (u, e) => new {u,e})
+                        (u, e) => new { u, e })
                     .Join(_dbContext.Roles,
                         u => u.u.RoleId,
                         r => r.Id,
 
-                        (u,r) => new {u,r})
-                    .Select( users => new UserInfoDto
+                        (u, r) => new { u, r })
+                    .Select(users => new UserInfoDto
                     {
                         Photo = users.u.e.Image,
                         Name = users.u.e.Name,
@@ -398,7 +446,7 @@ namespace viko_api.Services
 
                 return (new ResponseDto { status = true, msg = "Users Found" }, allUsers);
 
-                
+
             }
             public async Task<ResponseDto> UpdateUserRole(string username, string role)
             {

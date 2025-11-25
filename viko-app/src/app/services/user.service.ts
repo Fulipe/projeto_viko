@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of, tap } from 'rxjs';
-import { UserInfo } from '../interfaces/interfaces';
+import { PasswordPayload, UserInfo } from '../interfaces/interfaces';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -32,33 +32,38 @@ export class UserService {
       })
     )
   }
+
+  changePassword(dto: PasswordPayload){
+    return this.http.post<any>(`${environment.apiUrl}/ChangePassword`, dto)
+  }
+
   userUpdate(user: UserInfo):Observable<UserInfo>{
     return this.http.post<any>(`${environment.apiUrl}/UpdateUser`, user)
   }
   getAllTeachers():Observable<any>{
     return this.http.get<any>(`${environment.apiUrl}/GetTeachers`)
-    // .pipe(
-    //   map((res)=>{
-    //     console.log(res)
-    //     if(res?.teachers){
-    //       return res.teachers
-    //     }
+    .pipe(
+      map((res)=>{
+        console.log(res)
+        if(res?.teachers){
+          return res.teachers
+        }
 
-    //     return false;
-    //   })
-    // )
+        return false;
+      })
+    )
   }
   getAllUsers():Observable<any>{
     return this.http.get<any>(`${environment.apiUrl}/GetAllUsers`)
-    // .pipe(
-    //   map((res) => {
-    //     if(res?.users){
-    //       return res.users
-    //     }
+    .pipe(
+      map((res) => {
+        if(res?.users){
+          return res.users
+        }
 
-    //     return false;
-    //   })
-    // )
+        return false;
+      })
+    )
   }
   updateUserRole(username: string, role: string): Observable<any>{
     return this.http.post<any>(`${environment.apiUrl}/UpdateUserRole`, {username, role})

@@ -79,15 +79,15 @@ export class EventService {
 
   getEventOfUser(guid: string | null): Observable<EventFetched | null>{
     return this.http.get<any>(`${environment.apiUrl}/GetEventOfUser?guid=${guid}`)
-    // .pipe(
-    //   map((res) => {
-    //     if (res?.eventsList) {
-    //       return res.eventsList
-    //     }
+    .pipe(
+      map((res) => {
+        if (res?.eventsList) {
+          return res.eventsList
+        }
 
-    //     return null
-    //   }), 
-    // )
+        return null
+      }), 
+    )
   }
 
   newRegistration(guid: string | null): Observable<any>{
@@ -100,15 +100,6 @@ export class EventService {
 
   getRegistrations(guid: string | null):Observable<any>{
     return this.http.get<any>(`${environment.apiUrl}/GetRegistrations?guid=${guid}`)
-    // .pipe(
-    //   map((res) => {
-    //     if (res?.registrationsList){
-    //       return res.registrationsList
-    //     }
-
-    //     return null
-    //   })
-    // )
   }
 
   editEvent (guid: string | null, eventUpdate: EventFetched): Observable<any>{

@@ -1,10 +1,10 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../../services/user.service';
-import { LanguagesObjectFormat, UserInfo } from '../../../interfaces/interfaces';
+import { LanguagesObjectFormat, PasswordPayload, UserInfo } from '../../../interfaces/interfaces';
 import { COUNTRY_CODES } from '../../../interfaces/country-codes';
 import { splitDialAndNumber } from '../../../services/dialcodes-helper.service';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LANGUAGES } from '../../../interfaces/languages';
 
 const PHONE_PATTERN = /^[0-9+()\-\s]{6,20}$/;
@@ -62,16 +62,17 @@ export class ProfileComponent implements OnInit {
     });
 
     this.passwordForm = this.fb.group({
-      password: ['', [Validators.required, Validators.pattern(PASSWORD_PATTERN)]],
+      currentPassword: ['', [Validators.required, Validators.pattern(PASSWORD_PATTERN)]],
+      newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(PASSWORD_PATTERN)]],
       confirmPassword: ['', [Validators.required]],
-    });
+    }, { validators: [ProfileComponent.passwordsMatch] });
   };
 
   ngOnInit() {
     this.loadUser()
   }
 
-
+  //#region LoadUser
   private loadUser() {
     this.userService.userInfo().subscribe({
       next: (res: UserInfo | false) => {
@@ -124,6 +125,24 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  private fillFormEmpty() {
+    this.profileForm.patchValue({
+      username: '',
+      name: '',
+      email: '',
+      birthdate: '',
+      selectedCode: '+370',
+      language: '',
+      phoneNumber: '',
+      role: ''
+
+    });
+    this.selectedLanguages = []
+    this.profileForm.markAsPristine();
+  };
+  //#endregion
+
+  //#region Language
   onSearch() {
     this.searching = true
 
@@ -159,23 +178,9 @@ export class ProfileComponent implements OnInit {
   onInputBlur() {
     setTimeout(() => (this.searching = false), 250);
   }
+  //#endregion
 
-  private fillFormEmpty() {
-    this.profileForm.patchValue({
-      username: '',
-      name: '',
-      email: '',
-      birthdate: '',
-      selectedCode: '+370',
-      language: '',
-      phoneNumber: '',
-      role: ''
-
-    });
-    this.selectedLanguages = []
-    this.profileForm.markAsPristine();
-  };
-
+  //#region Photo
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
@@ -191,7 +196,9 @@ export class ProfileComponent implements OnInit {
     };
     reader.readAsDataURL(this.selectedFile);
   }
+  //#endregion
 
+  //#region Phone
   combinePhone() {
     // Remove apenas o indicativo exato se o número começar por ele
     const { selectedCode, phoneNumber } = this.profileForm.getRawValue();
@@ -210,7 +217,9 @@ export class ProfileComponent implements OnInit {
     this.profileForm.get('phoneNumber')?.setValue(input.value, { emitEvent: false });
 
   }
+  //#endregion
 
+  //#region SaveUser
   private updateUser() {
     this.user.name = this.profileForm.get('name')?.value,
       this.user.username = this.profileForm.get('username')?.value,
@@ -242,5 +251,42 @@ export class ProfileComponent implements OnInit {
         console.error('Erro ao guardar perfil:', err);
       }
     });
+  }
+  //#endregion
+
+  static passwordsMatch(control: AbstractControl) {
+    const newPassword = control.get('newPassword')?.value;
+    const confirm = control.get('confirmPassword')?.value;
+    return newPassword === confirm ? null : { passwordMismatch: true };
+  }
+
+  saveChangePassword(){
+    const dto: PasswordPayload = {
+      currentPassword: this.passwordForm.get('currentPassword')?.value,
+      newPassword: this.passwordForm.get('newPassword')?.value,
+      confirmPassword: this.passwordForm.get('confirmPassword')?.value
+    }
+
+    return dto;
+  }
+
+  onChangePassword(){
+    if (this.passwordForm.invalid || !this.passwordForm.dirty) {
+      this.passwordForm.markAllAsTouched();
+
+      return;
+    };
+
+    this.userService.changePassword(this.saveChangePassword()).subscribe({
+      next: (res)=>{
+        console.log( res.msg ?? "Password saved")
+        alert(res.msg ?? "Password saved")
+        window.location.reload()
+      },
+      error: (err)=>{
+        alert(err.error.msg ?? "Password not changed")
+        console.log(err.error.msg ?? "Password not changed", err)
+      }
+    })
   }
 }
