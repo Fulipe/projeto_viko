@@ -449,7 +449,7 @@ namespace viko_api.Services
                     return new ResponseDto { status = false, msg = "No event was found with the given GUID" };
 
                 //Checks if Event is Opened, if not, doesn't allow registration
-                if (getGuidEvent.EventStatusId != 1)
+                if (getGuidEvent.EventStatusId != 1 || getGuidEvent.RegistrationDeadline < DateTime.UtcNow || getGuidEvent.FinishDate < DateTime.UtcNow)
                     return new ResponseDto { status = false, msg = "Registration failed. This event is closed or finished" };
 
                 //Get EventId of Event provided by the GUID
