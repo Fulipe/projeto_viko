@@ -23,28 +23,6 @@ public partial class VikoDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         
-        //modelBuilder.Entity<Administrator>(entity =>
-        //{
-        //    entity.HasKey(e => e.Id).HasName("PK__Administ__3214EC073EC03841"); //PK
-
-        //    // Collumn names as in the DB
-        //    entity.Property(e => e.EntityId).HasColumnName("Entity_Id");
-        //    entity.Property(e => e.UserId).HasColumnName("User_Id");
-
-        //    //Relation with entities (FK_Admin_Entity)
-        //    entity.HasOne(d => d.Entity).WithMany(p => p.Administrators)
-        //        .HasForeignKey(d => d.EntityId)
-        //        .OnDelete(DeleteBehavior.ClientSetNull)
-        //        .HasConstraintName("FK_Admin_Entity");
-
-        //    //Relation with Users (FK_Admin_User)
-        //    entity.HasOne(d => d.User).WithMany(p => p.Administrators)
-        //        .HasForeignKey(d => d.UserId)
-        //        .OnDelete(DeleteBehavior.ClientSetNull)
-        //        .HasConstraintName("FK_Admin_User");
-        //});
-
-
         modelBuilder.Entity<Entity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Entities");
