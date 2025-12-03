@@ -101,7 +101,7 @@ namespace viko_api.Services
             public async Task<(ResponseDto, List<EventsDto>)> GetStudentEvents(long userid)
             {
                 var eventfetched = await _dbContext.EventRegistrations
-                        .Where(u => u.StudentId == userid && u.Event.EventStatusId != 3 && u.Event.isViewed == true) //Searches for the events of the student and are not classified as 'finished'
+                        .Where(u => u.StudentId == userid && u.Event.isViewed == true) //Searches for the events of the student and are not classified as 'finished'
                         .Join(_dbContext.Events,
                             regId => regId.EventId,
                             ev => ev.Id,

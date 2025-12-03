@@ -87,6 +87,7 @@ export class ViewEventComponent implements OnInit {
     this.event = this.route.snapshot.data['event'];
     
     this.eventStatus = this.event.eventStatus;
+    console.log(this.eventStatus)
 
     this.eventIsViewed = this.event.isViewed;
 
@@ -229,7 +230,7 @@ export class ViewEventComponent implements OnInit {
   getAllTeachers(){
     this.userService.getAllTeachers().subscribe({
       next: (res)=>{
-        const e:any = res.teachers
+        const e:any = res
         const teachers = e
 
         this.teachers = teachers

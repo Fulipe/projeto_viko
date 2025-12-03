@@ -61,8 +61,14 @@ public class DailyScanner
                 scheduleDate = ev.EndDate.Date;
             }
 
+            else if (ev.EventStatus == 3) 
+            {
+                continue;
+            }
+
             if (scheduleDate != today)
                 continue; // Ignores events that are not from actual date
+
 
             // Calculates delay until the exact hour
             var eventTimeUtc = scheduleDateExact.Value.ToUniversalTime();
@@ -92,25 +98,6 @@ public class DailyScanner
                     await _dbContext.SaveChangesAsync();
 
                     _logger.LogInformation($"Executed immediate status update for {ev.guid}.");
-                    //var payloadNoQueue = JsonSerializer.Serialize(new QueuePayload
-                    //{
-                    //    guid = ev.guid,
-                    //    CurrentStatus = ev.EventStatus
-                    //});
-
-                    //// Encodes payload, so QueueStorage can storage it 
-                    //var bytesNoQueue = Encoding.UTF8.GetBytes(payloadNoQueue);
-
-                    //await _queueClient.SendMessageAsync(
-                    //    Convert.ToBase64String(bytesNoQueue),
-                    //    visibilityTimeout: delay
-                    //);
-
-                    //if (eventNoQueue == null)
-                    //    return;
-
-                    //eventNoQueue.HasPendingStatusChange = true;
-                    //await _dbContext.SaveChangesAsync();
                 }
 
                 continue; 
@@ -119,8 +106,6 @@ public class DailyScanner
             // Only schedules if theres not an already pending queue
             if (!ev.HasPendingStatusChange)
             { 
-
-                Console.WriteLine(ev.Title);
 
                 var payload = JsonSerializer.Serialize(new QueuePayload
                 {

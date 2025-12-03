@@ -44,7 +44,6 @@ export class UserService {
     return this.http.get<any>(`${environment.apiUrl}/GetTeachers`)
     .pipe(
       map((res)=>{
-        console.log(res)
         if(res?.teachers){
           return res.teachers
         }
