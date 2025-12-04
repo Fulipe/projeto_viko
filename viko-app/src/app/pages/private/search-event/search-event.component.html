@@ -108,7 +108,7 @@
                         </td>
                         <td class="px-4 py-2 font-medium">
                             @switch (event.eventStatus) {
-                            @case (1) { <a href="/private/event/{{event.guid}}" class="text-green-600"> Opened </a> }
+                            @case (1) { <a href="/private/event/{{event.guid}}" class="text-green-600"> Open </a> }
                             @case (2) { <a href="/private/event/{{event.guid}}" class="text-yellow-600"> Closed </a> }
                             @case (3) { <a href="/private/event/{{event.guid}}" class="text-red-600"> Finished </a> }
                             }
