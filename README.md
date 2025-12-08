@@ -75,7 +75,7 @@ docker-compose up -d
 
 4. Set your `local.settings.json` accordingly:
 
-> Get the Microsoft provided [Azurite connection string](https://learn.microsoft.com/en-us/azure/storage/common/storage-connect-azurite?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json&tabs=blob-storage#use-connection-strings) and replace it with the placeholder 
+> Get the Microsoft provided [Azurite connection string](https://learn.microsoft.com/en-us/azure/storage/common/storage-connect-azurite?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&bc=%2Fazure%2Fstorage%2Fblobs%2Fbreadcrumb%2Ftoc.json&tabs=blob-storage#http-connection-strings) and replace it with the placeholder 
 ```
 {
     "IsEncrypted": false,
